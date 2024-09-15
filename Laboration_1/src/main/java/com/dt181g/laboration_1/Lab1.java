@@ -10,8 +10,8 @@ public final class Lab1 {
     }
 
     /**
-     * Simple output of the assignment's name. Be sure to replace
-     * this when working with the assignment!
+     * This method simulate clients by using lambda expressions
+     * to create threads that need different tasks done
      * @param args command arguments.
      */
     public static void main(final String... args) {
