@@ -1,8 +1,12 @@
 package com.dt181g.laboration_1;
 
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Random;
+
 /**
  * The main starting point for laboration 1.
- * @author Erik Ström
+ * @author Joel Lansgren
  */
 public final class Lab1 {
     private Lab1() { // Utility classes should not have a public or default constructor
@@ -15,6 +19,16 @@ public final class Lab1 {
      * @param args command arguments.
      */
     public static void main(final String... args) {
-        System.out.println("Lab assignment 1");
+        final Deque<Client> clients = new LinkedList<Client>();
+        Random randomizer = new Random();
+        final int CLIENT_POOL = randomizer.nextInt(11) + 10;
+
+        for (int i = 1; i <= CLIENT_POOL; i++) {
+            clients.add(new Client("Client " + i));
+        }
+
+        for (Client client : clients) {
+            client.start();
+        }
     }
 }
