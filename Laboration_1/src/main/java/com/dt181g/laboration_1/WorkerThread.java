@@ -3,27 +3,25 @@ package com.dt181g.laboration_1;
 public class WorkerThread extends Thread {
     private final Object threadLock = new Object();
     private Client client;
-    private Object clientLock;
     private boolean shutdown = false;
 
     public WorkerThread(String name) {
         this.setName(name);
     }
 
-    public Object getThreadLock() {
-        return threadLock;
-    }
-
     public void setClient(Client client) {
         this.client = client;
-        this.clientLock = this.client.getClientLock();
+    }
+
+    public void doWork() {
+        synchronized (threadLock) {
+            threadLock.notify();
+        }
     }
 
     public void shutdown() {
         shutdown = true;
-        synchronized (threadLock) {
-            threadLock.notify();
-        }
+        doWork();
     }
 
     @Override
@@ -47,10 +45,8 @@ public class WorkerThread extends Thread {
                 e.printStackTrace();
             }
 
-            synchronized (clientLock) {
-                if (client != null) {
-                    clientLock.notify();
-                }
+            if (client != null) {
+                client.notifyWorksDone();
             }
 
         }

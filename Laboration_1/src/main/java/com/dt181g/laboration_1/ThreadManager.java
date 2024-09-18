@@ -8,7 +8,7 @@ public class ThreadManager {
     private final Deque<WorkerThread> workerThreads = new LinkedList<WorkerThread>();
     private final Object poolLock = new Object();
     private boolean isEmpty;
-    private int threadUtilized = 0;
+    private int threadUtilizations = 0;
 
     private ThreadManager() {
         for (int i = 1; i <= 5; i++) {
@@ -18,8 +18,8 @@ public class ThreadManager {
         }
     }
 
-    public int getUtilizedThreads() {
-        return threadUtilized;
+    public int getThreadUtilizations() {
+        return threadUtilizations;
     }
 
     public WorkerThread getThread() {
@@ -31,13 +31,9 @@ public class ThreadManager {
                     e.printStackTrace();
                 }
             }
-            threadUtilized += 1;
+            threadUtilizations += 1;
             return workerThreads.pollFirst();
         }
-    }
-
-    public synchronized Object getPoolLock() {
-        return poolLock;
     }
 
     public void returnThread(WorkerThread workerThread) {

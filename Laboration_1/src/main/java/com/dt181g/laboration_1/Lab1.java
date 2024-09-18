@@ -19,9 +19,10 @@ public final class Lab1 {
      * @param args command arguments.
      */
     public static void main(final String... args) {
-        final Deque<Client> clients = new LinkedList<Client>();
-        Random randomizer = new Random();
+        final Random randomizer = new Random();
         final int CLIENT_POOL = randomizer.nextInt(11) + 10;
+        final Deque<Client> clients = new LinkedList<Client>();
+        final ThreadManager manager = ThreadManager.INSTANCE;
 
         for (int i = 1; i <= CLIENT_POOL; i++) {
             clients.add(new Client("Client " + i));
@@ -37,9 +38,8 @@ public final class Lab1 {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
-        System.out.println("We had " + CLIENT_POOL + " clients, " + ThreadManager.INSTANCE.getUtilizedThreads() + " terminated.");
+        } System.out.println("We had " + CLIENT_POOL + " clients, " + manager.getThreadUtilizations() + " did their thing and went home.");
 
-        ThreadManager.INSTANCE.shutdown();
+        manager.shutdown();
     }
 }
