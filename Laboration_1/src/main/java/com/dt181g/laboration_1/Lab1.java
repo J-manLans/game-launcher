@@ -29,13 +29,13 @@ public final class Lab1 {
      */
     public static void main(final String... args) {
         final Random randomizer = new Random();
-        final int CLIENT_POOL = randomizer.nextInt(11) + 10;
+        final int clientPool = randomizer.nextInt(11) + 10;
         final Deque<Client> clients = new LinkedList<Client>();
         final ThreadManager manager = ThreadManager.INSTANCE;
 
-        System.out.println("\nClients: " + CLIENT_POOL + "\n");
+        System.out.println("\nClients: " + clientPool + "\n");
 
-        for (int i = 1; i <= CLIENT_POOL; i++) {
+        for (int i = 1; i <= clientPool; i++) {
             clients.add(new Client("Client " + i));
         }
 
@@ -49,7 +49,13 @@ public final class Lab1 {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        } System.out.println("\nWe had " + CLIENT_POOL + " clients today, " + manager.getThreadUtilizations() + " of them executed threads in the Thread pool and then went on their way.\n");
+        } System.out.println(
+            String.format(
+                "\nWe had %d clients today, %d of them executed threads in the Thread pool and then went on their way.\n",
+                clientPool,
+                manager.getThreadUtilizations()
+            )
+        );
 
         manager.shutdown();
     }

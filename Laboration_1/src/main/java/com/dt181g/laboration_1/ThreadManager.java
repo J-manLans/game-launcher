@@ -10,19 +10,21 @@ import java.util.LinkedList;
  * The {@code ThreadManager} is implemented as a singleton, ensuring only one instance is created.
  * @author Joel Lansgren
  */
-public class ThreadManager {
+public final class ThreadManager {
+    private final int threadPoolSize = 5;
     public static final ThreadManager INSTANCE = new ThreadManager();
     private final Deque<WorkerThread> workerThreads = new LinkedList<WorkerThread>();
     private final Object poolLock = new Object();
     private boolean isEmpty;
     private int threadUtilizations = 0;
+    private final long threadLeaving = 400L;
 
     /**
      * Private constructor to prevent external instantiation.
      * Initializes the pool with 5 worker threads.
      */
     private ThreadManager() {
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= threadPoolSize; i++) {
             WorkerThread workerThread = new WorkerThread("Worker thread " + i);
             this.workerThreads.add(workerThread);
             workerThread.start();
@@ -43,7 +45,7 @@ public class ThreadManager {
      * @return a {@code WorkerThread} from the pool.
      */
     public WorkerThread getThread() {
-        synchronized(this.poolLock) {
+        synchronized (this.poolLock) {
             while (this.workerThreads.isEmpty()) {
                 try {
                     poolLock.wait();
@@ -61,11 +63,13 @@ public class ThreadManager {
      * If the pool was previously empty, it notifies any threads waiting to get a worker.
      * @param workerThread the {@code WorkerThread} to be returned to the pool.
      */
-    public void returnThread(WorkerThread workerThread) {
+    public void returnThread(final WorkerThread workerThread) {
         synchronized (poolLock) {
             isEmpty = workerThreads.isEmpty();
             workerThreads.add(workerThread);
-            if (isEmpty) {} poolLock.notify();
+            if (isEmpty) {
+                poolLock.notify();
+            }
         }
     }
 
@@ -77,7 +81,7 @@ public class ThreadManager {
     public void shutdown() {
         for (WorkerThread workerThread : workerThreads) {
             try {
-                Thread.sleep(400L);
+                Thread.sleep(threadLeaving);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -94,6 +98,8 @@ public class ThreadManager {
         }
 
         workerThreads.clear();
-        if(workerThreads.size() == 0) System.out.println("\nThe Thread Pool is empty. Good work guys, see yah tomorrow!\n");
+        if (workerThreads.size() == 0) {
+            System.out.println("\nThe Thread Pool is empty. Good work guys, see yah tomorrow!\n");
+        }
     }
 }

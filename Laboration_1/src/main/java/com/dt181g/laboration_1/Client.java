@@ -7,7 +7,7 @@ package com.dt181g.laboration_1;
  * Each {@code Client} runs in its own thread and interacts with a {@code WorkerThread} to perform tasks.
  * @author Joel Lansgren
  */
-public class Client extends Thread{
+public class Client extends Thread {
         private final Object clientLock = new Object();
         private boolean threadDone = false;
         private final ThreadManager manager = ThreadManager.INSTANCE;
@@ -45,7 +45,7 @@ public class Client extends Thread{
             System.out.println(Thread.currentThread().getName() + " executes " + workerThread.getName());
             workerThread.doWork();
 
-            synchronized(clientLock) {
+            synchronized (clientLock) {
                 while (!threadDone) {
                     try {
                         clientLock.wait();
@@ -56,7 +56,13 @@ public class Client extends Thread{
                 workerThread.setClient(null);
             }
 
-            System.out.println(workerThread.getName() + " is returned to the pool. " + this.getName() + " leaves the building.");
+            System.out.println(
+                String.format(
+                    "%s is returned to the pool. %s leaves the building.",
+                    workerThread.getName(),
+                    this.getName()
+                )
+            );
             manager.returnThread(workerThread);
         }
 }

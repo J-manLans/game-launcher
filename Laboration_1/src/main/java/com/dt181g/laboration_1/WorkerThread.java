@@ -11,12 +11,13 @@ public class WorkerThread extends Thread {
     private Client client;
     private boolean shutdown = false;
     private boolean gotClient = false;
+    private final long simulateWork = 300L;
 
     /**
      * Constructs a WorkerThread with a given name.
      * @param name the name of the worker thread
      */
-    public WorkerThread(String name) {
+    public WorkerThread(final String name) {
         this.setName(name);
     }
 
@@ -24,7 +25,7 @@ public class WorkerThread extends Thread {
      * Sets the client for this worker thread. The client assigns tasks to the worker.
      * @param client the client assigning tasks to the worker
      */
-    public void setClient(Client client) {
+    public void setClient(final Client client) {
         this.client = client;
     }
 
@@ -60,7 +61,7 @@ public class WorkerThread extends Thread {
 
             synchronized (this.threadLock) {
                 // Wait for instructions
-                while(!this.gotClient) {
+                while (!this.gotClient) {
                     try {
                         this.threadLock.wait();
                     } catch (InterruptedException e) {
@@ -74,7 +75,7 @@ public class WorkerThread extends Thread {
                 // Execute the predefined task
                 System.out.println(this.getName() + " performs monotonous task...");
                 try {
-                    Thread.sleep(300L);
+                    Thread.sleep(simulateWork);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
