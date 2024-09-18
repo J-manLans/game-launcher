@@ -49,7 +49,9 @@ public final class Lab1 {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        } System.out.println(
+        }
+
+        System.out.println(
             String.format(
                 "\nWe had %d clients today, %d of them executed threads in the Thread pool and then went on their way.\n",
                 clientPool,
