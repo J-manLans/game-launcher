@@ -5,7 +5,11 @@ import java.util.LinkedList;
 import java.util.Random;
 
 /**
- * The main starting point for laboration 1.
+ * The {@code Lab1} class is the entry point of the application. It simulates multiple clients that utilize
+ * worker threads from a thread pool managed by the {@code ThreadManager}. Each client runs its own thread,
+ * waits for the worker thread to complete a task, and then returns the thread back to the pool.
+ *
+ * This class cannot be instantiated as it is designed to contain only static methods.
  * @author Joel Lansgren
  */
 public final class Lab1 {
@@ -14,9 +18,14 @@ public final class Lab1 {
     }
 
     /**
-     * This method simulate clients by using lambda expressions
-     * to create threads that need different tasks done
-     * @param args command arguments.
+     * The main method is the entry point for the application. It simulates a pool of clients that
+     * execute tasks using worker threads from the {@code ThreadManager}.
+     * <p>
+     * It creates a random number of clients (between 10 and 20), let them interact with worker threads,
+     * and waits for each client to complete before shutting down the thread manager.
+     * </p>
+     *
+     * @param args command-line arguments (not used in this application).
      */
     public static void main(final String... args) {
         final Random randomizer = new Random();

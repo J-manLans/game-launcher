@@ -3,6 +3,13 @@ package com.dt181g.laboration_1;
 import java.util.Deque;
 import java.util.LinkedList;
 
+/**
+ * The {@code ThreadManager} class manages a pool of worker threads.
+ * It provides threads for clients to use and returns them to the pool when they are finished.
+ * It also handles the shutdown of all worker threads when needed.
+ * The {@code ThreadManager} is implemented as a singleton, ensuring only one instance is created.
+ * @author Joel Lansgren
+ */
 public class ThreadManager {
     public static final ThreadManager INSTANCE = new ThreadManager();
     private final Deque<WorkerThread> workerThreads = new LinkedList<WorkerThread>();
@@ -10,32 +17,50 @@ public class ThreadManager {
     private boolean isEmpty;
     private int threadUtilizations = 0;
 
+    /**
+     * Private constructor to prevent external instantiation.
+     * Initializes the pool with 5 worker threads.
+     */
     private ThreadManager() {
         for (int i = 1; i <= 5; i++) {
             WorkerThread workerThread = new WorkerThread("Worker thread " + i);
-            workerThreads.add(workerThread);
+            this.workerThreads.add(workerThread);
             workerThread.start();
         }
     }
 
+    /**
+     * Returns the number of thread utilizations.
+     * @return the number of thread utilizations.
+     */
     public int getThreadUtilizations() {
-        return threadUtilizations;
+        return this.threadUtilizations;
     }
 
+    /**
+     * Retrieves a {@code WorkerThread} from the pool and add 1 to thread utilizations.
+     * If no thread is available, the method will wait until a thread is returned to the pool.
+     * @return a {@code WorkerThread} from the pool.
+     */
     public WorkerThread getThread() {
-        synchronized(poolLock) {
-            while (workerThreads.peekFirst() == null) {
+        synchronized(this.poolLock) {
+            while (this.workerThreads.isEmpty()) {
                 try {
                     poolLock.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            threadUtilizations += 1;
-            return workerThreads.pollFirst();
+            this.threadUtilizations += 1;
+            return this.workerThreads.pollFirst();
         }
     }
 
+     /**
+     * Returns a {@code WorkerThread} to the pool once it has completed its work.
+     * If the pool was previously empty, it notifies any threads waiting to get a worker.
+     * @param workerThread the {@code WorkerThread} to be returned to the pool.
+     */
     public void returnThread(WorkerThread workerThread) {
         synchronized (poolLock) {
             isEmpty = workerThreads.isEmpty();
@@ -44,6 +69,11 @@ public class ThreadManager {
         }
     }
 
+     /**
+     * Shuts down all the worker threads in the pool.
+     * It ensures that all threads complete their current tasks before shutting down.
+     * Once all threads are stopped, the pool is cleared.
+     */
     public void shutdown() {
         for (WorkerThread workerThread : workerThreads) {
             try {
