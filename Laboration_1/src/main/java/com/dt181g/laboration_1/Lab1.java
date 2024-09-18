@@ -24,6 +24,8 @@ public final class Lab1 {
         final Deque<Client> clients = new LinkedList<Client>();
         final ThreadManager manager = ThreadManager.INSTANCE;
 
+        System.out.println("\nClients: " + CLIENT_POOL + "\n");
+
         for (int i = 1; i <= CLIENT_POOL; i++) {
             clients.add(new Client("Client " + i));
         }
@@ -38,7 +40,7 @@ public final class Lab1 {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        } System.out.println("We had " + CLIENT_POOL + " clients, " + manager.getThreadUtilizations() + " did their thing and went home.");
+        } System.out.println("\nWe had " + CLIENT_POOL + " clients today, " + manager.getThreadUtilizations() + " of them executed threads in the Thread pool and then went on their way.\n");
 
         manager.shutdown();
     }

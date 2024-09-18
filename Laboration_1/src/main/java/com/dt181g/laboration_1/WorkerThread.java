@@ -4,6 +4,7 @@ public class WorkerThread extends Thread {
     private final Object threadLock = new Object();
     private Client client;
     private boolean shutdown = false;
+    private boolean gotClient = false;
 
     public WorkerThread(String name) {
         this.setName(name);
@@ -15,41 +16,43 @@ public class WorkerThread extends Thread {
 
     public void doWork() {
         synchronized (threadLock) {
-            threadLock.notify();
+            this.gotClient = true;
+            this.threadLock.notify();
         }
     }
 
     public void shutdown() {
-        shutdown = true;
+        this.shutdown = true;
         doWork();
     }
 
     @Override
     public void run() {
-        while (true) {
+        while (!this.shutdown) {
 
-            synchronized (threadLock) {
+            synchronized (this.threadLock) {
+                while(!this.gotClient) {
+                    try {
+                        this.threadLock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                this.gotClient = false;
+            }
+
+            if (this.client != null) {
+            // Execute the task
+                System.out.println(this.getName() + " performs monotonous task...");
                 try {
-                    threadLock.wait();
-                    if (shutdown) break;
+                    Thread.sleep(300L);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
+                this.client.notifyWorksDone();
             }
 
-            // Execute the task
-            System.out.println(this.getName() + " Fetching resources...");
-            try {
-                Thread.sleep(300L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            if (client != null) {
-                client.notifyWorksDone();
-            }
-
-        }
-        System.out.println(this.getName() + " shutting down...");
+        } System.out.println(this.getName() + " shutting down...");
     }
 }

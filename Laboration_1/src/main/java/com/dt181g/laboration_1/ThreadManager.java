@@ -46,7 +46,24 @@ public class ThreadManager {
 
     public void shutdown() {
         for (WorkerThread workerThread : workerThreads) {
+            try {
+                Thread.sleep(400L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             workerThread.shutdown();
         }
+
+        for (WorkerThread workerThread : workerThreads) {
+            try {
+                workerThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        workerThreads.clear();
+        if(workerThreads.size() == 0) System.out.println("\nThe Thread Pool is empty. Good work guys, see yah tomorrow!");
     }
 }
