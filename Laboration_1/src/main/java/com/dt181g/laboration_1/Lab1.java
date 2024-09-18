@@ -30,5 +30,16 @@ public final class Lab1 {
         for (Client client : clients) {
             client.start();
         }
+
+        for (Client client : clients) {
+            try {
+                client.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("We had " + CLIENT_POOL + " clients, " + ThreadManager.INSTANCE.getUtilizedThreads() + " terminated.");
+
+        ThreadManager.INSTANCE.shutdown();
     }
 }

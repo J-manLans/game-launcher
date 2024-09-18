@@ -19,13 +19,21 @@ public class WorkerThread extends Thread {
         this.clientLock = this.client.getClientLock();
     }
 
+    public void shutdown() {
+        shutdown = true;
+        synchronized (threadLock) {
+            threadLock.notify();
+        }
+    }
+
     @Override
     public void run() {
-        while (!shutdown) {
+        while (true) {
 
             synchronized (threadLock) {
                 try {
                     threadLock.wait();
+                    if (shutdown) break;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

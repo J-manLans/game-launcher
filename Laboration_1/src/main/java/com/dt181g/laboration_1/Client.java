@@ -40,7 +40,7 @@ public class Client extends Thread{
                     manager.returnThread(workerThread);
                 }
 
-                System.out.println(workerThread.getName() + " is returned to the pool. Thread " + this.getName() + " terminates.");
+                System.out.println(workerThread.getName() + " is returned to the pool. " + this.getName() + " terminates.");
             }
         }
 }
