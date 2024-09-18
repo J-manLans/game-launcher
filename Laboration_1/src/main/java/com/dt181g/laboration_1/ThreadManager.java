@@ -64,6 +64,6 @@ public class ThreadManager {
         }
 
         workerThreads.clear();
-        if(workerThreads.size() == 0) System.out.println("\nThe Thread Pool is empty. Good work guys, see yah tomorrow!");
+        if(workerThreads.size() == 0) System.out.println("\nThe Thread Pool is empty. Good work guys, see yah tomorrow!\n");
     }
 }
