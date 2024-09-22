@@ -1,8 +1,7 @@
 package com.dt181g.laboration_1;
 
-import java.util.Deque;
-import java.util.LinkedList;
 import java.util.Random;
+import java.util.ArrayList;
 
 /**
  * The {@code Lab1} class is the entry point of the application. It simulates multiple clients that utilize
@@ -30,7 +29,7 @@ public final class Lab1 {
     public static void main(final String... args) {
         final Random randomizer = new Random();
         final int clientPool = randomizer.nextInt(11) + 10;
-        final Deque<Client> clients = new LinkedList<Client>();
+        final ArrayList<Client> clients = new ArrayList<Client>(20);
         final ThreadManager manager = ThreadManager.INSTANCE;
 
         System.out.println("\nClients: " + clientPool + "\n");
@@ -50,6 +49,8 @@ public final class Lab1 {
                 e.printStackTrace();
             }
         }
+
+        clients.clear();
 
         System.out.println(
             String.format(
