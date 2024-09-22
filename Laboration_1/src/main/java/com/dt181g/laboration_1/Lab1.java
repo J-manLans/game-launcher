@@ -53,7 +53,7 @@ public final class Lab1 {
 
         System.out.println(
             String.format(
-                "\nWe had %d clients today, %d of them executed threads in the Thread pool and then went on their way.\n",
+                "\nWe had %d clients today, %d of them obtained a multilayered random number from the threads in the Thread Pool, then went on their way.\n",
                 clientPool,
                 manager.getThreadUtilizations()
             )

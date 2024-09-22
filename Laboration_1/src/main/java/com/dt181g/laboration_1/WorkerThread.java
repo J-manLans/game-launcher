@@ -1,7 +1,10 @@
 package com.dt181g.laboration_1;
 
+import java.util.Random;
+
 /**
- * This class represents a worker thread that performs tasks assigned by a client.
+ * This class represents a worker thread that adds a layer of randomness to a number
+ * provided by a client.
  * The worker thread can be in an idle state, waiting for a client to assign work,
  * and can be shut down when no longer needed.
  * @author Joel Lansgren
@@ -11,7 +14,7 @@ public class WorkerThread extends Thread {
     private Client client;
     private boolean shutdown = false;
     private boolean gotClient = false;
-    private final long simulateWork = 300L;
+    Random randomizer = new Random();
 
     /**
      * Constructs a WorkerThread with a given name.
@@ -30,12 +33,22 @@ public class WorkerThread extends Thread {
     }
 
     /**
-     * Notifies the worker thread that it has work to do.
-     * This method is called when the client assigns a task to the worker.
+     * Notifies the worker thread that it has work to do and executes the task.
+     * The method adds an extra layer of randomness based on the provided number.
+     * After the work is done, it notifies the client that the task has been completed.
+     *
+     * @param randomNum the base number used to generate a random number.
      */
-    public void doWork() {
+    public void doWork(int randomNum) {
         synchronized (threadLock) {
             this.gotClient = true;
+            System.out.println(
+                String.format("%s adds a layer of randomness to %d...",
+                    this.getName(),
+                    randomNum
+                )
+            );
+            this.client.setRandomNum(randomizer.nextInt(randomNum));
             this.threadLock.notify();
         }
     }
@@ -45,8 +58,10 @@ public class WorkerThread extends Thread {
      * Once shutdown is called, the thread will exit the while loop without performing any tasks.
      */
     public void shutdown() {
-        this.shutdown = true;
-        doWork();
+        synchronized (threadLock) {
+            this.shutdown = true;
+            this.threadLock.notify();
+        }
     }
 
     /**
@@ -61,7 +76,7 @@ public class WorkerThread extends Thread {
 
             synchronized (this.threadLock) {
                 // Wait for instructions
-                while (!this.gotClient) {
+                while (!this.gotClient && shutdown == false) {
                     try {
                         this.threadLock.wait();
                     } catch (InterruptedException e) {
@@ -72,13 +87,7 @@ public class WorkerThread extends Thread {
             }
 
             if (this.client != null) {
-                // Execute the predefined task
-                System.out.println(this.getName() + " performs monotonous task...");
-                try {
-                    Thread.sleep(simulateWork);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                // notify client that work is done
                 this.client.notifyWorksDone();
             }
 

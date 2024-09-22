@@ -15,9 +15,7 @@ public final class ThreadManager {
     public static final ThreadManager INSTANCE = new ThreadManager();
     private final Deque<WorkerThread> workerThreads = new LinkedList<WorkerThread>();
     private final Object poolLock = new Object();
-    private boolean isEmpty;
     private int threadUtilizations = 0;
-    private final long threadLeaving = 400L;
 
     /**
      * Private constructor to prevent external instantiation.
@@ -60,16 +58,12 @@ public final class ThreadManager {
 
      /**
      * Returns a {@code WorkerThread} to the pool once it has completed its work.
-     * If the pool was previously empty, it notifies any threads waiting to get a worker.
      * @param workerThread the {@code WorkerThread} to be returned to the pool.
      */
     public void returnThread(final WorkerThread workerThread) {
         synchronized (poolLock) {
-            isEmpty = workerThreads.isEmpty();
             workerThreads.add(workerThread);
-            if (isEmpty) {
-                poolLock.notify();
-            }
+            poolLock.notify();
         }
     }
 
@@ -80,11 +74,6 @@ public final class ThreadManager {
      */
     public void shutdown() {
         for (WorkerThread workerThread : workerThreads) {
-            try {
-                Thread.sleep(threadLeaving);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             workerThread.shutdown();
         }
 
