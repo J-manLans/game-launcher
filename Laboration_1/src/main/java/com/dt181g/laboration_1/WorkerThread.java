@@ -81,7 +81,6 @@ public class WorkerThread extends Thread {
                         e.printStackTrace();
                     }
                 }
-                this.gotClient = false;
             }
 
             if (this.client != null) {
@@ -93,6 +92,7 @@ public class WorkerThread extends Thread {
                 );
                 this.client.updateRandNum(this.doWork(client.getRandNum()));
                 this.client.notifyWorksDone();
+                this.gotClient = false;
             }
 
         } System.out.println(this.getName() + " shutting down...");

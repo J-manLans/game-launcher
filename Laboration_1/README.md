@@ -70,6 +70,28 @@ This ensures that the client proceeds only after the worker thread has completed
 
 After this the whole synchronization process of waiting and notifying covered above will take place and once the worker completes its task, the client prints relevant statistics, unsets itself as the worker's client, returns the worker thread to the manager, and clears its reference to the worker. Finally, the client thread terminates after completing all necessary actions.
 
+### WorkerThread
+**Next class to be covered** is the ``WorkerThread`` class. This class represents an entity within a pool of five WorkerThreads handled by the ``ThreadManager``, each responsible for adding a layer of randomness to a number retrieved from its current client. The ``ThreadManager`` itself should be responsible for initiating the instances of the class and are responsible for starting the threads in its constructor.
+
+The class holds four methods aside the ``run()`` method who respectively are responsible for letting the client assign itself to the worker; notifying the worker to do work; the actual method that contains the task of doing the work and a shutdown method for the ``ThreadManager`` to utilize once all the clients are done.
+
+``setClient()`` needs to be a ordinary setter for the client variable and ``doWork()`` should simply randomizes the given number. ``notifyToWoWork()`` and ``shutdown()`` both will notify the client and respectively set a boolean to true, one for signaling work needs done and one for signaling the thread to shut down. Both these methods will work in the same way as ``notifyWorksDone()`` by altering the flag in the while loop inside the synchronized block in the ``run()`` method that locks on ``threadLock``. However, a small alteration will be happening in the sync block inside the workers ``run()`` method.
+
+**The ``run()`` method will terminate** when the ``shutdown()`` method is invoked by the ``ThreadManager``. To accomplish this, the ``run()`` method should be enclosed in a while loop that continually checks a shutdown flag. This loop serves a dual purpose: it ensures the thread stays active as long as there are clients requiring its services and handles the shutdown gracefully when needed.
+
+Initially, the worker thread will enter a wait state, utilizing the same synchronization mechanism employed in the ``Client`` class. Once the thread is notified and leaves the synchronized block, it needs to reset the ``gotClient`` boolean to false before re-entering the main while loop. This reset prepares the thread for future client assignments, allowing it to return to the wait state if the loop runs again.
+
+After being released from the sync block the worker needs to check if a client is assigned to the variable and enter an if block if so - this is to avoid ``NullPointerException`` in the shutdown phase and skip unnecessary code. If the worker has a client however, it will update the random number utilizing the clients ``updateRandNum()`` method together with its own method ``doWork()`` with the clients random number as its argument.
+
+````java
+this.client.updateRandNum(this.doWork(client.getRandNum()));
+````
+
+Then it shall go on to notify the client the job is done, reverts the ``gotClient`` boolean back to false and check the ``shutdown`` flag if it should reenter the while loop.
+
+### TreadManager
+
+
 ## Discussion
 ### Purpose Fulfillment
 

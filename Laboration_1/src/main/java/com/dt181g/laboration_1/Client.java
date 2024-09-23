@@ -48,7 +48,7 @@ public class Client extends Thread {
          * This method is called by the {@code WorkerThread} when it completes its work.
          */
         public void notifyWorksDone() {
-            synchronized (clientLock) {
+            synchronized (this.clientLock) {
                 this.threadDone = true;
                 this.clientLock.notify();
             }
@@ -73,8 +73,8 @@ public class Client extends Thread {
             );
             workerThread.notifyToDoWork();
 
-            synchronized (clientLock) {
-                while (!threadDone) {
+            synchronized (this.clientLock) {
+                while (!this.threadDone) {
                     try {
                         this.clientLock.wait(2000);
                     } catch (InterruptedException e) {
