@@ -104,13 +104,11 @@ The ``returnThread()`` method will also be synchronized on the ``poolLock`` obje
 
 ### Aditional Considerations
 
-**There is also the option** to implement the ``Runnable`` interface for both the ``Client`` and ``WorkerThread`` classes. While the current design is straightforward, relying on direct thread extension, using ``Runnable`` could offer greater flexibility for future changes.
+**There is also the option** to implement the ``Runnable`` interface for both the ``Client`` and ``WorkerThread`` classes. While the current design is straightforward, relying on direct thread extension, using ``Runnable`` could offer greater flexibility for future changes. For example, if we needed to extend the Client class or add new functionality.
 
-One significant advantage of implementing ``Runnable`` is the ability to separate the thread's execution logic from its lifecycle management, allowing for easier code reuse. For instance, if we later need to extend the ``Client`` class or introduce new functionality, we could do so without modifying the threading behavior, minimizing the risk of breaking existing code.
+A key advantage of using Runnable is that it promotes a cleaner separation between the task logic and the threading mechanics. This means we can reuse the same Runnable instance across multiple threads, which is more memory-efficient, especially in scenarios where many threads are created. In contrast, extending the Thread class results in multiple instances of our custom thread classes, which can lead to higher memory consumption.
 
-However, this approach would involve additional boilerplate code and complexity in the current implementation. As it stands, should the need arise to extend the ``Client`` class, a refactor of the codebase would be necessary to accommodate the changes, which could be a more cumbersome process.
-
-In summary, while implementing ``Runnable`` can enhance design flexibility and maintainability in the long run, it comes at the cost of added complexity and initial overhead.
+However, in this scenario where only a small number of clients and workers are used, and no resources are shared, refactoring the code to implement Runnable might involve some amount of work while providing limited benefits. Given the simplicity of the current implementation, the advantages of switching may not justify the added complexity at this time.
 
 ## Discussion
 ### Purpose Fulfillment

@@ -53,14 +53,13 @@ public class WorkerThread extends Thread {
     }
 
     /**
-     * Shuts down the worker thread by setting the shutdown flag and notifying it to stop waiting.
-     * Once shutdown is called, the thread will exit the while loop without performing any tasks.
+     * Shuts down the worker thread by setting the shutdown flag and interrupting the thread.
+     * Once shutdown is called, the thread will break out of the while loop through the catch block
+     * without performing any tasks since the client is null and shutdown is true.
      */
     public void shutdown() {
-        synchronized (this.threadLock) {
-            this.shutdown = true;
-            this.threadLock.notify();
-        }
+        this.shutdown = true;
+        this.interrupt();
     }
 
     /**
@@ -75,11 +74,12 @@ public class WorkerThread extends Thread {
 
             synchronized (this.threadLock) {
                 // Wait for instructions
-                while (!this.gotClient && !this.shutdown) {
+                while (!this.gotClient) {
                     try {
                         this.threadLock.wait();
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Thread.currentThread().interrupt();
+                        break;
                     }
                 }
             }
