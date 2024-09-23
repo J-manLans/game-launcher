@@ -1,7 +1,6 @@
 package com.dt181g.laboration_1;
 
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 /**
  * The {@code ThreadManager} class manages a pool of worker threads.
@@ -13,7 +12,7 @@ import java.util.LinkedList;
 public final class ThreadManager {
     private final int threadPoolSize = 5;
     public static final ThreadManager INSTANCE = new ThreadManager();
-    private final Deque<WorkerThread> workerThreads = new LinkedList<WorkerThread>();
+    private final ArrayList<WorkerThread> workerThreads = new ArrayList<WorkerThread>(5);
     private final Object poolLock = new Object();
     private int threadUtilizations = 0;
 
@@ -52,7 +51,7 @@ public final class ThreadManager {
                 }
             }
             this.threadUtilizations += 1;
-            return this.workerThreads.pollFirst();
+            return this.workerThreads.remove(0);
         }
     }
 
@@ -87,8 +86,5 @@ public final class ThreadManager {
         }
 
         workerThreads.clear();
-        if (workerThreads.size() == 0) {
-            System.out.println("\nThe Thread Pool is empty. Good work guys, see yah tomorrow!\n");
-        }
     }
 }

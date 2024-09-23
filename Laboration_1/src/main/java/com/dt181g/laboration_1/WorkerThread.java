@@ -14,7 +14,7 @@ public class WorkerThread extends Thread {
     private Client client;
     private boolean shutdown = false;
     private boolean gotClient = false;
-    Random randomizer = new Random();
+    private Random randomizer = new Random();
 
     /**
      * Constructs a WorkerThread with a given name.
@@ -33,7 +33,7 @@ public class WorkerThread extends Thread {
     }
 
     /**
-     * Notifies the worker thread that it has work to do
+     * Notifies the worker thread that it has work to do.
      */
     public void notifyToDoWork() {
         synchronized (this.threadLock) {
@@ -46,8 +46,9 @@ public class WorkerThread extends Thread {
      * The method adds an extra layer of randomness based on the provided number.
      *
      * @param randomNum the base number used to generate a random number.
+     * @return the layered random number
      */
-    private int doWork(int randomNum) {
+    private int doWork(final int randomNum) {
             return randomizer.nextInt(randomNum);
     }
 
@@ -56,7 +57,7 @@ public class WorkerThread extends Thread {
      * Once shutdown is called, the thread will exit the while loop without performing any tasks.
      */
     public void shutdown() {
-        synchronized (threadLock) {
+        synchronized (this.threadLock) {
             this.shutdown = true;
             this.threadLock.notify();
         }
@@ -74,7 +75,7 @@ public class WorkerThread extends Thread {
 
             synchronized (this.threadLock) {
                 // Wait for instructions
-                while (!this.gotClient && shutdown == false) {
+                while (!this.gotClient && !this.shutdown) {
                     try {
                         this.threadLock.wait();
                     } catch (InterruptedException e) {

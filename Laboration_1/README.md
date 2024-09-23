@@ -90,7 +90,27 @@ this.client.updateRandNum(this.doWork(client.getRandNum()));
 Then it shall go on to notify the client the job is done, reverts the ``gotClient`` boolean back to false and check the ``shutdown`` flag if it should reenter the while loop.
 
 ### TreadManager
+**The ``ThreadManager`` class** will be responsible for managing a fixed pool of worker threads, allowing clients to borrow threads for tasks and returning them to the pool when finished. It will also provide a mechanism for gracefully shutting down all threads when no more clients are available. The class will be designed as a singleton to ensure that only one instance of the ``ThreadManager`` exists throughout the application.
 
+The constructor will be private in order to enforce the singleton pattern, preventing external instantiation. Upon initialization, it will create five ``WorkerThread`` instances, name them, and immediately start them. These threads will be added to the ``workerThreads`` ``ArrayList`` for client use.
+
+The main methods in this class will be ``getThread()`` and ``returnThread()``. Besides them a common getter for a variable will be implemented to retrieve data about thread utilizations for statistical purposes and the ``shutdown()`` method utilized at the end of the program to exit gracefully.
+
+The ``getThread()`` method will retrieve a ``WorkerThread`` from the pool. If no threads are available, the calling thread will wait until one is returned. This method is synchronized on ``poolLock`` to ensure thread safety. If the ``workerThread``s list is empty, the thread will wait for notification before proceeding. Once a thread is available, it will increment the ``threadUtilizations`` counter and remove the first ``WorkerThread`` from the list before returning it.
+
+The ``returnThread()`` method will also be synchronized on the ``poolLock`` object, notifying any waiting threads in ``getThread()`` that a thread is now available.
+
+**Finally, the ``shutdown()`` method** will be called from the main method when all clients have completed their tasks. It will iterate over each worker thread, invoking their ``shutdown()`` method, and then wait for their termination using **join()**, clearing the thread pool afterward.
+
+### Aditional Considerations
+
+**There is also the option** to implement the ``Runnable`` interface for both the ``Client`` and ``WorkerThread`` classes. While the current design is straightforward, relying on direct thread extension, using ``Runnable`` could offer greater flexibility for future changes.
+
+One significant advantage of implementing ``Runnable`` is the ability to separate the thread's execution logic from its lifecycle management, allowing for easier code reuse. For instance, if we later need to extend the ``Client`` class or introduce new functionality, we could do so without modifying the threading behavior, minimizing the risk of breaking existing code.
+
+However, this approach would involve additional boilerplate code and complexity in the current implementation. As it stands, should the need arise to extend the ``Client`` class, a refactor of the codebase would be necessary to accommodate the changes, which could be a more cumbersome process.
+
+In summary, while implementing ``Runnable`` can enhance design flexibility and maintainability in the long run, it comes at the cost of added complexity and initial overhead.
 
 ## Discussion
 ### Purpose Fulfillment

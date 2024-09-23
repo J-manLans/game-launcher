@@ -61,5 +61,6 @@ public final class Lab1 {
         );
 
         manager.shutdown();
+        System.out.println("\nThe Thread Pool is empty. Good work guys, see yah tomorrow!\n");
     }
 }
