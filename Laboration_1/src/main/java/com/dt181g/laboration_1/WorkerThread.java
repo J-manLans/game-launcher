@@ -32,6 +32,9 @@ public class WorkerThread extends Thread {
         this.client = client;
     }
 
+    /**
+     * Notifies the worker thread that it has work to do
+     */
     public void notifyToDoWork() {
         synchronized (this.threadLock) {
             this.gotClient = true;
@@ -40,19 +43,11 @@ public class WorkerThread extends Thread {
     }
 
     /**
-     * Notifies the worker thread that it has work to do and executes the task.
      * The method adds an extra layer of randomness based on the provided number.
-     * After the work is done, it notifies the client that the task has been completed.
      *
      * @param randomNum the base number used to generate a random number.
      */
     private int doWork(int randomNum) {
-            System.out.println(
-                String.format("%s adds a layer of randomness to %d...",
-                    this.getName(),
-                    randomNum
-                )
-            );
             return randomizer.nextInt(randomNum);
     }
 
@@ -69,7 +64,7 @@ public class WorkerThread extends Thread {
 
     /**
      * The main execution loop of the worker thread.
-     * The thread waits for tasks, performs the assigned work,
+     * The thread awaits notification, performs its task,
      * and then notifies the client when the work is done.
      * It keeps running until the shutdown flag is set to true.
      */
@@ -90,7 +85,12 @@ public class WorkerThread extends Thread {
             }
 
             if (this.client != null) {
-                // notify client that work is done
+                System.out.println(
+                    String.format("%s adds a layer of randomness to %d...",
+                        this.getName(),
+                        client.getRandNum()
+                    )
+                );
                 this.client.updateRandNum(this.doWork(client.getRandNum()));
                 this.client.notifyWorksDone();
             }

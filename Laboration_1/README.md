@@ -43,17 +43,11 @@ The purpose of this program is to simulate a simple multithreaded environment wh
 ### Client Class
 **This class needs** to be responsible for requesting and obtaining threads from the thread pool to add a layer of randomness to their already randomly generated number. If the pool is empty the clients must wait until a thread is returned. It will obtain ownership of a thread when granted access, and upon completing its task, it will return the thread to the pool.
 
-**The ``Client`` class** extends ``Thread`` and must therefore overrun its ``run()`` method that represent the entry point for the threads execution since it by default does nothing. Additionally two other methods needs to be implemented to update the random number and notify the client that the worker thread is done.
+**The ``Client`` class** extends ``Thread`` and must therefore overrun its ``run()`` method that represent the entry point for the threads execution since it by default does nothing. Additionally, two other methods needs to be implemented to update the random number and notify the client that the worker thread is done. A simple getter for the ``randNum`` variable also needs to be created.
 
-**The private ``updateRandNum()`` method** will simply set its variable to the parameter passed into the method by the worker ``doWork()`` method executed in the clients ``run()`` method.
+**The ``updateRandNum()`` method** will simply set the ``randNum`` to the parameter passed into the method by the workers ``doWork()`` method, which uses the clients random number to generate a new one.
 
-````java
-updateRandNum(this.workerThread.doWork(randNum));
-````
-
-The ``notifyWorksDone()`` method however, demands a little more explanation. It needs to handle the signaling between the client and worker thread, letting the client know that the worker thread is done.
-
-**To achieve this** two synchronized blocks will be used together with a dedicated lock object (``clientLock``) This is crucial for maintaining thread safety during the signaling process. By creating a separate ``Object`` instance (``clientLock``) and using its intrinsic lock, we ensure that both the client’s waiting state and the worker’s notification are synchronized using the same lock object, thus allowing proper communication between the two synchronized blocks. When a worker thread calls the method and enters the synchronized block inside, it holds the lock on ``clientLock``, which was previously released by the client in its ``run()`` method when it entered the wait state. Now the second part of the synchronization mechanism comes into play.
+**The ``notifyWorksDone()`` method however**, demands a little more explanation. It needs to handle the signaling between the client and worker thread, letting the client know that the worker thread is done. To achieve this two synchronized blocks will be used together with a dedicated lock object (``clientLock``) This is crucial for maintaining thread safety during the signaling process. By creating a separate ``Object`` instance (``clientLock``) and using its intrinsic lock, we ensure that both the client’s waiting state and the worker’s notification are synchronized using the same lock object, thus allowing proper communication between the two synchronized blocks. When a worker thread calls the method and enters the synchronized block inside, it holds the lock on ``clientLock``, which was previously released by the client in its ``run()`` method when it entered the wait state. Now the second part of the synchronization mechanism comes into play.
 
 **In the client’s ``run()`` method**, the client will first enter a while loop that checks the boolean flag ``threadDone`` before entering its wait state. This flag, initially set to false, is changed to true by the worker thread before it notifies the client. The loop ensures that the client remains in the waiting state until the worker thread actually sends the notification. This is necessary because of something called spurious wakeups, where a thread might exit the wait state even though ``notify()`` was not called. To prevent premature execution, the while loop continuously checks the ``threadDone`` flag. The client only breaks out of this loop when the worker thread calls ``notifyWorksDone()``, changing the flag to true within its synchronized block.
 
@@ -72,7 +66,9 @@ synchronized (clientLock) {
 
 This ensures that the client proceeds only after the worker thread has completed its task, guaranteeing correct behavior in a multithreaded environment.
 
-**The only thing left now is the ``run()`` method.** A lot has already been covered, but lets take it from the top. This method needs to handle the synchronization between the worker and client thread. To achieve this the ``ThreadManager.INSTANCE`` needs to be utilized to give access to worker threads. By executing its ``getThread()`` method the client obtains ownership over a worker thread and set itself as its client, to give the worker the capability to notify the client when the work is done.
+**The only thing left now is the ``run()`` method.** A lot has already been covered, but lets take it from the top. This method needs to handle the synchronization between the worker and client thread. To achieve this the ``ThreadManager.INSTANCE`` needs to be utilized to give access to worker threads. By executing its ``getThread()`` method the client obtains ownership over a worker thread and set itself as its client. This is needed to give the worker the capability to notify the client when the work is done. After that it shall notify the worker so it can do its job of generating a random number and update the clients ``randNum`` variable.
+
+After this the whole synchronization process of waiting and notifying covered above will take place and once the worker completes its task, the client prints relevant statistics, unsets itself as the worker's client, returns the worker thread to the manager, and clears its reference to the worker. Finally, the client thread terminates after completing all necessary actions.
 
 ## Discussion
 ### Purpose Fulfillment
