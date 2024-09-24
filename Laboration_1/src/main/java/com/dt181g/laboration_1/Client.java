@@ -76,7 +76,7 @@ public class Client extends Thread {
             synchronized (this.clientLock) {
                 while (!this.threadDone) {
                     try {
-                        this.clientLock.wait(2000L);
+                        this.clientLock.wait();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
