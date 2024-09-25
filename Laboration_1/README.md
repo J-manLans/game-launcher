@@ -27,12 +27,13 @@
 The purpose of this program is to simulate a simple multithreaded environment where multiple clients request and share worker threads from a thread pool. Each client will provide a random number to the worker thread, which will add an additional layer of randomness to it, simulating a task. It demonstrates basic concurrency by showing how clients can use limited computational resources to perform tasks efficiently. This simulation is a simplified model of how thread pools can optimize performance and resource utilization in concurrent systems.
 
 ### Concrete Goals
-- Simulate clients by having a pool of threads that stand in line to utilize the worker threads.
+- Simulate clients by having a list of threads that stand in line to utilize the worker threads.
 - When a client request a thread the ownership should transfer from the manager to the client and revert back to the pool after its use.
 - If the pool is empty the client must wait for a thread to be returned
 - Implement a simple thread manager for a thread pool containing 5 threads adhering to the **Object Pool Manager Pattern**.
 
 ## Procedures
+![Copilots view of this program](../_RepoResources/img/thread_pool.jpg)
 ### Main Method
 **The main method** serves as the entry point for the application, designed to simulate client interactions with worker threads managed by the ``ThreadManager``. It initiates the process by generating a random number of clients between 10 and 20. Each client is instantiated with a unique name and added to a list for processing.
 
