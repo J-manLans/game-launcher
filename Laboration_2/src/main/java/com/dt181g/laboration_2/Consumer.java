@@ -23,7 +23,7 @@ public class Consumer implements Runnable {
             try {
                 Thread.sleep(randomizer.nextInt(maxSleepValue) + minSleepValue);
             } catch (InterruptedException e) {
-                System.out.println("Consumer will terminate");
+                // System.out.println("Consumer will terminate");
                 break;
             }
         }

@@ -39,40 +39,45 @@ public enum Manager {
         while(true) {
             current = resourcePool.getResources();
             if (current < startingPoolSize) {
-                createClient(producer, "Producer");
-                killClient("Consumer");
+                this.modifyClients(producer, "Producer");
             } else {
-                createClient(consumer, "Consumer");
-                killClient("Producer");
+                this.modifyClients(consumer, "Consumer");
             }
-            System.out.println(resourcePool.getResources() + " Clients: " + clients.size());
+            System.out.println(
+                String.format(
+                    "Resources: %d - Clients: %d",
+                    resourcePool.getResources(),
+                    clients.size()
+                )
+            );
 
             try {
                 Thread.sleep(150);
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
 
     }
 
-    public void createClient(Runnable client, String type) {
-        this.clients.add(new Thread(client, type));
-    }
+    private void modifyClients(Runnable client, String type) {
+        if (clients.size() <= initialConsumers + initialProducers) {
+            this.clients.add(new Thread(client, type));
+            this.clients.peekLast().start();
+        }
 
-    public void killClient(String client) {
         for (Thread thread : clients) {
-            if (thread.getName().equals(client)) {
+            if (!thread.getName().equals(type)) {
+                thread.interrupt();
                 this.clients.remove(thread);
                 break;
             }
         }
     }
 
-    void shutdown() {
-        for (Thread client : clients) {
-            client.interrupt();
+    synchronized void shutdown() {
+        for (Thread thread : clients) {
+            thread.interrupt();
         }
     }
 }

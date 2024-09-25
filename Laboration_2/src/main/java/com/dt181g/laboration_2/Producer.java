@@ -23,7 +23,7 @@ public class Producer implements Runnable {
             try {
                 Thread.sleep(randomizer.nextInt(maxSleepValue) + minSleepValue);
             } catch (InterruptedException e) {
-                System.out.println("Producer will terminate");
+                // System.out.println("Producer will terminate");
                 break;
             }
         }

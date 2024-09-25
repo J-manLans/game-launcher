@@ -7,7 +7,9 @@ public enum ResourcePool {
     private final AtomicInteger resources = new AtomicInteger(50);
 
     public void modifyResources(int resource) {
-        this.resources.addAndGet(resource);
+        if (!(resources.get() - resource < 0)) {
+            this.resources.addAndGet(resource);
+        }
     }
 
     public int getResources() {
