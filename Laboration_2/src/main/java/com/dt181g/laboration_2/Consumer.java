@@ -6,6 +6,7 @@ public class Consumer implements Runnable {
     private final ResourcePool resourcePool;
     private static final int minValue = 1;
     private static final int maxResourceValue = 20;
+    private static final int minSleepValue = 1000;
     private static final int maxSleepValue = 5000;
 
     Consumer(ResourcePool resourcePool) {
@@ -18,8 +19,9 @@ public class Consumer implements Runnable {
 
         while (true) {
             resourcePool.modifyResources(-(randomizer.nextInt(maxResourceValue) + minValue));
+
             try {
-                Thread.sleep(randomizer.nextInt(maxSleepValue) + minValue);
+                Thread.sleep(randomizer.nextInt(maxSleepValue) + minSleepValue);
             } catch (InterruptedException e) {
                 System.out.println("Consumer will terminate");
                 break;

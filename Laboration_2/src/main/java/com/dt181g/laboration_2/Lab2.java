@@ -14,7 +14,16 @@ public final class Lab2 {
      * @param args command arguments.
      */
     public static void main(final String... args) {
-        Manager manager = Manager.INSTANCE;
-        manager.shutdown();
+        final Manager manager = Manager.INSTANCE;
+
+        while (true) {
+            manager.checkResources();
+            try {
+                Thread.sleep(1000L);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
     }
 }
