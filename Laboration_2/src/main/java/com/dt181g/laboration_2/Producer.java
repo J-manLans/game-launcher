@@ -4,7 +4,6 @@ import java.util.Random;
 
 public class Producer implements Runnable {
     private final ResourcePool resourcePool;
-    private boolean shutdown = false;
     private final int minValue = 1;
     private final int maxResourceValue = 10;
     private final int maxSleepValue = 5000;
