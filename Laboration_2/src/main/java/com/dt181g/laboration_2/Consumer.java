@@ -18,7 +18,8 @@ public class Consumer implements Runnable {
         final Random randomizer = new Random();
 
         while (true) {
-            resourcePool.modifyResources(-(randomizer.nextInt(maxResourceValue) + minValue));
+            int resource = randomizer.nextInt(maxResourceValue) + minValue;
+            resourcePool.modifyResources(-resource);
 
             try {
                 Thread.sleep(randomizer.nextInt(maxSleepValue) + minSleepValue);

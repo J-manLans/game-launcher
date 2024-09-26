@@ -17,8 +17,10 @@ public class Producer implements Runnable {
     @Override
     public void run() {
         Random randomizer = new Random();
+
         while (true) {
-            resourcePool.modifyResources((randomizer.nextInt(maxResourceValue) + minValue));
+            int resource = randomizer.nextInt(maxResourceValue) + minValue;
+            resourcePool.modifyResources(resource);
 
             try {
                 Thread.sleep(randomizer.nextInt(maxSleepValue) + minSleepValue);

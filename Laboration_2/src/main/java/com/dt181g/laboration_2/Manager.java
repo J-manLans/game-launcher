@@ -13,6 +13,7 @@ public enum Manager {
     final Producer producer = new Producer(resourcePool);
     final Consumer consumer = new Consumer(resourcePool);
     private final int startingPoolSize = resourcePool.getResources();
+    private int currentPoolSize;
 
     Manager() {
         for (int i = 1; i <= largerQuantity; i++) {
@@ -29,20 +30,15 @@ public enum Manager {
     }
 
     public void checkResources() {
-        /*
-        * If the pool dwindles,the system will prioritize adding more producers
-        * while reducing consumers. Conversely, if the pool swells, it will
-        * increase consumers and decrease producers. This dynamic balance
-        * ensures the simulation runs indefinitely, halting only upon user intervention.
-        */
-        int current;
         while(true) {
-            current = resourcePool.getResources();
-            if (current < startingPoolSize) {
+            currentPoolSize = resourcePool.getResources();
+
+            if (currentPoolSize < startingPoolSize) {
                 this.modifyClients(producer, "Producer");
             } else {
                 this.modifyClients(consumer, "Consumer");
             }
+
             System.out.println(
                 String.format(
                     "Resources: %d - Clients: %d",
@@ -57,15 +53,9 @@ public enum Manager {
                 e.printStackTrace();
             }
         }
-
     }
 
     private void modifyClients(Runnable client, String type) {
-        if (clients.size() <= initialConsumers + initialProducers) {
-            this.clients.add(new Thread(client, type));
-            this.clients.peekLast().start();
-        }
-
         for (Thread thread : clients) {
             if (!thread.getName().equals(type)) {
                 thread.interrupt();
@@ -73,11 +63,26 @@ public enum Manager {
                 break;
             }
         }
+
+        if (clients.size() < initialConsumers + initialProducers) {
+            this.clients.add(new Thread(client, type));
+            this.clients.peekLast().start();
+        }
     }
 
     synchronized void shutdown() {
         for (Thread thread : clients) {
             thread.interrupt();
         }
+
+        for (Thread thread : clients) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        clients.clear();
     }
 }

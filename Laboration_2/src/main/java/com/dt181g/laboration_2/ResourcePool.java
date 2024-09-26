@@ -6,8 +6,8 @@ public enum ResourcePool {
     INSTANCE;
     private final AtomicInteger resources = new AtomicInteger(50);
 
-    public void modifyResources(int resource) {
-        if (!(resources.get() - resource < 0)) {
+    public synchronized void modifyResources(int resource) {
+        if (!(resources.get() + resource < 0)) {
             this.resources.addAndGet(resource);
         }
     }

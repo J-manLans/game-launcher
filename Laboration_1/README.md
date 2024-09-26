@@ -33,7 +33,7 @@ The purpose of this program is to simulate a simple multithreaded environment wh
 - Implement a simple thread manager for a thread pool containing 5 threads adhering to the **Object Pool Manager Pattern**.
 
 ## Procedures
-![Copilots view of this program](../_RepoResources/img/thread_pool.jpg)
+![Copilots view of this program](./src/main/resources/thread_pool.jpg)
 ### Main Method
 **The main method** serves as the entry point for the application, designed to simulate client interactions with worker threads managed by the ``ThreadManager``. It initiates the process by generating a random number of clients between 10 and 20. Each client is instantiated with a unique name and added to a list for processing.
 
