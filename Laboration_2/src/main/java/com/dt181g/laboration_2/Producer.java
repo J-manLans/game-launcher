@@ -7,8 +7,7 @@ public class Producer implements Runnable {
     private static final int minValue = 1;
     private static final int maxResourceValue = 10;
     private static final int minSleepValue = 1000;
-    private static final int maxSleepValue = 5000;
-
+    private static final int maxSleepValue = 2000;
 
     Producer(ResourcePool resourcePool) {
         this.resourcePool = resourcePool;
@@ -25,7 +24,6 @@ public class Producer implements Runnable {
             try {
                 Thread.sleep(randomizer.nextInt(maxSleepValue) + minSleepValue);
             } catch (InterruptedException e) {
-                // System.out.println("Producer will terminate");
                 break;
             }
         }

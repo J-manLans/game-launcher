@@ -15,8 +15,4 @@ public enum ResourcePool {
     public int getResources() {
         return this.resources.get();
     }
-
-    public void drawPool() {
-
-    }
 }

@@ -7,7 +7,7 @@ public class Consumer implements Runnable {
     private static final int minValue = 1;
     private static final int maxResourceValue = 20;
     private static final int minSleepValue = 1000;
-    private static final int maxSleepValue = 5000;
+    private static final int maxSleepValue = 2000;
 
     Consumer(ResourcePool resourcePool) {
         this.resourcePool = resourcePool;
@@ -24,7 +24,6 @@ public class Consumer implements Runnable {
             try {
                 Thread.sleep(randomizer.nextInt(maxSleepValue) + minSleepValue);
             } catch (InterruptedException e) {
-                // System.out.println("Consumer will terminate");
                 break;
             }
         }
