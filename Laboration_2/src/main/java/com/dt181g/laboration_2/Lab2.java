@@ -1,5 +1,6 @@
 package com.dt181g.laboration_2;
 
+import javax.swing.*;
 
 /**
  * The main starting point for laboration 2.
@@ -16,14 +17,10 @@ public final class Lab2 {
     public static void main(final String... args) {
         final Manager manager = Manager.INSTANCE;
 
-        while (true) {
-            manager.checkResources();
-            try {
-                Thread.sleep(1000L);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
+        SwingUtilities.invokeLater(() -> {
+            manager.setupGUI();
+        });
+
+        manager.startResourceChecking();
     }
 }
