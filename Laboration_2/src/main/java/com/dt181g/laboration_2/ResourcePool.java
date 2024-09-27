@@ -5,10 +5,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 public enum ResourcePool {
     INSTANCE;
     private final AtomicInteger resources = new AtomicInteger(50);
+    private final int minResources = 0;
+    private final int maxResources = 250;
+    private int currentPoolSize;
 
-    public synchronized void modifyResources(int resource) {
-        if (!(resources.get() + resource < 0)) {
-            this.resources.addAndGet(resource);
+    public synchronized void modifyResources(int resourceToAdd) {
+        this.currentPoolSize = this.resources.get();
+        if (!(this.currentPoolSize + resourceToAdd < minResources) &&
+            !(this.currentPoolSize + resourceToAdd > maxResources)) {
+            this.resources.addAndGet(resourceToAdd);
         }
     }
 

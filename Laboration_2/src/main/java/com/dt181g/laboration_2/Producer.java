@@ -4,10 +4,10 @@ import java.util.Random;
 
 public class Producer implements Runnable {
     private final ResourcePool resourcePool;
-    private static final int minValue = 1;
-    private static final int maxResourceValue = 10;
-    private static final int minSleepValue = 1000;
-    private static final int maxSleepValue = 1500;
+    private final int minValue = 1;
+    private final int maxResourceValue = 10;
+    private final int minSleepValue = 1000;
+    private final int maxSleepValue = 5000;
 
     Producer(ResourcePool resourcePool) {
         this.resourcePool = resourcePool;
@@ -18,18 +18,19 @@ public class Producer implements Runnable {
         Random randomizer = new Random();
 
         while (true) {
-            int resource = randomizer.nextInt(maxResourceValue) + minValue;
+            int resource = randomizer.nextInt(this.maxResourceValue) + this.minValue;
             resourcePool.modifyResources(resource);
 
             try {
-                Thread.sleep(randomizer.nextInt(maxSleepValue) + minSleepValue);
+                Thread.sleep(randomizer.nextInt(this.maxSleepValue) + this.minSleepValue);
             } catch (InterruptedException e) {
-                synchronized (Thread.currentThread()) {
-                    try {
-                        System.out.println("A " + Thread.currentThread().getName() + " go to rest...");
-                        Thread.currentThread().wait();
-                    } catch (InterruptedException e1) {
-                        System.out.println("A " + Thread.currentThread().getName() + " wakes up!");
+                synchronized (Thread.currentThread()) {  // Enters here when interrupt() is called
+                    while (true) {  // Protects from spurious wakeup
+                        try {
+                            Thread.currentThread().wait();
+                        } catch (InterruptedException e1) {
+                            break;  // Breaks out when interrupt() is called
+                        }
                     }
                 }
             }

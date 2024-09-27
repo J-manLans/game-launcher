@@ -23,7 +23,7 @@ public final class Lab2 {
             manager.setupAndStartGUI();
         });
 
-        Timer resourceCheckTimer = new Timer(10, new ActionListener () {
+        Timer resourceCheckTimer = new Timer(150, new ActionListener () {
             @Override
             public void actionPerformed(ActionEvent e) {
                 manager.refreshGUI();

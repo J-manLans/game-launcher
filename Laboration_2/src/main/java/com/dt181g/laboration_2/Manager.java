@@ -7,31 +7,36 @@ import java.util.LinkedList;
 public class Manager extends JFrame{
     public static final Manager INSTANCE = new Manager();
 
+    // Left panel
     private final JPanel leftPanel = new JPanel();
     private final JLabel producerLabel = new JLabel();
+    private final JLabel producerCount = new JLabel();
+    // Center panel
+    private final CirclePanel centerPanel = new CirclePanel();
+    private final JLabel resourceLabel = new JLabel();
+    // Right panel
     private final JPanel rightPanel = new JPanel();
     private final JLabel consumerLabel = new JLabel();
-    private final JLabel producerCount = new JLabel();
-    private final CirclePanel centerPanel = new CirclePanel();
     private final JLabel consumerCount = new JLabel();
-
+    // Thread lists
     private final LinkedList<Thread> clients = new LinkedList<>();
     private final LinkedList<Thread> waitingProducers = new LinkedList<>();
     private final LinkedList<Thread> waitingConsumers = new LinkedList<>();
 
-    private int producers = 6;
-    private int consumers = 5;
-    private final int largerQuantity = Math.max(producers, consumers);
+    private int producers = 6;  // These are the initial clients for the setup
+    private int consumers = 5;  // They will be modified continuously to update the GUI
     private final ResourcePool resourcePool = ResourcePool.INSTANCE;
-    final Producer producer = new Producer(resourcePool);
-    final Consumer consumer = new Consumer(resourcePool);
     private final int startingPoolSize = resourcePool.getResources();
     private int currentPoolSize;
+    private final Runnable producer = new Producer(resourcePool);
+    private final Runnable consumer = new Consumer(resourcePool);
 
     /*=====================
      *  Constructor
      ======================*/
     Manager() {
+        final int largerQuantity = Math.max(producers, consumers);
+
         for (int i = 1; i <= largerQuantity; i++) {
             if (i <= producers) {
                 this.clients.add(new Thread(producer, "Producer"));
@@ -48,35 +53,40 @@ public class Manager extends JFrame{
     /*=====================
      *  GUI Methods
      ======================*/
-    private void setAndCenterLabel(JPanel panel, JLabel label, String text, int size, Color cText) {
-        label.setText(text);;
-        label.setFont(new Font("Monospace", Font.BOLD, size));
-        label.setForeground(cText);
+    private void setAndCenterLabel(JPanel panel, JLabel label, String labelText, int fontSize, Color textColor) {
+        label.setText(labelText);
+        label.setFont(new Font("Monospace", Font.BOLD, fontSize));
+        label.setForeground(textColor);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(label);
     }
 
     void setupAndStartGUI() {
         // ====== Setting up the panels ======
+        int sidePanelFontSize = 15;
+        int centerPanelFontSize = 25;
+        int size1 = 200;
+        int size2 = 400;
 
         // Layout settings
         this.leftPanel.setLayout(new BoxLayout(this.leftPanel, BoxLayout.Y_AXIS));
         this.rightPanel.setLayout(new BoxLayout(this.rightPanel, BoxLayout.Y_AXIS));
 
-        this.leftPanel.setPreferredSize(new Dimension(200, 400));
-        this.centerPanel.setPreferredSize(new Dimension(400, 400));
-        this.rightPanel.setPreferredSize(new Dimension(200, 400));
+        this.leftPanel.setPreferredSize(new Dimension(size1, size2));
+        this.centerPanel.setPreferredSize(new Dimension(size2, size2));
+        this.rightPanel.setPreferredSize(new Dimension(size1, size2));
 
         // Adding components and styling
-        this.setAndCenterLabel(this.leftPanel, this.producerLabel, "PRODUCERS", 15, Color.WHITE);
-        this.setAndCenterLabel(this.leftPanel, this.producerCount, String.valueOf(this.producers), 15, Color.ORANGE);
+        this.setAndCenterLabel(this.leftPanel, this.producerLabel, "PRODUCERS", sidePanelFontSize, Color.WHITE);
+        this.setAndCenterLabel(this.leftPanel, this.producerCount, Integer.toString(this.producers), sidePanelFontSize, Color.ORANGE);
         this.leftPanel.setBackground(Color.DARK_GRAY);
 
-        this.centerPanel.setBackground(Color.GRAY);
         centerPanel.drawCircle(this.startingPoolSize);
+        this.setAndCenterLabel(this.centerPanel, this.resourceLabel, Integer.toString(resourcePool.getResources()), centerPanelFontSize, Color.ORANGE);
+        this.centerPanel.setBackground(Color.GRAY);
 
-        this.setAndCenterLabel(this.rightPanel, this.consumerLabel, "CONSUMERS", 15, Color.WHITE);
-        this.setAndCenterLabel(this.rightPanel, this.consumerCount, String.valueOf(this.consumers), 15, Color.ORANGE);
+        this.setAndCenterLabel(this.rightPanel, this.consumerLabel, "CONSUMERS", sidePanelFontSize, Color.WHITE);
+        this.setAndCenterLabel(this.rightPanel, this.consumerCount, Integer.toString(this.consumers), sidePanelFontSize, Color.ORANGE);
         this.rightPanel.setBackground(Color.DARK_GRAY);
 
         // ====== Setting up the frame ======
@@ -97,12 +107,12 @@ public class Manager extends JFrame{
      * @author Joel Lansgren
      */
     private class CirclePanel extends JPanel {
-        private int resourceAmount;
+        private int currentPoolSize;
         private Color circleColor;
 
-        private void drawCircle(int resourceAmount) {
-            this.resourceAmount = resourceAmount;
-            this.circleColor = setColor(resourceAmount);
+        private void drawCircle(int currentPoolSize) {
+            this.currentPoolSize = currentPoolSize;
+            this.circleColor = setColor(currentPoolSize);
             repaint();
         }
 
@@ -111,12 +121,12 @@ public class Manager extends JFrame{
          * @param resourceAmount
          * @return
          */
-        private Color setColor(int resourceAmount) {
-            return switch (resourceAmount / 50) {
-                case 2 -> Color.PINK; // 100 to 149 and above
+        private Color setColor(int currentPoolSize) {
+            return switch (currentPoolSize / 50) {
+                case 2 -> Color.PINK; // 100 to 149
                 case 1 -> Color.ORANGE;   // 50 to 99
-                case 0 -> Color.YELLOW; // 0 to 49
-                default -> Color.RED; // 150 and above
+                case 0 -> Color.WHITE; // 0 to 49
+                default -> Color.DARK_GRAY; // 150 and above
             };
         }
 
@@ -131,10 +141,10 @@ public class Manager extends JFrame{
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            int x = (getWidth() / 2) - (resourceAmount / 2);
-            int y = (getHeight() / 2) - (resourceAmount / 2);
+            int x = (getWidth() / 2) - (currentPoolSize / 2);
+            int y = (getHeight() / 2) - (currentPoolSize / 2);
             g.setColor(circleColor);
-            g.fillOval(x, y, resourceAmount, resourceAmount);
+            g.fillOval(x, y, currentPoolSize, currentPoolSize);
         }
     }
 
@@ -143,89 +153,88 @@ public class Manager extends JFrame{
      ======================*/
     void refreshGUI() {
         this.currentPoolSize = resourcePool.getResources();
-        this.modifyClientsList();
+        this.modifyClients();
         this.updateClientCount();
         this.reDrawGUI();
     }
 
-    private void modifyClientsList() {
-        // Lower bound
-        if (this.currentPoolSize < this.startingPoolSize) {
-            this.modifyClients(this.producer, "Producer");
-        }
-        // Upper bound
-        if (this.currentPoolSize > this.startingPoolSize * 4) {
-            this.modifyClients(this.consumer, "Consumer");
+    private void modifyClients() {
+        switch (this.currentPoolSize / 50) {
+            case 0 -> this.modifyClientLists(this.producer, "Producer");  // Below 50
+            case 4 -> this.modifyClientLists(this.consumer, "Consumer");  // 200 and above
         }
     }
 
-    private void modifyClients(Runnable client, String typeToAdd) {
+    private void modifyClientLists(Runnable client, String typeToAdd) {
         int i = 0;
         boolean switchedClient = false;
 
         for (Thread thread : clients) {
             if (!thread.getName().equals(typeToAdd)) {
-                thread.interrupt();
+                thread.interrupt();  // Make the client enter a wait state
 
-                switch (thread.getName()) {
+                switch (thread.getName()) {  // Adds client to correct waiting list
                     case "Producer" -> this.waitingProducers.add(this.clients.get(i));
                     case "Consumer" -> this.waitingConsumers.add(this.clients.get(i));
-                };
+                }
 
-                this.clients.remove(thread);
+                this.clients.remove(i);  // Removes client from client list
                 break;
             }
-            i += 1;
+            i++;
         }
 
         if (clients.size() < 11) {
-
             switch(typeToAdd) {
                 case "Producer" -> {
                     if (waitingProducers.size() > 0) {
-                        this.clients.add(this.waitingProducers.getFirst());
-                        this.waitingProducers.peekFirst().interrupt();
-                        this.waitingProducers.removeFirst();
+                        this.clients.add(this.waitingProducers.getFirst());  // Adds producer to client list
+                        this.waitingProducers.peekFirst().interrupt();  // Restarts the producer
+                        this.waitingProducers.removeFirst();  // Removes the producer from waiting list
                         switchedClient = true;
                     }
                 } case "Consumer" -> {
                     if (waitingConsumers.size() > 0) {
-                        this.clients.add(this.waitingConsumers.getFirst());
-                        this.waitingConsumers.peekFirst().interrupt();
-                        this.waitingConsumers.removeFirst();
+                        this.clients.add(this.waitingConsumers.getFirst());  // Adds consumer to client list
+                        this.waitingConsumers.peekFirst().interrupt();  // Restarts the consumer
+                        this.waitingConsumers.removeFirst();  // Removes the consumer from waiting list
                         switchedClient = true;
                     }
                 }
             }
 
-            System.out.println("consumers: " + waitingConsumers.size() + " producers: " + waitingProducers.size() + " clients: " + clients.size() + "\n");
-
+            // Adds new client thread and starts it up if no clients have been switched
             if (!switchedClient) {
                 this.clients.add(new Thread(client, typeToAdd));
                 this.clients.peekLast().start();
-             } else {
+            } else {
                 switchedClient = false;
-             }
+            }
 
+            System.out.printf("Waiting Producers: %d | Waiting Consumers; %d | Total in Wait: %d | Active Clients: %d\n",
+                waitingProducers.size(),
+                waitingConsumers.size(),
+                waitingProducers.size() + waitingConsumers.size(),
+                clients.size()
+            );
         }
     }
 
     private void updateClientCount() {
-        this.producers = 0;
-        this.consumers = 0;
+        this.producers = this.consumers = 0;
 
         for (Thread thread : clients) {
-            if (thread.getName().equals("Producer")) {
-                this.producers += 1;
-            } else {
-                this.consumers += 1;
-            }
+            switch (thread.getName()) {
+                case "Producer" -> this.producers++;
+                case "Consumer" -> this.consumers++;
+            };
         }
     }
 
     private void reDrawGUI() {
-        this.producerCount.setText(String.valueOf(this.producers));
+        this.producerCount.setText(Integer.toString(this.producers));
+        this.resourceLabel.setText(Integer.toString(this.resourcePool.getResources()));
         centerPanel.drawCircle(this.currentPoolSize);
-        this.consumerCount.setText(String.valueOf(this.consumers));
+        this.consumerCount.setText(Integer.toString(this.consumers));
     }
 }
