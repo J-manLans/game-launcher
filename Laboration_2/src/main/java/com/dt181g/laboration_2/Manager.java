@@ -2,8 +2,6 @@ package com.dt181g.laboration_2;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.LinkedList;
 
 public class Manager extends JFrame{
@@ -18,11 +16,12 @@ public class Manager extends JFrame{
     private final JLabel consumerCount = new JLabel();
 
     private final LinkedList<Thread> clients = new LinkedList<>();
-    private Timer resourceCheckTimer;
-    private final int initialProducers = 6;
-    private final int initialConsumers = 5;
-    final int[] clientCounter = new int[2];
-    private final int largerQuantity = Math.max(initialProducers, initialConsumers);
+    private final LinkedList<Thread> waitingProducers = new LinkedList<>();
+    private final LinkedList<Thread> waitingConsumers = new LinkedList<>();
+
+    private int producers = 6;
+    private int consumers = 5;
+    private final int largerQuantity = Math.max(producers, consumers);
     private final ResourcePool resourcePool = ResourcePool.INSTANCE;
     final Producer producer = new Producer(resourcePool);
     final Consumer consumer = new Consumer(resourcePool);
@@ -34,12 +33,12 @@ public class Manager extends JFrame{
      ======================*/
     Manager() {
         for (int i = 1; i <= largerQuantity; i++) {
-            if (i <= initialProducers) {
+            if (i <= producers) {
                 this.clients.add(new Thread(producer, "Producer"));
                 clients.peekLast().start();
             }
 
-            if (i <= initialConsumers) {
+            if (i <= consumers) {
                 this.clients.add(new Thread(consumer, "Consumer"));
                 clients.peekLast().start();
             }
@@ -57,7 +56,7 @@ public class Manager extends JFrame{
         panel.add(label);
     }
 
-    void setupGUI() {
+    void setupAndStartGUI() {
         // ====== Setting up the panels ======
 
         // Layout settings
@@ -70,14 +69,14 @@ public class Manager extends JFrame{
 
         // Adding components and styling
         this.setAndCenterLabel(this.leftPanel, this.producerLabel, "PRODUCERS", 15, Color.WHITE);
-        this.setAndCenterLabel(this.leftPanel, this.producerCount, String.valueOf(this.initialProducers), 15, Color.ORANGE);
+        this.setAndCenterLabel(this.leftPanel, this.producerCount, String.valueOf(this.producers), 15, Color.ORANGE);
         this.leftPanel.setBackground(Color.DARK_GRAY);
 
         this.centerPanel.setBackground(Color.GRAY);
         centerPanel.drawCircle(this.startingPoolSize);
 
         this.setAndCenterLabel(this.rightPanel, this.consumerLabel, "CONSUMERS", 15, Color.WHITE);
-        this.setAndCenterLabel(this.rightPanel, this.consumerCount, String.valueOf(this.initialConsumers), 15, Color.ORANGE);
+        this.setAndCenterLabel(this.rightPanel, this.consumerCount, String.valueOf(this.consumers), 15, Color.ORANGE);
         this.rightPanel.setBackground(Color.DARK_GRAY);
 
         // ====== Setting up the frame ======
@@ -142,54 +141,91 @@ public class Manager extends JFrame{
     /*=====================
      *  Resource Methods
      ======================*/
-    void startResourceChecking() {
-        this.resourceCheckTimer = new Timer(150, new ActionListener () {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                checkResources();
-            }
-        });
-        this.resourceCheckTimer.start();
-    }
-
-    private void checkResources() {
+    void refreshGUI() {
         this.currentPoolSize = resourcePool.getResources();
-        clientCounter[0] = 0;
-        clientCounter[1] = 0;
-
-        if (currentPoolSize < startingPoolSize) {
-            this.modifyClients(producer, "Producer");
-        }
-
-        if (currentPoolSize > startingPoolSize * 4) {
-            this.modifyClients(consumer, "Consumer");
-        }
-
-        for (Thread thread : clients) {
-            if (thread.getName().equals("Producer")) {
-                clientCounter[0] += 1;
-            } else {
-                clientCounter[1] += 1;
-            }
-        }
-
-        this.producerCount.setText(String.valueOf(clientCounter[0]));
-        centerPanel.drawCircle(currentPoolSize);
-        this.consumerCount.setText(String.valueOf(clientCounter[1]));
+        this.modifyClientsList();
+        this.updateClientCount();
+        this.reDrawGUI();
     }
 
-    private void modifyClients(Runnable client, String type) {
+    private void modifyClientsList() {
+        // Lower bound
+        if (this.currentPoolSize < this.startingPoolSize) {
+            this.modifyClients(this.producer, "Producer");
+        }
+        // Upper bound
+        if (this.currentPoolSize > this.startingPoolSize * 4) {
+            this.modifyClients(this.consumer, "Consumer");
+        }
+    }
+
+    private void modifyClients(Runnable client, String typeToAdd) {
+        int i = 0;
+        boolean switchedClient = false;
+
         for (Thread thread : clients) {
-            if (!thread.getName().equals(type)) {
+            if (!thread.getName().equals(typeToAdd)) {
                 thread.interrupt();
+
+                switch (thread.getName()) {
+                    case "Producer" -> this.waitingProducers.add(this.clients.get(i));
+                    case "Consumer" -> this.waitingConsumers.add(this.clients.get(i));
+                };
+
                 this.clients.remove(thread);
                 break;
             }
+            i += 1;
         }
 
-        if (clients.size() < initialConsumers + initialProducers) {
-            this.clients.add(new Thread(client, type));
-            this.clients.peekLast().start();
+        if (clients.size() < 11) {
+
+            switch(typeToAdd) {
+                case "Producer" -> {
+                    if (waitingProducers.size() > 0) {
+                        this.clients.add(this.waitingProducers.getFirst());
+                        this.waitingProducers.peekFirst().interrupt();
+                        this.waitingProducers.removeFirst();
+                        switchedClient = true;
+                    }
+                } case "Consumer" -> {
+                    if (waitingConsumers.size() > 0) {
+                        this.clients.add(this.waitingConsumers.getFirst());
+                        this.waitingConsumers.peekFirst().interrupt();
+                        this.waitingConsumers.removeFirst();
+                        switchedClient = true;
+                    }
+                }
+            }
+
+            System.out.println("consumers: " + waitingConsumers.size() + " producers: " + waitingProducers.size() + " clients: " + clients.size() + "\n");
+
+            if (!switchedClient) {
+                this.clients.add(new Thread(client, typeToAdd));
+                this.clients.peekLast().start();
+             } else {
+                switchedClient = false;
+             }
+
         }
+    }
+
+    private void updateClientCount() {
+        this.producers = 0;
+        this.consumers = 0;
+
+        for (Thread thread : clients) {
+            if (thread.getName().equals("Producer")) {
+                this.producers += 1;
+            } else {
+                this.consumers += 1;
+            }
+        }
+    }
+
+    private void reDrawGUI() {
+        this.producerCount.setText(String.valueOf(this.producers));
+        centerPanel.drawCircle(this.currentPoolSize);
+        this.consumerCount.setText(String.valueOf(this.consumers));
     }
 }

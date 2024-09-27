@@ -1,6 +1,8 @@
 package com.dt181g.laboration_2;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * The main starting point for laboration 2.
@@ -18,9 +20,15 @@ public final class Lab2 {
         final Manager manager = Manager.INSTANCE;
 
         SwingUtilities.invokeLater(() -> {
-            manager.setupGUI();
+            manager.setupAndStartGUI();
         });
 
-        manager.startResourceChecking();
+        Timer resourceCheckTimer = new Timer(10, new ActionListener () {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                manager.refreshGUI();
+            }
+        });
+        resourceCheckTimer.start();
     }
 }
