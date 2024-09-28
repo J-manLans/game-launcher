@@ -40,12 +40,10 @@ public class Manager extends JFrame{
         for (int i = 1; i <= largerQuantity; i++) {
             if (i <= producers) {
                 this.clients.add(new Thread(producer, "Producer"));
-                clients.peekLast().start();
             }
 
             if (i <= consumers) {
                 this.clients.add(new Thread(consumer, "Consumer"));
-                clients.peekLast().start();
             }
         }
     }
@@ -151,6 +149,12 @@ public class Manager extends JFrame{
     /*=====================
      *  Resource Methods
      ======================*/
+    void startThreads () {
+        for (Thread thread : clients) {
+            thread.start();
+        }
+    }
+
     void refreshGUI() {
         this.currentPoolSize = resourcePool.getResources();
         this.modifyClients();

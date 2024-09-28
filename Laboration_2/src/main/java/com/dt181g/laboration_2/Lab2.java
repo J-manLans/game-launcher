@@ -3,6 +3,7 @@ package com.dt181g.laboration_2;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * The main starting point for laboration 2.
@@ -19,9 +20,14 @@ public final class Lab2 {
     public static void main(final String... args) {
         final Manager manager = Manager.INSTANCE;
 
-        SwingUtilities.invokeLater(() -> {
-            manager.setupAndStartGUI();
-        });
+        try {
+            SwingUtilities.invokeAndWait(() -> {
+                manager.setupAndStartGUI();
+            });
+            manager.startThreads();
+        } catch (InvocationTargetException | InterruptedException e) {
+            e.printStackTrace();
+        }
 
         Timer resourceCheckTimer = new Timer(150, new ActionListener () {
             @Override
