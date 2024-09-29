@@ -11,10 +11,8 @@ package com.dt181g.laboration_2;
  */
 public enum ResourcePool {
     INSTANCE;
-    private int resources = 50;
+    private int resources = AppConfig.STARTING_RESOURCES;
     private int newResources;
-    private final int minResources = 0;
-    private final int maxResources = 250;
 
     /**
      * Modifies the current amount of resources in the pool.
@@ -29,8 +27,8 @@ public enum ResourcePool {
     public synchronized void modifyResources(final int resourceToAdd) {
         this.newResources = this.resources + resourceToAdd;
 
-        if (this.newResources >= this.minResources
-            && this.newResources <= this.maxResources) {
+        if (this.newResources >= AppConfig.MIN_RESOURCE_BOUND
+            && this.newResources <= AppConfig.MAX_RESOURCE_BOUND) {
             this.resources = this.newResources;
         }
     }

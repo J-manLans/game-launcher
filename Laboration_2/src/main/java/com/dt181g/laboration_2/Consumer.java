@@ -19,10 +19,6 @@ import java.util.Random;
  */
 public class Consumer implements Runnable {
     private final ResourcePool resourcePool;
-    private final int minValue = 1;
-    private final int maxResourceValue = 20;
-    private final int minSleepValue = 1000;
-    private final int maxSleepValue = 5000;
 
      /**
      * Constructs a Consumer with the specified resource pool.
@@ -46,11 +42,11 @@ public class Consumer implements Runnable {
         final Random randomizer = new Random();
 
         while (true) {
-            int resource = randomizer.nextInt(this.maxResourceValue) + this.minValue;
+            int resource = randomizer.nextInt(AppConfig.CONSUMER_MAX_ADD) + AppConfig.CLIENT_MIN_ADD;
             resourcePool.modifyResources(-resource);
 
             try {
-                Thread.sleep(randomizer.nextInt(this.maxSleepValue) + this.minSleepValue);
+                Thread.sleep(randomizer.nextLong(AppConfig.CLIENTS_MAX_SLEEP) + AppConfig.CLIENTS_MIN_SLEEP);
             } catch (InterruptedException e) {
                 synchronized (Thread.currentThread()) {
                     while (true) {  // Protects from spurious wakeup

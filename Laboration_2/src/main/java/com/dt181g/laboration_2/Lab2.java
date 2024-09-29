@@ -40,7 +40,7 @@ public final class Lab2 {
 
         manager.startThreads();
 
-        Timer resourceCheckTimer = new Timer(150, new ActionListener() {
+        Timer resourceCheckTimer = new Timer(AppConfig.EDT_REFRESH_DELAY, new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 manager.refreshGUI();

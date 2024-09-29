@@ -1,8 +1,28 @@
 /**
- * Package for laboration 2, the second assignment of course DT180G.
- * The assignment regards a revisit to Spies'R Us, a secret spy organization we
- * first met in DT179G. This time, the organization needs a better approach to
- * ciphering of messages passing between agents. The solution needs to utilize
- * Decorator Design Pattern!
+ * Core functionality for the Laboration 2 application,
+ * simulating a resource pool system with producers and consumers.
+ *
+ * <p>
+ * Classes in this package:
+ * <ul>
+ *     <li>{@link Lab2} - Main entry point and GUI initialization.</li>
+ *     <li>{@link Manager} - Manages producers and consumers in the GUI.</li>
+ *     <li>{@link Producer} - Generates resources for the pool.</li>
+ *     <li>{@link Consumer} - Consumes resources from the pool.</li>
+ *     <li>{@link ResourcePool} - Thread-safe resource management.</li>
+ *     <li>{@link CirclePanel} - Visual representation of the resource pool.</li>
+ *     <li>{@link AppConfig} - Configuration settings for the application.</li>
+ * </ul>
+ * </p>
+ *
+ * <p>
+ * The application uses Swing for the GUI, with a timer for real-time updates
+ * and employs the Singleton pattern for resource management.
+ * </p>
+ *
+ * @author Joel Lansgren
+ * @version 1.0
+ * @since 2023-09-29
+
  */
 package com.dt181g.laboration_2;
