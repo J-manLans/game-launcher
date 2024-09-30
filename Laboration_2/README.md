@@ -37,6 +37,7 @@
 polling vs observer pattern
 Timer vs invokeAndWait() - check notes
 BLockingqueue in resourcepool
+alternative method for modifying clients list, a more general method that is open for additional threads that might be added in the future, but in this consumer producer setup its not really applicable
 
 
 ## Personal Reflections

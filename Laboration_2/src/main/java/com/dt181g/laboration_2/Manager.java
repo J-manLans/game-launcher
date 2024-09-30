@@ -3,8 +3,7 @@ package com.dt181g.laboration_2;
 import javax.swing.*;
 
 import java.awt.*;
-import java.util.LinkedList;
-import java.util.logging.Logger;
+import java.util.ArrayDeque;
 
 /**
  * The Manager class represents the main GUI component for managing producers and consumers
@@ -22,7 +21,6 @@ import java.util.logging.Logger;
  */
 public class Manager extends JFrame {
     public static final Manager INSTANCE = new Manager();
-    private final Logger managerLogger = Logger.getLogger(Manager.class.getName());
 
     // Left panel
     private final JPanel leftPanel = new JPanel();
@@ -36,9 +34,10 @@ public class Manager extends JFrame {
     private final JLabel consumerLabel = new JLabel();
     private final JLabel consumerCount = new JLabel();
     // Thread lists
-    private final LinkedList<Thread> clients = new LinkedList<>();
-    private final LinkedList<Thread> waitingProducers = new LinkedList<>();
-    private final LinkedList<Thread> waitingConsumers = new LinkedList<>();
+    private final ArrayDeque<Thread> activeProducers = new ArrayDeque<>();
+    private final ArrayDeque<Thread> activeConsumers = new ArrayDeque<>();
+    private final ArrayDeque<Thread> waitingProducers = new ArrayDeque<>();
+    private final ArrayDeque<Thread> waitingConsumers = new ArrayDeque<>();
 
     private int producers = AppConfig.STARTING_PRODUCERS;  // These are the initial clients for the setup
     private int consumers = AppConfig.STARTING_CONSUMERS;  // They will be modified continuously to update the GUI
@@ -61,11 +60,11 @@ public class Manager extends JFrame {
 
         for (int i = 1; i <= largerQuantity; i++) {
             if (i <= producers) {
-                this.clients.add(new Thread(producer, AppConfig.PRODUCER));
+                this.activeProducers.add(new Thread(producer, AppConfig.PRODUCER));
             }
 
             if (i <= consumers) {
-                this.clients.add(new Thread(consumer, AppConfig.CONSUMER));
+                this.activeConsumers.add(new Thread(consumer, AppConfig.CONSUMER));
             }
         }
     }
@@ -238,7 +237,10 @@ public class Manager extends JFrame {
      * and consumers to operate concurrently.
      */
     void startThreads() {
-        for (Thread thread : clients) {
+        for (Thread thread : this.activeProducers) {
+            thread.start();
+        }
+        for (Thread thread : this.activeConsumers) {
             thread.start();
         }
     }
@@ -265,69 +267,71 @@ public class Manager extends JFrame {
      */
     private void modifyClients() {
         switch (this.currentPoolSize / AppConfig.STARTING_RESOURCES) {
-            case AppConfig.THRESHOLD_LOW -> this.modifyClientLists(this.producer, AppConfig.PRODUCER);
-            case AppConfig.THRESHOLD_MAX -> this.modifyClientLists(this.consumer, AppConfig.CONSUMER);
+            case AppConfig.THRESHOLD_LOW -> this.modifyClientLists(
+                this.activeConsumers,
+                this.waitingConsumers,
+                this.activeProducers,
+                this.waitingProducers,
+                this.producer,
+                AppConfig.PRODUCER
+            );
+            case AppConfig.THRESHOLD_MAX -> this.modifyClientLists(
+                this.activeProducers,
+                this.waitingProducers,
+                this.activeConsumers,
+                this.waitingConsumers,
+                this.consumer,
+                AppConfig.CONSUMER
+            );
             default -> { } // No action needed for this value since it is inside the interval.
         }
     }
 
     /**
-     * Modifies the clients lists by removing and adding threads based on the current
-     * resource amount. It interrupts threads that are not of the specified type,
-     * place it in its waiting list and either add a waiting client of the specified type,
-     * or if none exists, it creates a new one, add it to the client list and starts it up.
-     * By doing this we have a pool of threads that is growing dynamically based on how many
-     * threads actually are utilized.
+     * Modifies the client thread lists by removing and adding threads based on the current
+     * resource availability. It interrupts a specified active client thread,
+     * places it into the waiting list, and either starts a waiting client thread
+     * if available or creates a new one. This approach allows for dynamic management
+     * of active client threads, ensuring that the maximum limit is respected.
      *
-     * @param client the Runnable instance of the client (producer or consumer)
-     * @param typeToAdd the type of client to add (AppConfig.PRODUCER or AppConfig.CONSUMER)
+     * @param removeActiveList the list of active clients where a thread is to be removed
+     * @param removeWaitingList the list where interrupted clients are placed
+     * @param addActiveList the list of active clients where a thread is to be added
+     * @param removeWaitingList the list from which clients are drawn when adding new ones if it is not empty
+     * @param newClient the Runnable instance of the client to be added (producer or consumer)
+     * @param clientName the name of the client thread to be created
      */
-    private void modifyClientLists(final Runnable client, final String typeToAdd) {
-        int i = 0;
+    private void modifyClientLists(
+        final ArrayDeque<Thread> removeActiveList,
+        final ArrayDeque<Thread> addWaitingList,
+        final ArrayDeque<Thread> addActiveList,
+        final ArrayDeque<Thread> removeWaitingList,
+        final Runnable newClient,
+        final String clientName
+    ) {
         boolean switchedClient = false;
 
-        for (Thread thread : clients) {
-            if (!thread.getName().equals(typeToAdd)) {
-                thread.interrupt();  // Make the client enter a wait state
-
-                switch (thread.getName()) {  // Adds client to correct waiting list
-                    case AppConfig.PRODUCER -> this.waitingProducers.add(this.clients.get(i));
-                    case AppConfig.CONSUMER -> this.waitingConsumers.add(this.clients.get(i));
-                    default -> managerLogger.warning(thread.getName() + " doesn't have an implementation");
-                }
-
-                this.clients.remove(i);  // Removes client from client list
-                break;
-            }
-            i++;
+        if (removeActiveList.size() > 0) {
+            // Make the client enter a wait state
+            removeActiveList.peekFirst().interrupt();
+            // Moves client from its active to its waiting list
+            addWaitingList.add(removeActiveList.pollFirst());
         }
 
-        if (clients.size() < AppConfig.MAX_ACTIVE_CLIENTS) {
-            switch (typeToAdd) {
-                case AppConfig.PRODUCER -> {
-                    if (waitingProducers.size() > 0) {
-                        this.clients.add(this.waitingProducers.getFirst());  // Adds producer to client list
-                        this.waitingProducers.peekFirst().interrupt();  // Restarts the producer
-                        this.waitingProducers.removeFirst();  // Removes the producer from waiting list
-                        switchedClient = true;
-                    }
-                } case AppConfig.CONSUMER -> {
-                    if (waitingConsumers.size() > 0) {
-                        this.clients.add(this.waitingConsumers.getFirst());  // Adds consumer to client list
-                        this.waitingConsumers.peekFirst().interrupt();  // Restarts the consumer
-                        this.waitingConsumers.removeFirst();  // Removes the consumer from waiting list
-                        switchedClient = true;
-                    }
-                } default -> managerLogger.warning(typeToAdd + " doesn't have an implementation");
+        if (addActiveList.size() < AppConfig.MAX_ACTIVE_CLIENTS) {
+            if (removeWaitingList.size() > 0) {
+                // Moves opposite client from its waiting to its active list
+                addActiveList.add(removeWaitingList.pollFirst());
+                // Restarts client
+                addActiveList.peekLast().interrupt();
+                switchedClient = true;
             }
 
             // Adds new client thread and starts it up if no clients have
             // been switched from the waiting list to the client list
             if (!switchedClient) {
-                this.clients.add(new Thread(client, typeToAdd));
-                this.clients.peekLast().start();
-            } else {
-                switchedClient = false;
+                addActiveList.add(new Thread(newClient, clientName));
+                addActiveList.peekLast().start();
             }
         }
     }
@@ -338,16 +342,8 @@ public class Manager extends JFrame {
      * and increments the respective counts.
      */
     private void updateClientCount() {
-        this.producers = 0;
-        this.consumers = 0;
-
-        for (Thread thread : clients) {
-            switch (thread.getName()) {
-                case AppConfig.PRODUCER -> this.producers++;
-                case AppConfig.CONSUMER -> this.consumers++;
-                default -> managerLogger.warning(thread.getName() + " doesn't have an implementation");
-            }
-        }
+        this.producers = this.activeProducers.size();
+        this.consumers = this.activeConsumers.size();
     }
 
     /**

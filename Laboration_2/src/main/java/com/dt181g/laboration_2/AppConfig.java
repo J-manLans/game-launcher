@@ -1,6 +1,7 @@
 package com.dt181g.laboration_2;
 
 import java.awt.Color;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The AppConfig class provides a collection of constants used throughout
@@ -13,6 +14,8 @@ import java.awt.Color;
 public final class AppConfig {
     // make sure the class cannot be instantiated.
     private AppConfig() { throw new IllegalStateException("Utility class"); }
+
+    public static volatile AtomicInteger ACTIVE = new AtomicInteger(11);
 
     /*=================================
      * Resource Pool Settings

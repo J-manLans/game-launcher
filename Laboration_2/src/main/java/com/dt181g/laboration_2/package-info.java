@@ -23,6 +23,5 @@
  * @author Joel Lansgren
  * @version 1.0
  * @since 2023-09-29
-
  */
 package com.dt181g.laboration_2;
