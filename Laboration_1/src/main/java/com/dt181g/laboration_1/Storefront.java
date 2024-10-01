@@ -22,26 +22,17 @@ public class Storefront {
     Storefront() {
         System.out.println("\nClients: " + clientPool + "\n");
         welcomeClients();
-        startClients();
         waitForClientsToLeave();
         endOfDay();
     }
 
     /**
-     * Creates the list of clients.
+     * Creates the list of clients and starts them
      */
     private void welcomeClients(){
         for (int i = 1; i <= clientPool; i++) {
             clients.add(new Client("Client " + i));
-        }
-    }
-
-    /**
-     * Starts the clients.
-     */
-    private void startClients() {
-        for (Client client : clients) {
-            client.start();
+            clients.getLast().start();
         }
     }
 
