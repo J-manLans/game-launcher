@@ -65,6 +65,20 @@ public class WorkerThread extends Thread {
     }
 
     /**
+     * Shuts down the worker thread by setting the shutdown flag and interrupting the thread.
+     * Once shutdown is called, the thread will break out of the while loop through the catch block
+     * without performing any tasks since the client is null and shutdown is true.
+     */
+    public void shutdown() {
+        this.shutdown = true;
+        this.interrupt();
+    }
+
+    /*===========================
+     * Private methods
+     *==========================/
+
+    /**
      * The method checks if the initial number given by the client is prime with the helper method
      * {@code isRandPrime}.
      * If so, the number is flagged and additional computation is done. The helper method {@code threadSleepAndIncrement}
@@ -139,15 +153,9 @@ public class WorkerThread extends Thread {
         return count[0];
     }
 
-    /**
-     * Shuts down the worker thread by setting the shutdown flag and interrupting the thread.
-     * Once shutdown is called, the thread will break out of the while loop through the catch block
-     * without performing any tasks since the client is null and shutdown is true.
-     */
-    public void shutdown() {
-        this.shutdown = true;
-        this.interrupt();
-    }
+    /*===========================
+     * Run
+     *==========================/
 
     /**
      * The main execution loop of the worker thread.
