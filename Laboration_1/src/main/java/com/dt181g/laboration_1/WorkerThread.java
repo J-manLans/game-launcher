@@ -65,33 +65,48 @@ public class WorkerThread extends Thread {
     }
 
     /**
-     * The method checks if the initial number given by the client is prime.
+     * The method checks if the initial number given by the client is prime with the helper method
+     * {@code isRandPrime}.
      * If so, the number is flagged and additional computation is done. The helper method {@code threadSleepAndIncrement}
      * is utilized for this to add complexity to the upper bound for number generation to the {@code randomizer}.
      * The prime number is also used to set the randomizer's seed.
      *
      * <p>
-     * If the number isn't prime, the flag is set to false
-     * and a new random number is generated based on the initial number.
+     * If the number isn't prime, a new random number is generated based on the initial number.
      * <p/>
      *
      * @param initialNum the base number used to generate a random number.
      * @return the layered random number
      */
-    private int isRandPrime(final int initialNum) {
+    private int doWork(int initialNum) {
+        this.isRandPrime(initialNum);
+        if (isPrime) {
+            randomizer.setSeed(initialNum);
+            return randomizer.nextInt(threadSleepAndIncrement(initialNum));
+        }
+
+        return randomizer.nextInt(initialNum);
+    }
+
+    /**
+     * The method checks if the initial number given by the client is prime and sets
+     * the {@code isPrime} to false if not and true if it is
+     *
+     * @param initialNum the base number used to generate a random number.
+     * @return the layered random number
+     */
+    private void isRandPrime(final int initialNum) {
         if (initialNum % 2 == 1) {
             for (int i = 3; i <= (int) Math.sqrt(initialNum); i += 2) {
                 if (initialNum % i == 0) {
-                    isPrime = false;
-                    break;
-                } else {
-                    this.isPrime = true;
-                    randomizer.setSeed(initialNum);
-                    return randomizer.nextInt(threadSleepAndIncrement(initialNum));
+                    this.isPrime = false;
+                    return;
                 }
             }
+            this.isPrime = true;
+        } else {
+            this.isPrime = false;
         }
-        return randomizer.nextInt(initialNum);
     }
 
     /**
@@ -163,7 +178,7 @@ public class WorkerThread extends Thread {
                         this.clientsNum
                     )
                 );
-                this.client.updateRandNum(this.isRandPrime(clientsNum));
+                this.client.updateRandNum(this.doWork(clientsNum));
                 this.client.notifyWorksDone();
                 this.gotClient = false;
             }
