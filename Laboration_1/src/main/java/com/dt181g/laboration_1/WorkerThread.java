@@ -143,6 +143,7 @@ public class WorkerThread extends Thread {
 
         try {
             Thread.sleep(prime);
+            // Waiting for atoms to decay...
             counting.set(false);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
