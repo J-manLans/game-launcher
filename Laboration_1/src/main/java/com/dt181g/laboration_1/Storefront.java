@@ -27,19 +27,28 @@ public class Storefront {
         endOfDay();
     }
 
-    void welcomeClients(){
+    /**
+     * Creates the list of clients.
+     */
+    private void welcomeClients(){
         for (int i = 1; i <= clientPool; i++) {
             clients.add(new Client("Client " + i));
         }
     }
 
-    void startClients() {
+    /**
+     * Starts the clients.
+     */
+    private void startClients() {
         for (Client client : clients) {
             client.start();
         }
     }
 
-    void waitForClientsToLeave() {
+    /**
+     * Joins the client threads and wait for them to terminate
+     */
+    private void waitForClientsToLeave() {
         for (Client client : clients) {
             try {
                 client.join();
@@ -50,7 +59,10 @@ public class Storefront {
         clients.clear();
     }
 
-    void endOfDay() {
+    /**
+     * Print some statistics to the console and utilizes the manager enum to shut down the thread pool.
+     */
+    private void endOfDay() {
 
         System.out.println(
             String.format(
