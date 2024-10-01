@@ -13,9 +13,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class WorkerThread extends Thread {
     private final Object threadLock = new Object();
     private Client client;
+    private int clientsNum;
     private boolean shutdown = false;
     private boolean gotClient = false;
     private Random randomizer = new Random();
+    AtomicBoolean counting = new AtomicBoolean();
+    int[] count = {0};
+    private boolean isPrime;
 
     /**
      * Constructs a WorkerThread with a given name.
@@ -31,6 +35,23 @@ public class WorkerThread extends Thread {
      */
     public void setClient(final Client client) {
         this.client = client;
+        if (client != null) { this.clientsNum = this.client.getRandNum(); }
+    }
+
+    /**
+     * Returns the isPrime boolean
+     * @return the isPrime boolean
+     */
+    public boolean getPrime() {
+        return this.isPrime;
+    }
+
+    /**
+     * Returns the clientsNum int
+     * @return the clientsNum int
+     */
+    public int getClientsNum() {
+        return this.clientsNum;
     }
 
     /**
@@ -44,50 +65,63 @@ public class WorkerThread extends Thread {
     }
 
     /**
-     * The method adds an extra layer of randomness based on the provided number.
+     * The method checks if the initial number given by the client is prime.
+     * If so, the number is flagged and additional computation is done. The helper method {@code threadSleepAndIncrement}
+     * is utilized for this to add complexity to the upper bound for number generation to the {@code randomizer}.
+     * The prime number is also used to set the randomizer's seed.
      *
-     * @param randomNum the base number used to generate a random number.
+     * <p>
+     * If the number isn't prime, the flag is set to false
+     * and a new random number is generated based on the initial number.
+     * <p/>
+     *
+     * @param initialNum the base number used to generate a random number.
      * @return the layered random number
      */
-    private int isRandPrim(final int randomNum) {
-        if (randomNum % 2 == 1) {
-            for (int i = 3; i < randomNum; i += 2) {
-                if (i * i < randomNum) {
-                    if (randomNum % i == 0) {
-                        break;
-                    }
+    private int isRandPrime(final int initialNum) {
+        if (initialNum % 2 == 1) {
+            for (int i = 3; i <= (int) Math.sqrt(initialNum); i += 2) {
+                if (initialNum % i == 0) {
+                    isPrime = false;
+                    break;
                 } else {
-                    return randomizer.nextInt(threadSleepAndIncrement(randomNum));
+                    this.isPrime = true;
+                    randomizer.setSeed(initialNum);
+                    return randomizer.nextInt(threadSleepAndIncrement(initialNum));
                 }
             }
         }
-        return randomizer.nextInt(randomNum);
+        return randomizer.nextInt(initialNum);
     }
 
-    private int threadSleepAndIncrement(int prime) {
-        AtomicBoolean counting = new AtomicBoolean(true);
-        int[] count = {0};
-        Thread incrementer = new Thread(() -> {
+    /**
+     * A helper method that increments a counter from a Runnable background thread while the worker thread is sleeping.
+     * The sleep time of the worker is determined on the prime number put into the method as an argument.
+     * When the worker wakes up it sets the atomic boolean {@code counting} to false to indicate to the
+     * background thread that it can stop counting and terminate, then returns the incremented number.
+     *
+     * @param prime the initial number from the client when it is prime
+     * @return a new number that serve as upper bound for the new random number to be generated
+     */
+    private int threadSleepAndIncrement(final int prime) {
+        counting.set(true);
+        count[0] = 0;
+        new Thread(() -> {
             while (counting.get()) {
              count[0]++;
             }
-        });
+        }).start();
 
-        incrementer.start();
-        sleep(prime);
-        counting.set(false);
-
-        return count[0];
-    }
-
-    private void sleep(int prime) {
-        randomizer.setSeed(prime);
         try {
-            Thread.sleep((prime * 100) / prime);
+            Thread.sleep(prime);
+            counting.set(false);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            counting.set(false);
             e.printStackTrace();
         }
+        this.clientsNum = count[0];
+        return count[0];
     }
 
     /**
@@ -126,10 +160,10 @@ public class WorkerThread extends Thread {
                 System.out.println(
                     String.format("%s adds a layer of randomness to %d...",
                         this.getName(),
-                        client.getRandNum()
+                        this.clientsNum
                     )
                 );
-                this.client.updateRandNum(this.isRandPrim(client.getRandNum()));
+                this.client.updateRandNum(this.isRandPrime(clientsNum));
                 this.client.notifyWorksDone();
                 this.gotClient = false;
             }

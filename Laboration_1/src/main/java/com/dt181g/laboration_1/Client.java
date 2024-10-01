@@ -1,7 +1,6 @@
 package com.dt181g.laboration_1;
 
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * The {@code Client} class represents a client that requests and utilizes a {@code WorkerThread}
