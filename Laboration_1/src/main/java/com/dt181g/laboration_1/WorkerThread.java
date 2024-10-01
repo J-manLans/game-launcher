@@ -1,6 +1,7 @@
 package com.dt181g.laboration_1;
 
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * This class represents a worker thread that adds a layer of randomness to a number
@@ -48,8 +49,45 @@ public class WorkerThread extends Thread {
      * @param randomNum the base number used to generate a random number.
      * @return the layered random number
      */
-    private int doWork(final int randomNum) {
-            return randomizer.nextInt(randomNum);
+    private int isRandPrim(final int randomNum) {
+        if (randomNum % 2 == 1) {
+            for (int i = 3; i < randomNum; i += 2) {
+                if (i * i < randomNum) {
+                    if (randomNum % i == 0) {
+                        break;
+                    }
+                } else {
+                    return randomizer.nextInt(threadSleepAndIncrement(randomNum));
+                }
+            }
+        }
+        return randomizer.nextInt(randomNum);
+    }
+
+    private int threadSleepAndIncrement(int prime) {
+        AtomicBoolean counting = new AtomicBoolean(true);
+        int[] count = {0};
+        Thread incrementer = new Thread(() -> {
+            while (counting.get()) {
+             count[0]++;
+            }
+        });
+
+        incrementer.start();
+        sleep(prime);
+        counting.set(false);
+
+        return count[0];
+    }
+
+    private void sleep(int prime) {
+        randomizer.setSeed(prime);
+        try {
+            Thread.sleep((prime * 100) / prime);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -91,7 +129,7 @@ public class WorkerThread extends Thread {
                         client.getRandNum()
                     )
                 );
-                this.client.updateRandNum(this.doWork(client.getRandNum()));
+                this.client.updateRandNum(this.isRandPrim(client.getRandNum()));
                 this.client.notifyWorksDone();
                 this.gotClient = false;
             }

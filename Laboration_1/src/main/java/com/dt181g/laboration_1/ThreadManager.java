@@ -9,12 +9,14 @@ import java.util.ArrayList;
  * The {@code ThreadManager} is implemented as a singleton, ensuring only one instance is created.
  * @author Joel Lansgren
  */
-public final class ThreadManager {
+public enum ThreadManager {
+    INSTANCE;
     private final int threadPoolSize = 5;
-    public static final ThreadManager INSTANCE = new ThreadManager();
     private final ArrayList<WorkerThread> workerThreads = new ArrayList<WorkerThread>(5);
+    private Thread workerThread;
     private final Object poolLock = new Object();
     private int threadUtilizations = 0;
+    private int queuePreference = 6;
 
     /**
      * Private constructor to prevent external instantiation.
@@ -36,6 +38,11 @@ public final class ThreadManager {
         return this.threadUtilizations;
     }
 
+    public void setQueuePreference(int queuePreference) {
+        queuePreference = queuePreference % 5;
+        this.queuePreference = queuePreference;
+    }
+
     /**
      * Retrieves a {@code WorkerThread} from the pool and add 1 to thread utilizations.
      * If no thread is available, the method will wait until a thread is returned to the pool.
@@ -51,6 +58,8 @@ public final class ThreadManager {
                 }
             }
             this.threadUtilizations += 1;
+            workerThread = this.workerThreads.getFirst();
+
             return this.workerThreads.remove(0);
         }
     }
