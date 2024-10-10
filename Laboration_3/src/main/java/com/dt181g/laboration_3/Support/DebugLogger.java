@@ -1,4 +1,4 @@
-package com.dt181g.laboration_3.Support;
+package com.dt181g.laboration_3.support;
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -61,7 +61,7 @@ public enum DebugLogger {
      * @param message the message to be logged
      */
     public void logInfo(String message) {
-        performLog(String.format("%s%s%s", AppConfig.ANSI_YELLOW, message, AppConfig.ANSI_RESET));
+        performLog(String.format("%s%s%s", AppConfigLab3.ANSI_YELLOW, message, AppConfigLab3.ANSI_RESET));
 
     }
 
@@ -72,6 +72,6 @@ public enum DebugLogger {
      * @param message the message to be logged
      */
     public void logWarning(String message) {
-        performLog(String.format("%s%s%s", AppConfig.ANSI_RED, message, AppConfig.ANSI_RESET));
+        performLog(String.format("%s%s%s", AppConfigLab3.ANSI_RED, message, AppConfigLab3.ANSI_RESET));
     }
 }

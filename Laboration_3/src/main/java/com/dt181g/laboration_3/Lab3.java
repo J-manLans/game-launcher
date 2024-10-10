@@ -1,5 +1,9 @@
 package com.dt181g.laboration_3;
 
+import com.dt181g.laboration_3.controller.GameLauncherController;
+import com.dt181g.laboration_3.model.GameListModel;
+import com.dt181g.laboration_3.view.GameLauncherView;
+
 /**
  * The main starting point for laboration 3.
  * @author Erik Ström
@@ -15,6 +19,11 @@ public final class Lab3 {
      * @param args command arguments.
      */
     public static void main(final String... args) {
-        System.out.println("Lab assignment 3");
+        GameLauncherView gameLauncherView = new GameLauncherView();
+        GameListModel gameListModel = new GameListModel();
+        GameLauncherController gameLauncherController = new GameLauncherController(gameLauncherView, gameListModel);
+
+        gameLauncherController.initialize();
+        gameLauncherView.setVisible(true);
     }
 }
