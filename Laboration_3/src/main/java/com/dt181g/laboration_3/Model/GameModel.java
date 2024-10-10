@@ -1,9 +1,11 @@
 package com.dt181g.laboration_3.model;
 
 public class GameModel {
+    private final String title;
     private final String iconPath;
 
-    public GameModel(String iconPath) {
+    public GameModel(String title, String iconPath) {
+        this.title = title;
         this.iconPath = iconPath;
     }
 
@@ -11,4 +13,7 @@ public class GameModel {
         return iconPath;
     }
 
+    public String getTitle() {
+        return title;
+    }
 }

@@ -4,7 +4,7 @@ public class FakeTicTacToeModel extends GameModel {
     private final String title;
 
     public FakeTicTacToeModel(String title, String iconPath){
-        super(iconPath);
+        super(title, iconPath);
         this.title = title;
     }
 

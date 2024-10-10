@@ -15,7 +15,7 @@ public class GameLauncherController {
     }
 
     public void initialize() {
-        this.gameLauncherView.addGameButtons(this.gameListModel.getIconPath(), this.gameLauncherView::loadGame);
+        this.gameLauncherView.addGameButtons(this.gameListModel.getIconPath(), this.gameListModel.getTitleList());
         this.gameLauncherView.getGameSelectorPanel().add(Box.createVerticalGlue());
     }
 }

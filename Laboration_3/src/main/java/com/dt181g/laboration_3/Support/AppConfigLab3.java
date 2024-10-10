@@ -3,9 +3,15 @@ package com.dt181g.laboration_3.support;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.border.Border;
+
 
 public final class AppConfigLab3 {
     // make sure the class cannot be instantiated.
@@ -23,7 +29,7 @@ public final class AppConfigLab3 {
     /* ---------------------------------------
     Game titles.
     ------------------------------------------ */
-    public static final String SNAKE_TITLE = "Snake";
+    public static final String SNAKE_TITLE = "Snake(s)";
 
     public static final String TIC_TAC_TOE_TITLE = "Tic Tac Toe";
 
@@ -32,7 +38,7 @@ public final class AppConfigLab3 {
     ------------------------------------------ */
     public static final String PICK_A_GAME = "PICK A GAME";
 
-    public static final Border PICK_A_GAME_BORDER = BorderFactory.createEmptyBorder(20, 0, 30, 0);
+    public static final Border BOTTOM_BORDER_30 = BorderFactory.createEmptyBorder(20, 0, 30, 0);
 
     public static final Border REMOVE_BORDER = BorderFactory.createEmptyBorder();
 
@@ -44,14 +50,60 @@ public final class AppConfigLab3 {
 
     public static final Dimension HIGHT_20 = new Dimension(0,20);
 
-    public static final Color DARK_GREY = new Color(40,40,40);
+    public static final Dimension HIGHT_40 = new Dimension(0,40);
 
-    public static final Color DARKER_GREY = new Color(30,30,30);
 
     /* ---------------------------------------
     Fonts.
     ------------------------------------------ */
     public static final Font MONOSPACE_BOLD = new Font("Monospace", Font.BOLD, 15);
+
+    /* ---------------------------------------
+    Colors.
+    ------------------------------------------ */
+    public static final Color DARK_GREY = new Color(40,40,40);
+
+    public static final Color DARKER_GREY = new Color(30,30,30);
+
+    public static final Color WHITE = new Color(255, 245, 238);
+
+
+    /* ---------------------------------------
+    Helper methods.
+    ------------------------------------------ */
+    public static final void LABEL_BUTTON(JLabel labelToBtn, Color lightClr, Color darkClr) {
+        labelToBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        labelToBtn.setForeground(lightClr);
+        labelToBtn.setBackground(lightClr);
+        labelToBtn.setFont(MONOSPACE_BOLD);
+
+        Border emptyBorder = BorderFactory.createEmptyBorder(10, 10, 10, 10);
+        Border matteBorder = BorderFactory.createMatteBorder(3, 3, 3, 3, lightClr);
+        labelToBtn.setBorder(BorderFactory.createCompoundBorder(matteBorder, emptyBorder));
+
+
+        labelToBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                labelToBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                labelToBtn.setOpaque(true);
+                labelToBtn.setForeground(darkClr);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                labelToBtn.setOpaque(false);
+                labelToBtn.setForeground(lightClr);
+            }
+        });
+    }
+
+    public static final void LABEL_STYLING(JLabel label) {
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        label.setFont(MONOSPACE_BOLD);
+        label.setForeground(WHITE);
+        label.setBorder(BOTTOM_BORDER_30);
+    }
 
     /* ---------------------------------------
     ANSI COLOR CODES. Used to colorize debug output.

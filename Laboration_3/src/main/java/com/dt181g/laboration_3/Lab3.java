@@ -1,5 +1,7 @@
 package com.dt181g.laboration_3;
 
+import javax.swing.SwingUtilities;
+
 import com.dt181g.laboration_3.controller.GameLauncherController;
 import com.dt181g.laboration_3.model.GameListModel;
 import com.dt181g.laboration_3.view.GameLauncherView;
@@ -24,6 +26,9 @@ public final class Lab3 {
         GameLauncherController gameLauncherController = new GameLauncherController(gameLauncherView, gameListModel);
 
         gameLauncherController.initialize();
-        gameLauncherView.setVisible(true);
+
+        SwingUtilities.invokeLater(() -> {
+            gameLauncherView.setVisible(true);
+        });
     }
 }

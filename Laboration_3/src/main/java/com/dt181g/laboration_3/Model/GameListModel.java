@@ -14,6 +14,12 @@ public class GameListModel {
         this.games.add(new FakeTicTacToeModel(AppConfigLab3.TIC_TAC_TOE_TITLE, AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.TIC_TAC_TOE_ICON));
     }
 
+    public List<String> getTitleList() {
+        return games.stream()
+            .map(GameModel::getTitle)
+            .collect(Collectors.toList());
+    }
+
     public List<String> getIconPath() {
         return games.stream()
             .map(GameModel::getIconPath)
