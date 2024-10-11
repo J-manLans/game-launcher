@@ -25,4 +25,13 @@ public class GameListModel {
             .map(GameModel::getIconPath)
             .collect(Collectors.toList());
     }
+
+    public GameModel getGame(String title) {
+        for (GameModel gameModel : games) {
+            if (gameModel.getTitle().equals(title)) {
+                return gameModel;
+            }
+        }
+        return null;
+    }
 }

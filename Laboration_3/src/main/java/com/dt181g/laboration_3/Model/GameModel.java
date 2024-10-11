@@ -1,6 +1,6 @@
 package com.dt181g.laboration_3.model;
 
-public class GameModel {
+public abstract class GameModel {
     private final String title;
     private final String iconPath;
 

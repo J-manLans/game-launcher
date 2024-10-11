@@ -52,6 +52,11 @@ public final class AppConfigLab3 {
 
     public static final Dimension HIGHT_40 = new Dimension(0,40);
 
+    /* ---------------------------------------
+    Snake settings
+    ------------------------------------------ */
+    public static final Dimension SNAKE_GRID_SIZE = new Dimension(800,800);
+
 
     /* ---------------------------------------
     Fonts.

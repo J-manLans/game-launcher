@@ -2,7 +2,7 @@ package com.dt181g.laboration_3;
 
 import javax.swing.SwingUtilities;
 
-import com.dt181g.laboration_3.controller.GameLauncherController;
+import com.dt181g.laboration_3.controller.GameLauncherCtrl;
 import com.dt181g.laboration_3.model.GameListModel;
 import com.dt181g.laboration_3.view.GameLauncherView;
 
@@ -23,7 +23,7 @@ public final class Lab3 {
     public static void main(final String... args) {
         GameLauncherView gameLauncherView = new GameLauncherView();
         GameListModel gameListModel = new GameListModel();
-        GameLauncherController gameLauncherController = new GameLauncherController(gameLauncherView, gameListModel);
+        GameLauncherCtrl gameLauncherController = new GameLauncherCtrl(gameLauncherView, gameListModel);
 
         gameLauncherController.initialize();
 

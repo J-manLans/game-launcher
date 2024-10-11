@@ -3,12 +3,14 @@ package com.dt181g.laboration_3.view;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
 
+import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
 import javax.swing.BoxLayout;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JPanel;
 
@@ -22,17 +24,18 @@ public class SnakePanelView extends JPanel{
     JLabel multiplayer = new JLabel("Multiplayer");
     JLabel settings = new JLabel("Settings");
 
+    JPanel gridPanel = new JPanel(new GridLayout(40, 40));
+
     public SnakePanelView() {
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.initializeStartMenu();
     }
 
     private void initializeStartMenu() {
-
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         startBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // So the label button will be transparent on startup
+                // So the label button will be transparent on next startup
                 startBtn.setOpaque(false);
                 startGame(startBtn);
             }
@@ -63,9 +66,38 @@ public class SnakePanelView extends JPanel{
     }
 
     private void startGame(JLabel btn) {
+        // Clearing the JPanel
         this.removeAll();
+
+        // Setting up the grid
+        gridPanel.removeAll();
+        gridPanel.setPreferredSize(AppConfigLab3.SNAKE_GRID_SIZE);
+        this.initializeGrid(gridPanel);
+
+        // Centering the grid
+        this.setLayout(null);
+        gridPanel.setBounds(
+            (this.getWidth() - gridPanel.getPreferredSize().width) / 2,
+            (this.getHeight() - gridPanel.getPreferredSize().height) / 2,
+            gridPanel.getPreferredSize().width,
+            gridPanel.getPreferredSize().height
+        );
+
+        // adding grid to the JPanel
+        this.add(gridPanel);
+
+        // Updating the JPanel with the grid
         this.revalidate();
         this.repaint();
+    }
+
+    private void initializeGrid(JPanel grid) {
+        for (int i = 0; i < 40 * 40; i++) {
+            JPanel cell = new JPanel();
+            cell.setBorder(BorderFactory.createLineBorder(AppConfigLab3.DARK_GREY));
+            cell.setBackground(AppConfigLab3.DARKER_GREY);
+            grid.add(cell);
+        }
     }
 
     public JPanel getPanel() {

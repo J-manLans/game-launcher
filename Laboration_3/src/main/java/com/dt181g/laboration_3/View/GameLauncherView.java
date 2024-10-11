@@ -42,12 +42,10 @@ public class GameLauncherView extends JFrame{
         // GameSelectorPanel
         gameSelectorPanel.setLayout(new BoxLayout(gameSelectorPanel, BoxLayout.Y_AXIS));
         gameSelectorPanel.setBackground(AppConfigLab3.DARK_GREY);
-
         AppConfigLab3.LABEL_STYLING(pickAGameLabel);
-
         gameSelectorPanel.add(pickAGameLabel);
 
-        // ScrollPane
+        // ScrollPane (handles size of gameSelectorPanel)
         this.setupScrollPane();
 
         // GamePanel
@@ -101,9 +99,7 @@ public class GameLauncherView extends JFrame{
 
             switch (title) {
                 case AppConfigLab3.SNAKE_TITLE -> {
-                    JPanel snakePanel = snakePanelView.getPanel();
-                    gamePanel.add(snakePanel, BorderLayout.CENTER);
-
+                    gamePanel.add(snakePanelView.getPanel(), BorderLayout.CENTER);
                     snakePanelView.resetGame();
                 }
                 default -> {
@@ -111,7 +107,6 @@ public class GameLauncherView extends JFrame{
                     gameLabel.setHorizontalAlignment(SwingConstants.CENTER);
                     gameLabel.setForeground(AppConfigLab3.WHITE);
                     gameLabel.setFont(AppConfigLab3.MONOSPACE_BOLD);
-
                     gamePanel.add(gameLabel, BorderLayout.CENTER);
                 }
             }
@@ -142,5 +137,9 @@ public class GameLauncherView extends JFrame{
 
     public JPanel getGamePanel() {
         return gamePanel;
+    }
+
+    public JPanel getSnakePanelView() {
+        return snakePanelView;
     }
 }
