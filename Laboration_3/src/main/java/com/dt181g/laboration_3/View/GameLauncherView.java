@@ -1,15 +1,18 @@
 package com.dt181g.laboration_3.view;
-
+import com.dt181g.laboration_3.support.AppConfigLab3;
+import com.dt181g.laboration_3.support.DebugLogger;
 
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Image;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -18,15 +21,11 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.SwingConstants;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-
-import com.dt181g.laboration_3.support.AppConfigLab3;
-import com.dt181g.laboration_3.support.DebugLogger;
 
 public class GameLauncherView extends JFrame{
     DebugLogger logger = DebugLogger.INSTANCE;
@@ -35,8 +34,7 @@ public class GameLauncherView extends JFrame{
     private final JLabel pickAGameLabel = new JLabel(AppConfigLab3.PICK_A_GAME);
     private final JScrollPane scrollPane = new JScrollPane(gameSelectorPanel);
     private final JPanel gamePanel = new JPanel();
-
-    SnakePanelView snakePanelView = new SnakePanelView();
+    private final List<JButton> gameIcons = new ArrayList<JButton>();
 
     public GameLauncherView() {
         // GameSelectorPanel
@@ -54,32 +52,40 @@ public class GameLauncherView extends JFrame{
         gamePanel.setBackground(AppConfigLab3.DARKER_GREY);
 
         // JFrame
-        setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
-        add(scrollPane);
-        add(gamePanel);
-        pack();
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
+        this.add(scrollPane);
+        this.add(gamePanel);
+        this.pack();
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    public void addGameButtons(List<String> pathToIcon, List<String> titles) {
+    public void addGameIcons(List<String> pathToIcon, List<String> titles) {
         for (int i = 0; i < pathToIcon.size(); i++) {
-            JButton button = new JButton();
-            button.setAlignmentX(Component.CENTER_ALIGNMENT);
-            button.setBorder(AppConfigLab3.REMOVE_BORDER);
-            button.setContentAreaFilled(false);
-            button.setBorderPainted(false);
+            // Set up the icon.
+            JButton gameIcon = new JButton();
+            gameIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
+            gameIcon.setBorder(AppConfigLab3.REMOVE_BORDER);
+            gameIcon.setContentAreaFilled(false);
+            gameIcon.setBorderPainted(false);
+            gameIcon.setPreferredSize(AppConfigLab3.GAME_ICON_SIZE);
+            gameIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            // Fetch the icon image.
+            gameIcon.setIcon(loadIcon(pathToIcon.get(i)));
+            // Set the action command to the game title,
+            // to let the action listener know which game was clicked.
+            gameIcon.setActionCommand(titles.get(i));
 
-            button.setIcon(loadIcon(pathToIcon.get(i)));
-
-            button.setPreferredSize(AppConfigLab3.GAME_ICON_SIZE);
-            button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            final String title = titles.get(i);
-            button.addActionListener(e -> this.loadGame(title));
-
-            gameSelectorPanel.add(button);
+            // Add icon to the panel, plus a distance to create some air.
+            gameSelectorPanel.add(gameIcon);
             gameSelectorPanel.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
+
+            // Add the icon to the icon list so action listeners can be attached at a later stage.
+            gameIcons.add(gameIcon);
         }
+        // Adds flexible space below the icons,
+        // allowing the panel to respect the preferred size of the buttons.
+        gameSelectorPanel.add(Box.createVerticalGlue());
     }
 
     private ImageIcon loadIcon(String path) {
@@ -93,24 +99,25 @@ public class GameLauncherView extends JFrame{
         }
     }
 
-    public void loadGame(String title) {
-        SwingUtilities.invokeLater(() -> {
-            gamePanel.removeAll();
+    public void addGameIconListener(ActionListener listenForGameIconClicks) {
+        for (JButton gameBtn : gameIcons) {
+            gameBtn.addActionListener(listenForGameIconClicks);
+        }
+    }
 
-            switch (title) {
-                case AppConfigLab3.SNAKE_TITLE -> {
-                    gamePanel.add(snakePanelView.getPanel(), BorderLayout.CENTER);
-                    snakePanelView.resetGame();
-                }
-                default -> {
-                    JLabel gameLabel = new JLabel("Sorry! The game isn't available at the moment.");
-                    gameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-                    gameLabel.setForeground(AppConfigLab3.WHITE);
-                    gameLabel.setFont(AppConfigLab3.MONOSPACE_BOLD);
-                    gamePanel.add(gameLabel, BorderLayout.CENTER);
+    public void loadGame(List<GameView> gameViews, String title) {
+        SwingUtilities.invokeLater(() -> {
+
+            // Looks for the game related to the title and adds it to the game panel.
+            for (GameView gameView : gameViews) {
+                if (title.equals(gameView.getTitle())) {
+                    gamePanel.removeAll();
+                    gamePanel.add(gameView.getPanel(), BorderLayout.CENTER);
+                    break;
                 }
             }
 
+            // Redraws the panel
             gamePanel.revalidate();
             gamePanel.repaint();
         });
@@ -129,17 +136,5 @@ public class GameLauncherView extends JFrame{
                 vertical.setValue(vertical.getValue() + (notches * 20));
             }
         });
-    }
-
-    public JPanel getGameSelectorPanel() {
-        return gameSelectorPanel;
-    }
-
-    public JPanel getGamePanel() {
-        return gamePanel;
-    }
-
-    public JPanel getSnakePanelView() {
-        return snakePanelView;
     }
 }

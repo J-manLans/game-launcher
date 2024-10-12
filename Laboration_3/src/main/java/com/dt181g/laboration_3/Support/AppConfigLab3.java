@@ -29,9 +29,9 @@ public final class AppConfigLab3 {
     /* ---------------------------------------
     Game titles.
     ------------------------------------------ */
-    public static final String SNAKE_TITLE = "Snake(s)";
+    public static final String SNAKE_TITLE = "SNAKE(S)";
 
-    public static final String TIC_TAC_TOE_TITLE = "Tic Tac Toe";
+    public static final String TIC_TAC_TOE_TITLE = "TIC TAC TOE";
 
     /* ---------------------------------------
     GameLauncherView Settings
@@ -76,7 +76,7 @@ public final class AppConfigLab3 {
     /* ---------------------------------------
     Helper methods.
     ------------------------------------------ */
-    public static final void LABEL_BUTTON(JLabel labelToBtn, Color lightClr, Color darkClr) {
+    public static final void LABEL_BUTTON(JLabel labelToBtn, Color lightClr) {
         labelToBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         labelToBtn.setForeground(lightClr);
         labelToBtn.setBackground(lightClr);
@@ -87,20 +87,20 @@ public final class AppConfigLab3 {
         labelToBtn.setBorder(BorderFactory.createCompoundBorder(matteBorder, emptyBorder));
 
 
-        labelToBtn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                labelToBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                labelToBtn.setOpaque(true);
-                labelToBtn.setForeground(darkClr);
-            }
+        // labelToBtn.addMouseListener(new MouseAdapter() {
+        //     @Override
+        //     public void mouseEntered(MouseEvent e) {
+        //         labelToBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        //         labelToBtn.setOpaque(true);
+        //         labelToBtn.setForeground(darkClr);
+        //     }
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                labelToBtn.setOpaque(false);
-                labelToBtn.setForeground(lightClr);
-            }
-        });
+        //     @Override
+        //     public void mouseExited(MouseEvent e) {
+        //         labelToBtn.setOpaque(false);
+        //         labelToBtn.setForeground(lightClr);
+        //     }
+        // });
     }
 
     public static final void LABEL_STYLING(JLabel label) {

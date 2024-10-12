@@ -25,7 +25,7 @@ public final class Lab3 {
         GameListModel gameListModel = new GameListModel();
         GameLauncherCtrl gameLauncherController = new GameLauncherCtrl(gameLauncherView, gameListModel);
 
-        gameLauncherController.initialize();
+        gameLauncherController.initializeLauncher();
 
         SwingUtilities.invokeLater(() -> {
             gameLauncherView.setVisible(true);

@@ -5,7 +5,6 @@ import com.dt181g.laboration_3.support.DebugLogger;
 
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
@@ -16,56 +15,40 @@ import javax.swing.JPanel;
 
 
 
-public class SnakePanelView extends JPanel{
+public class SnakeView extends JPanel implements GameView{
     DebugLogger logger = DebugLogger.INSTANCE;
 
-    JLabel title = new JLabel(AppConfigLab3.SNAKE_TITLE.toUpperCase());
-    JLabel startBtn = new JLabel("Start Game");
-    JLabel multiplayer = new JLabel("Multiplayer");
-    JLabel settings = new JLabel("Settings");
+    private final JLabel title = new JLabel();
+    private final JLabel startBtn = new JLabel("Start Game");
+    private final JLabel multiplayerBtn = new JLabel("Multiplayer");
+    private final JLabel settingsBtn = new JLabel("Settings");
 
     JPanel gridPanel = new JPanel(new GridLayout(40, 40));
 
-    public SnakePanelView() {
-        this.initializeStartMenu();
+    public SnakeView(final String title) {
+        this.title.setText(title);
     }
 
     private void initializeStartMenu() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        startBtn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // So the label button will be transparent on next startup
-                startBtn.setOpaque(false);
-                startGame(startBtn);
-            }
-        });
 
         AppConfigLab3.LABEL_STYLING(title);
-        AppConfigLab3.LABEL_BUTTON(startBtn, AppConfigLab3.WHITE, AppConfigLab3.DARKER_GREY);
-        AppConfigLab3.LABEL_BUTTON(multiplayer, AppConfigLab3.DARK_GREY, AppConfigLab3.DARKER_GREY);
-        // Remove when feature is implemented
-        for (MouseListener listener : multiplayer.getMouseListeners()) {
-            multiplayer.removeMouseListener(listener);
-        }
-        AppConfigLab3.LABEL_BUTTON(settings, AppConfigLab3.DARK_GREY, AppConfigLab3.DARKER_GREY);
-        // Remove when feature is implemented
-        for (MouseListener listener : settings.getMouseListeners()) {
-            settings.removeMouseListener(listener);
-        }
+        AppConfigLab3.LABEL_BUTTON(startBtn, AppConfigLab3.WHITE);
+        AppConfigLab3.LABEL_BUTTON(multiplayerBtn, AppConfigLab3.DARK_GREY);
+        AppConfigLab3.LABEL_BUTTON(settingsBtn, AppConfigLab3.DARK_GREY);
 
         this.setBackground(AppConfigLab3.DARKER_GREY);
         this.add(Box.createVerticalGlue());
         this.add(title);
         this.add(startBtn);
         this.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
-        this.add(multiplayer);
+        this.add(multiplayerBtn);
         this.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
-        this.add(settings);
+        this.add(settingsBtn);
         this.add(Box.createVerticalGlue());
     }
 
-    private void startGame(JLabel btn) {
+    public void startGame() {
         // Clearing the JPanel
         this.removeAll();
 
@@ -100,10 +83,50 @@ public class SnakePanelView extends JPanel{
         }
     }
 
+    /*==============================
+     * Listener methods
+     ==============================*/
+    public void addStartBtnListener(MouseAdapter startBtnListener) {
+        this.startBtn.addMouseListener(startBtnListener);
+    }
+
+    public void addMultiplayerBtnListener(MouseAdapter multiplayerBtnListener) {
+        this.multiplayerBtn.addMouseListener(multiplayerBtnListener);
+    }
+
+    public void addSettingsBtnListener(MouseAdapter settingsBtnListener) {
+        this.settingsBtn.addMouseListener(settingsBtnListener);
+    }
+
+    /*==============================
+     * Getters
+     ==============================*/
+    @Override
     public JPanel getPanel() {
         return this;
     }
 
+    @Override
+    public String getTitle() {
+        return title.getText();
+    }
+
+    public JLabel getStartBtn() {
+        return this.startBtn;
+    }
+
+    public JLabel getMultiplayerBtn() {
+        return this.multiplayerBtn;
+    }
+
+    public JLabel getSettingsBtn() {
+        return this.settingsBtn;
+    }
+
+    /*==============================
+     * Override methods (not getters)
+     ==============================*/
+    @Override
     public void resetGame() {
         this.removeAll();
         initializeStartMenu();
