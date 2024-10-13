@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.swing.SwingUtilities;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -41,6 +40,7 @@ public class GameLauncherView extends JFrame{
         gameSelectorPanel.setLayout(new BoxLayout(gameSelectorPanel, BoxLayout.Y_AXIS));
         gameSelectorPanel.setBackground(AppConfigLab3.DARK_GREY);
         AppConfigLab3.LABEL_STYLING(pickAGameLabel);
+        gameSelectorPanel.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
         gameSelectorPanel.add(pickAGameLabel);
 
         // ScrollPane (handles size of gameSelectorPanel)
@@ -60,6 +60,21 @@ public class GameLauncherView extends JFrame{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    private void setupScrollPane() {
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        scrollPane.setBorder(AppConfigLab3.REMOVE_BORDER);
+        scrollPane.setPreferredSize(AppConfigLab3.GAME_SELECTOR_PANEL_DIMENSIONS);
+
+        scrollPane.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                int notches = e.getWheelRotation();
+                JScrollBar vertical = scrollPane.getVerticalScrollBar();
+                vertical.setValue(vertical.getValue() + (notches * 20));
+            }
+        });
+    }
+
     public void addGameIcons(List<String> pathToIcon, List<String> titles) {
         for (int i = 0; i < pathToIcon.size(); i++) {
             // Set up the icon.
@@ -72,7 +87,7 @@ public class GameLauncherView extends JFrame{
             gameIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
             // Fetch the icon image.
             gameIcon.setIcon(loadIcon(pathToIcon.get(i)));
-            // Set the action command to the game title,
+            // Set the action command od the icon to the game title,
             // to let the action listener know which game was clicked.
             gameIcon.setActionCommand(titles.get(i));
 
@@ -105,36 +120,13 @@ public class GameLauncherView extends JFrame{
         }
     }
 
-    public void loadGame(List<GameView> gameViews, String title) {
-        SwingUtilities.invokeLater(() -> {
+    public void loadGame(GameView gameView) {
+        // Clears the panel and adds the game view.
+        gamePanel.removeAll();
+        gamePanel.add(gameView.getPanel(), BorderLayout.CENTER);
 
-            // Looks for the game related to the title and adds it to the game panel.
-            for (GameView gameView : gameViews) {
-                if (title.equals(gameView.getTitle())) {
-                    gamePanel.removeAll();
-                    gamePanel.add(gameView.getPanel(), BorderLayout.CENTER);
-                    break;
-                }
-            }
-
-            // Redraws the panel
-            gamePanel.revalidate();
-            gamePanel.repaint();
-        });
-    }
-
-    private void setupScrollPane() {
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        scrollPane.setBorder(AppConfigLab3.REMOVE_BORDER);
-        scrollPane.setPreferredSize(AppConfigLab3.GAME_SELECTOR_PANEL_DIMENSIONS);
-
-        scrollPane.addMouseWheelListener(new MouseWheelListener() {
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                int notches = e.getWheelRotation();
-                JScrollBar vertical = scrollPane.getVerticalScrollBar();
-                vertical.setValue(vertical.getValue() + (notches * 20));
-            }
-        });
+        // Redraws the panel
+        gamePanel.revalidate();
+        gamePanel.repaint();
     }
 }

@@ -8,12 +8,7 @@ import javax.swing.JPanel;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 
 public class FakeTicTacToeView extends JPanel implements GameView{
-    JLabel title = new JLabel();
-
-    public FakeTicTacToeView(final String title) {
-        this.title.setText(title);
-        this.initializeStartMenu();
-    }
+    JLabel title = new JLabel(AppConfigLab3.TIC_TAC_TOE_TITLE);
 
     private void initializeStartMenu() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

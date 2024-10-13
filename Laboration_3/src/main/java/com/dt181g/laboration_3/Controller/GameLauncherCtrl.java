@@ -40,16 +40,16 @@ public class GameLauncherCtrl {
                 case AppConfigLab3.SNAKE_TITLE -> {
                     if (!gameControllers.containsKey(title)) {
                         GameCtrl snakeCtrl = new SnakeCtrl(
-                            gameListModel.getPanelView(title),
-                            gameListModel.getGame(title)
+                            gameListModel.getGameView(title),
+                            gameListModel.getGameModel(title)
                         );
                         gameControllers.put(title, snakeCtrl);
                     }
                 } case AppConfigLab3.TIC_TAC_TOE_TITLE -> {
                     if (!gameControllers.containsKey(title)) {
                         GameCtrl ticTacToeCtrl = new FakeTicTacToeCtrl(
-                            gameListModel.getPanelView(title),
-                            gameListModel.getGame(title)
+                            gameListModel.getGameView(title),
+                            gameListModel.getGameModel(title)
                         );
                         gameControllers.put(title, ticTacToeCtrl);
                     }
@@ -58,7 +58,7 @@ public class GameLauncherCtrl {
 
             // Reset the game and load it into the launcher.
             gameControllers.get(title).resetGame();
-            gameLauncherView.loadGame(gameListModel.getPanelViews(), title);
+            gameLauncherView.loadGame(gameListModel.getGameView(title));
         }
     }
 }

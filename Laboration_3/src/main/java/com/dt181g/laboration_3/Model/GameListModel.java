@@ -19,8 +19,8 @@ public class GameListModel {
         this.gamesModels.add(new FakeTicTacToeModel(AppConfigLab3.TIC_TAC_TOE_TITLE, AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.TIC_TAC_TOE_ICON));
 
         // Instantiating game views
-        this.gameViews.add(new SnakeView(AppConfigLab3.SNAKE_TITLE));
-        this.gameViews.add(new FakeTicTacToeView(AppConfigLab3.TIC_TAC_TOE_TITLE));
+        this.gameViews.add(new SnakeView());
+        this.gameViews.add(new FakeTicTacToeView());
     }
 
     public List<String> getTitleList() {
@@ -35,7 +35,7 @@ public class GameListModel {
             .collect(Collectors.toList());
     }
 
-    public GameModel getGame(String title) {
+    public GameModel getGameModel(String title) {
         for (GameModel gameModel : gamesModels) {
             if (gameModel.getTitle().equals(title)) {
                 return gameModel;
@@ -44,16 +44,12 @@ public class GameListModel {
         return null;
     }
 
-    public GameView getPanelView(String title) {
+    public GameView getGameView(String title) {
         for (GameView gameView : gameViews) {
             if (gameView.getTitle().equals(title)) {
                 return gameView;
             }
         }
         return null;
-    }
-
-    public List<GameView> getPanelViews() {
-        return gameViews;
     }
 }

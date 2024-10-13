@@ -3,14 +3,14 @@ package com.dt181g.laboration_3.view;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
 
-import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseListener;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
+import java.awt.Insets;
 
 import javax.swing.JLabel;
-import javax.swing.BoxLayout;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.JPanel;
 
 
@@ -18,69 +18,75 @@ import javax.swing.JPanel;
 public class SnakeView extends JPanel implements GameView{
     DebugLogger logger = DebugLogger.INSTANCE;
 
-    private final JLabel title = new JLabel();
+    // Start menu components
+    GridBagConstraints gbc = new GridBagConstraints();
+    private final JLabel title = new JLabel(AppConfigLab3.SNAKE_TITLE);
     private final JLabel startBtn = new JLabel("Start Game");
     private final JLabel multiplayerBtn = new JLabel("Multiplayer");
     private final JLabel settingsBtn = new JLabel("Settings");
+    private final JLabel controlsBtn = new JLabel("Controls");
 
-    JPanel gridPanel = new JPanel(new GridLayout(40, 40));
+    // Snake panel
+    JPanel snakeGrid = new JPanel(new GridLayout(40, 40));
 
-    public SnakeView(final String title) {
-        this.title.setText(title);
+    public SnakeView() {
+        this.setLayout(new GridBagLayout());
     }
 
     private void initializeStartMenu() {
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
+        // Styles the components
         AppConfigLab3.LABEL_STYLING(title);
         AppConfigLab3.LABEL_BUTTON(startBtn, AppConfigLab3.WHITE);
         AppConfigLab3.LABEL_BUTTON(multiplayerBtn, AppConfigLab3.DARK_GREY);
         AppConfigLab3.LABEL_BUTTON(settingsBtn, AppConfigLab3.DARK_GREY);
+        AppConfigLab3.LABEL_BUTTON(controlsBtn, AppConfigLab3.WHITE);
 
+        // Adds and place the components on the grid.
+        gbc.gridy = 0;
+        this.add(title, gbc);
+
+        gbc.gridy++;
+        gbc.insets = new Insets(0, 0, 20, 0);
+        this.add(startBtn, gbc);
+
+        gbc.gridy++;
+        this.add(multiplayerBtn, gbc);
+
+        gbc.gridy++;
+        this.add(settingsBtn, gbc);
+
+        gbc.gridy++;
+        this.add(controlsBtn, gbc);
+
+        // Sets the background color
         this.setBackground(AppConfigLab3.DARKER_GREY);
-        this.add(Box.createVerticalGlue());
-        this.add(title);
-        this.add(startBtn);
-        this.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
-        this.add(multiplayerBtn);
-        this.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
-        this.add(settingsBtn);
-        this.add(Box.createVerticalGlue());
     }
 
     public void startGame() {
-        // Clearing the JPanel
         this.removeAll();
 
-        // Setting up the grid
-        gridPanel.removeAll();
-        gridPanel.setPreferredSize(AppConfigLab3.SNAKE_GRID_SIZE);
-        this.initializeGrid(gridPanel);
+        // Setting up the snake grid
+        this.initializeGrid();
 
-        // Centering the grid
-        this.setLayout(null);
-        gridPanel.setBounds(
-            (this.getWidth() - gridPanel.getPreferredSize().width) / 2,
-            (this.getHeight() - gridPanel.getPreferredSize().height) / 2,
-            gridPanel.getPreferredSize().width,
-            gridPanel.getPreferredSize().height
-        );
-
-        // adding grid to the JPanel
-        this.add(gridPanel);
-
-        // Updating the JPanel with the grid
+        this.add(snakeGrid);
         this.revalidate();
         this.repaint();
     }
 
-    private void initializeGrid(JPanel grid) {
+    private void initializeGrid() {
+        snakeGrid.removeAll();
+        snakeGrid.setPreferredSize(AppConfigLab3.SNAKE_GRID_SIZE);
+
         for (int i = 0; i < 40 * 40; i++) {
             JPanel cell = new JPanel();
             cell.setBorder(BorderFactory.createLineBorder(AppConfigLab3.DARK_GREY));
             cell.setBackground(AppConfigLab3.DARKER_GREY);
-            grid.add(cell);
+            snakeGrid.add(cell);
         }
+    }
+
+    public void showOptions() {
+        // Work to be done here!
     }
 
     /*==============================
@@ -96,6 +102,10 @@ public class SnakeView extends JPanel implements GameView{
 
     public void addSettingsBtnListener(MouseAdapter settingsBtnListener) {
         this.settingsBtn.addMouseListener(settingsBtnListener);
+    }
+
+    public void addControlsBtnListener(MouseAdapter controlsBtnListener) {
+        this.controlsBtn.addMouseListener(controlsBtnListener);
     }
 
     /*==============================
@@ -123,8 +133,11 @@ public class SnakeView extends JPanel implements GameView{
         return this.settingsBtn;
     }
 
+    public JLabel getControlsBtn() {
+        return this.controlsBtn;
+    }
     /*==============================
-     * Override methods (not getters)
+     * Override methods (not Override getters)
      ==============================*/
     @Override
     public void resetGame() {
