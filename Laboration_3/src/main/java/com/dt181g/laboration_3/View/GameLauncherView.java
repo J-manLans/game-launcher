@@ -10,7 +10,6 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +44,11 @@ import javax.swing.JScrollPane;
  *
  * @author Joel Lansgren
  */
-public class GameLauncherView extends JFrame{
-    DebugLogger logger = DebugLogger.INSTANCE;
+public class GameLauncherView extends JFrame {
+    private final DebugLogger logger = DebugLogger.INSTANCE;
 
     private final JPanel gameSelectorPanel = new JPanel();
-    private final JLabel pickAGameLabel = new JLabel(AppConfigLab3.PICK_A_GAME);
+    private final JLabel pickAGameLabel = new JLabel("PICK A GAME");
     private final JScrollPane scrollPane = new JScrollPane(gameSelectorPanel);
     private final JPanel gamePanel = new JPanel();
     private final List<JButton> gameIcons = new ArrayList<JButton>();
@@ -65,7 +64,7 @@ public class GameLauncherView extends JFrame{
         // GameSelectorPanel
         gameSelectorPanel.setLayout(new BoxLayout(gameSelectorPanel, BoxLayout.Y_AXIS));
         gameSelectorPanel.setBackground(AppConfigLab3.COLOR_DARK_GREY);
-        AppConfigLab3.LABEL_STYLING(pickAGameLabel);
+        AppConfigLab3.labelStyling(pickAGameLabel);
         gameSelectorPanel.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
         gameSelectorPanel.add(pickAGameLabel);
 
@@ -100,7 +99,7 @@ public class GameLauncherView extends JFrame{
 
         scrollPane.addMouseWheelListener(new MouseWheelListener() {
             @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
+            public void mouseWheelMoved(final MouseWheelEvent e) {
                 int notches = e.getWheelRotation();
                 JScrollBar vertical = scrollPane.getVerticalScrollBar();
                 vertical.setValue(vertical.getValue() + (notches * AppConfigLab3.SCROLL_SPEED_MULTIPLIER));
@@ -119,7 +118,7 @@ public class GameLauncherView extends JFrame{
      * @param pathToIcon a list of file paths for the game icons
      * @param titles a list of game titles corresponding to each icon
      */
-    public void addGameIcons(List<String> pathToIcon, List<String> titles) {
+    public void addGameIcons(final List<String> pathToIcon, final List<String> titles) {
         for (int i = 0; i < pathToIcon.size(); i++) {
             // Set up the icon.
             JButton gameIcon = new JButton();
@@ -154,10 +153,14 @@ public class GameLauncherView extends JFrame{
      * @param path the file path to the image
      * @return an ImageIcon containing the scaled image, or null if an error occurs
      */
-    private ImageIcon loadIcon(String path) {
+    private ImageIcon loadIcon(final String path) {
         try {
-            BufferedImage originalImage = ImageIO.read(new File(path));
-            Image scaledImage = originalImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+            BufferedImage originalImage = ImageIO.read((getClass().getClassLoader().getResourceAsStream(path)));
+            Image scaledImage = originalImage.getScaledInstance(
+                AppConfigLab3.NUM_200,
+                AppConfigLab3.NUM_200,
+                Image.SCALE_SMOOTH
+            );
             return new ImageIcon(scaledImage);
         } catch (IOException e) {
             logger.logWarning(e + "\nSomething went wrong while loading the picture to the game icons");
@@ -170,7 +173,7 @@ public class GameLauncherView extends JFrame{
      *
      * @param listenForGameIconClicks the listener to be added to each game icon
      */
-    public void addGameIconListener(ActionListener listenForGameIconClicks) {
+    public void addGameIconListener(final ActionListener listenForGameIconClicks) {
         for (JButton gameBtn : gameIcons) {
             gameBtn.addActionListener(listenForGameIconClicks);
         }
@@ -188,7 +191,7 @@ public class GameLauncherView extends JFrame{
      *
      * @param gameView the {@link GameView} to be displayed in the panel
      */
-    public void loadGame(GameView gameView) {
+    public void loadGame(final GameView gameView) {
         // Clears the panel and adds the game view.
         gamePanel.removeAll();
         gamePanel.add(gameView.getPanel(), BorderLayout.CENTER);

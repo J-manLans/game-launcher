@@ -35,7 +35,7 @@ public class GameLauncherCtrl {
      * @param gameLauncherView the view component for the game launcher
      * @param gameListModel the model component containing the list of games that the launcher will display
      */
-    public GameLauncherCtrl(GameLauncherView gameLauncherView, GameListModel gameListModel) {
+    public GameLauncherCtrl(final GameLauncherView gameLauncherView, final GameListModel gameListModel) {
         this.gameLauncherView = gameLauncherView;
         this.gameListModel = gameListModel;
     }
@@ -70,7 +70,7 @@ public class GameLauncherCtrl {
      */
     class GameIconListener implements ActionListener {
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(final ActionEvent e) {
             // Get the game title from the clicked button's action command set earlier.
             String title = e.getActionCommand();
 

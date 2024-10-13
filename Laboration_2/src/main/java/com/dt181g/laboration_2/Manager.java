@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 
 /**
  * The Manager class represents the main GUI component for managing producers and consumers
- * in a resource pool system. This class extends {@link JFrame} and is responsible for
+ * in a resource pool system. This class extends JFrame and is responsible for
  * creating and managing the user interface, as well as controlling the lifecycle of
  * producer and consumer threads.
  * <p>

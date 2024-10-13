@@ -26,9 +26,9 @@ import com.dt181g.laboration_3.view.GameLauncherView;
 public enum GameLauncherInitializer {
     INSTANCE;
 
-    GameLauncherView gameLauncherView = new GameLauncherView();
-    GameListModel gameListModel = new GameListModel();
-    GameLauncherCtrl gameLauncherController = new GameLauncherCtrl(gameLauncherView, gameListModel);
+    private final GameLauncherView gameLauncherView = new GameLauncherView();
+    private final GameListModel gameListModel = new GameListModel();
+    private final GameLauncherCtrl gameLauncherController = new GameLauncherCtrl(gameLauncherView, gameListModel);
 
     /**
      * Initializes and runs the game launcher.

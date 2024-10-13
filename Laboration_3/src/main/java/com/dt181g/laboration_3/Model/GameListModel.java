@@ -69,7 +69,7 @@ public class GameListModel {
      * @param title the title of the game to retrieve the model for.
      * @return the GameModel associated with the title, or null if not found.
      */
-    public GameModel getGameModel(String title) {
+    public GameModel getGameModel(final String title) {
         for (GameModel gameModel : gameModels) {
             if (gameModel.getTitle().equals(title)) {
                 return gameModel; // Return the first match found
@@ -84,7 +84,7 @@ public class GameListModel {
      * @param title the title of the game to retrieve the view for.
      * @return the GameView associated with the title, or null if not found.
      */
-    public GameView getGameView(String title) {
+    public GameView getGameView(final String title) {
         for (GameView gameView : gameViews) {
             if (gameView.getTitle().equals(title)) {
                 return gameView;

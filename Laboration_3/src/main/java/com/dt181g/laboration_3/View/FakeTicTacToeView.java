@@ -26,8 +26,8 @@ import com.dt181g.laboration_3.support.AppConfigLab3;
  * </p>
  * @author Joel Lansgren
  */
-public class FakeTicTacToeView extends JPanel implements GameView{
-    JLabel title = new JLabel(AppConfigLab3.TIC_TAC_TOE_TITLE);
+public class FakeTicTacToeView extends JPanel implements GameView {
+    private final JLabel title = new JLabel(AppConfigLab3.TIC_TAC_TOE_TITLE);
 
     /**
      * May be implemented in the future.
@@ -36,7 +36,7 @@ public class FakeTicTacToeView extends JPanel implements GameView{
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JLabel gameLabel = new JLabel("Sorry! The game isn't available at the moment.");
-        AppConfigLab3.LABEL_STYLING(gameLabel);
+        AppConfigLab3.labelStyling(gameLabel);
 
         this.setBackground(AppConfigLab3.COLOR_DARKER_GREY);
         this.add(Box.createVerticalGlue());
@@ -73,7 +73,7 @@ public class FakeTicTacToeView extends JPanel implements GameView{
      * May be implemented in the future.
      */
     @Override
-    public void startGame(int[][] pellets,String text) {
+    public void startGame(final int[][] pellets, final String text) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'startGame'");
     }

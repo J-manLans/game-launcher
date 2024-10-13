@@ -29,50 +29,109 @@ public final class AppConfigLab3 {
     /* ---------------------------------------
     Paths to game icons.
     ------------------------------------------ */
-    public static final String PATH_TO_ICONS = "Laboration_3\\src\\main\\resources\\icons\\";
+
+    /** Path to icon images folder. */
+    public static final String PATH_TO_ICONS = "icons/";
+
+    /** Extension to snake image. */
     public static final String SNAKE_ICON = "snake.jpeg";
+
+    /** Extension to tic tac toe image. */
     public static final String TIC_TAC_TOE_ICON = "tictactoe.jpg";
 
     /* ---------------------------------------
     Game titles.
     ------------------------------------------ */
+    /** Snake title. */
     public static final String SNAKE_TITLE = "SNAKE(S)";
+
+    /** Tic tac toe title. */
     public static final String TIC_TAC_TOE_TITLE = "TIC TAC TOE";
-
-    /* ---------------------------------------
-    GameLauncherView Settings.
-    ------------------------------------------ */
-    public static final String PICK_A_GAME = "PICK A GAME";
-    public static final Border BOTTOM_BORDER_30 = BorderFactory.createEmptyBorder(0, 0, 30, 0);
-    public static final Border REMOVE_BORDER = BorderFactory.createEmptyBorder();
-    public static final Dimension GAME_SELECTOR_PANEL_DIMENSIONS = new Dimension(400,900);
-    public static final Dimension GAME_PANEL_DIMENSIONS = new Dimension(1300,900);
-    public static final Dimension GAME_ICON_SIZE = new Dimension(200,90);
-    public static final Dimension HIGHT_20 = new Dimension(0,20);
-    public static final Dimension HIGHT_40 = new Dimension(0,40);
-    public static final int SCROLL_SPEED_MULTIPLIER = 20;
-
-    /* ---------------------------------------
-    Snake settings.
-    ------------------------------------------ */
-    public static final Dimension SNAKE_GRID_SIZE = new Dimension(760,760);
-    public static final Dimension SNAKE_CONTROLS_SIZE = new Dimension(400,400);
-    public static final int SNAKE_CELL_COUNT = 38;
-    public static final Insets RESET_INSETS = new Insets(0, 0, 0, 0);
-    public static final Insets BOTTOM_20_INSET = new Insets(0, 0, 20, 0);
 
     /* ---------------------------------------
     Fonts.
     ------------------------------------------ */
+
+    /** Monospace used everywhere. */
     public static final Font MONOSPACE_BOLD = new Font("Monospace", Font.BOLD, 15);
 
     /* ---------------------------------------
     Colors.
     ------------------------------------------ */
-    public static final Color COLOR_DARK_GREY = new Color(40,40,40);
-    public static final Color COLOR_DARKER_GREY = new Color(30,30,30);
+    /** Dark grey color. */
+    public static final Color COLOR_DARK_GREY = new Color(40, 40, 40);
+
+    /** Darker gray color. */
+    public static final Color COLOR_DARKER_GREY = new Color(30, 30, 30);
+
+    /** A white color. */
     public static final Color COLOR_WHITE = new Color(255, 245, 238);
+
+    /** Accent color for the snake game. */
     public static final Color COLOR_SNAKE_GAME_ACCENT = new Color(255, 184, 77);
+
+    /* ---------------------------------------
+    Borders.
+    ------------------------------------------ */
+
+    /** Creates space underneath the element. */
+    public static final Border BOTTOM_SPACER_30 = BorderFactory.createEmptyBorder(0, 0, 30, 0);
+
+    /** Removes borders. */
+    public static final Border REMOVE_BORDER = BorderFactory.createEmptyBorder();
+
+    /** A little bit thicker border. */
+    public static final Border CONTROLS_BORDER = BorderFactory.createMatteBorder(5, 5, 5, 5, COLOR_SNAKE_GAME_ACCENT);
+
+    /** An empty border that's part of a compound border. */
+    public static final Border LABEL_BTN_INNER_SPACE = BorderFactory.createEmptyBorder(10, 10, 10, 10);
+
+    /** The width of the outer border thats the other part of the compound border. */
+    public static final int LABEL_BTN_OUTER_BORDER_WIDTH = 3;
+
+    /* ---------------------------------------
+    GameLauncherView Settings.
+    ------------------------------------------ */
+
+    /** Dimension for the game selector panel. */
+    public static final Dimension GAME_SELECTOR_PANEL_DIMENSIONS = new Dimension(400, 900);
+
+    /** Dimension for the game panel.*/
+    public static final Dimension GAME_PANEL_DIMENSIONS = new Dimension(1300, 900);
+
+    /** A number of 200, free for use.*/
+    public static final int NUM_200 = 200;
+
+    /** Dimension for the game icons. */
+    public static final Dimension GAME_ICON_SIZE = new Dimension(200, 90);
+
+    /** Dimension of 20 that can be used for a rigid area. */
+    public static final Dimension HIGHT_20 = new Dimension(0, 20);
+
+    /** Dimension of 40 that can be used for a rigid area. */
+    public static final Dimension HIGHT_40 = new Dimension(0, 40);
+
+    /** Scroll speed multiplier for setting the mouse scrolling a little bit faster in the scroll pane. */
+    public static final int SCROLL_SPEED_MULTIPLIER = 20;
+
+    /* ---------------------------------------
+    Snake settings.
+    ------------------------------------------ */
+
+    /** Size of the grid layout for the snake. */
+    public static final Dimension SNAKE_GRID_SIZE = new Dimension(760, 760);
+
+    /** Size of the controls panel. */
+    public static final Dimension SNAKE_CONTROLS_SIZE = new Dimension(400, 400);
+
+    /** Number of cells in the grid. */
+    public static final int SNAKE_CELL_COUNT = 38;
+
+    /** Resetting the GridBag insets. */
+    public static final Insets RESET_INSETS = new Insets(0, 0, 0, 0);
+
+    /** A GridBag inset. */
+    public static final Insets BOTTOM_20_INSET = new Insets(0, 0, 20, 0);
 
     /* ---------------------------------------
     Helper methods.
@@ -84,13 +143,19 @@ public final class AppConfigLab3 {
      * @param labelToBtn the JLabel to style
      * @param lightClr the color used for the label's foreground and background
      */
-    public static final void LABEL_BUTTON(JLabel labelToBtn, Color lightClr) {
+    public static void labelBtn(final JLabel labelToBtn, final Color lightClr) {
         labelToBtn.setFont(MONOSPACE_BOLD);
         labelToBtn.setForeground(lightClr);
         labelToBtn.setBackground(lightClr); // Used for hovering effect.
 
-        Border emptyBorder = BorderFactory.createEmptyBorder(10, 10, 10, 10);
-        Border matteBorder = BorderFactory.createMatteBorder(3, 3, 3, 3, lightClr);
+        Border emptyBorder = LABEL_BTN_INNER_SPACE;
+        Border matteBorder = BorderFactory.createMatteBorder(
+            LABEL_BTN_OUTER_BORDER_WIDTH,
+            LABEL_BTN_OUTER_BORDER_WIDTH,
+            LABEL_BTN_OUTER_BORDER_WIDTH,
+            LABEL_BTN_OUTER_BORDER_WIDTH,
+            lightClr
+        );
         labelToBtn.setBorder(BorderFactory.createCompoundBorder(matteBorder, emptyBorder));
     }
 
@@ -99,11 +164,11 @@ public final class AppConfigLab3 {
      *
      * @param label the JLabel to style
      */
-    public static final void LABEL_STYLING(JLabel label) {
+    public static void labelStyling(final JLabel label) {
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         label.setFont(MONOSPACE_BOLD);
         label.setForeground(COLOR_WHITE);
-        label.setBorder(BOTTOM_BORDER_30);
+        label.setBorder(BOTTOM_SPACER_30);
     }
 
     /* ---------------------------------------

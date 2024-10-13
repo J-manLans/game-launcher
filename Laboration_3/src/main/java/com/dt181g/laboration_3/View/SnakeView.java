@@ -1,7 +1,6 @@
 package com.dt181g.laboration_3.view;
 
 import com.dt181g.laboration_3.support.AppConfigLab3;
-import com.dt181g.laboration_3.support.DebugLogger;
 
 import java.awt.event.MouseAdapter;
 import java.awt.GridBagLayout;
@@ -30,11 +29,10 @@ import javax.swing.SwingConstants;
  *
  * @author Joel Lansgren
  */
-public class SnakeView extends JPanel implements GameView{
-    DebugLogger logger = DebugLogger.INSTANCE;
+public class SnakeView extends JPanel implements GameView {
 
     // Start menu components
-    GridBagConstraints gbc = new GridBagConstraints();
+    private final GridBagConstraints gbc = new GridBagConstraints();
     private JLabel title;
     private final JLabel startBtn = new JLabel("Start Game");
     private final JLabel multiplayerBtn = new JLabel("Multiplayer");
@@ -43,8 +41,8 @@ public class SnakeView extends JPanel implements GameView{
 
     // Snake panel
     private int snakeCellCount;
-    JPanel snakeGrid;
-    JPanel[][] snakeGridCells;
+    private JPanel snakeGrid;
+    private JPanel[][] snakeGridCells;
     private final JLabel snakeBackBtn = new JLabel("Back");
 
     // Control panel
@@ -68,14 +66,14 @@ public class SnakeView extends JPanel implements GameView{
         this.snakeGridCells = new JPanel[snakeCellCount][snakeCellCount];
 
         // Style snake components
-        AppConfigLab3.LABEL_STYLING(this.title);
-        AppConfigLab3.LABEL_BUTTON(startBtn, AppConfigLab3.COLOR_WHITE);
-        AppConfigLab3.LABEL_BUTTON(multiplayerBtn, AppConfigLab3.COLOR_DARK_GREY);
-        AppConfigLab3.LABEL_BUTTON(settingsBtn, AppConfigLab3.COLOR_DARK_GREY);
-        AppConfigLab3.LABEL_BUTTON(controlsBtn, AppConfigLab3.COLOR_WHITE);
-        AppConfigLab3.LABEL_STYLING(controlsMainLabel);
-        AppConfigLab3.LABEL_STYLING(controlsSubLabel);
-        AppConfigLab3.LABEL_BUTTON(snakeBackBtn, AppConfigLab3.COLOR_WHITE);
+        AppConfigLab3.labelStyling(this.title);
+        AppConfigLab3.labelBtn(startBtn, AppConfigLab3.COLOR_WHITE);
+        AppConfigLab3.labelBtn(multiplayerBtn, AppConfigLab3.COLOR_DARK_GREY);
+        AppConfigLab3.labelBtn(settingsBtn, AppConfigLab3.COLOR_DARK_GREY);
+        AppConfigLab3.labelBtn(controlsBtn, AppConfigLab3.COLOR_WHITE);
+        AppConfigLab3.labelStyling(controlsMainLabel);
+        AppConfigLab3.labelStyling(controlsSubLabel);
+        AppConfigLab3.labelBtn(snakeBackBtn, AppConfigLab3.COLOR_WHITE);
 
         // Panel settings
         this.snakeGrid.setPreferredSize(AppConfigLab3.SNAKE_GRID_SIZE);
@@ -130,14 +128,14 @@ public class SnakeView extends JPanel implements GameView{
      /**
      * Starts the game by displaying the game grid and the back button.
      *
-     * @param snakeGrid  A 2D array representing the current state of the snake grid.
+     * @param snake2DArray  A 2D array representing the current state of the snake grid.
      * @param comingSoon A string representing the characters to display in the snake.
      */
-    public void startGame(int[][] snakeGrid, String comingSoon) {
+    public void startGame(final int[][] snake2DArray, final String comingSoon) {
         this.removeAll();
 
         // Setting up the snake grid
-        this.initializeGrid(snakeGrid, comingSoon);
+        this.initializeGrid(snake2DArray, comingSoon);
 
         // Display settings
         this.gbc.gridy = 0;
@@ -156,10 +154,10 @@ public class SnakeView extends JPanel implements GameView{
     /**
      * Initializes the grid with the current state of the snake.
      *
-     * @param snakeGrid  A 2D array representing the current state of the snake grid.
+     * @param snake2DArray  A 2D array representing the current state of the snake grid.
      * @param comingSoon A string representing the characters to display in the snake.
      */
-    private void initializeGrid(int[][] snakeGrid, String comingSoon) {
+    private void initializeGrid(final int[][] snake2DArray, final String comingSoon) {
         this.snakeGrid.removeAll();
         // used for displaying the text inside the snake
         int counter = 0;
@@ -170,7 +168,7 @@ public class SnakeView extends JPanel implements GameView{
                 JPanel cell = new JPanel(new BorderLayout());
                 cell.setBorder(BorderFactory.createLineBorder(AppConfigLab3.COLOR_DARK_GREY));
 
-                if (snakeGrid[i][j] == 1) {  // Displays the snake and the letters in the grid
+                if (snake2DArray[i][j] == 1) {  // Displays the snake and the letters in the grid
                     JLabel comingSoonChar = new JLabel(String.valueOf(comingSoon.charAt(counter)));
                     this.styleSnakeBanner(comingSoonChar);
 
@@ -193,17 +191,17 @@ public class SnakeView extends JPanel implements GameView{
     /**
      * Updates the game grid with the current state of the snake.
      *
-     * @param snakeGrid  A 2D array representing the current state of the snake grid.
+     * @param snake2DArray  A 2D array representing the current state of the snake grid.
      * @param comingSoon A string representing the characters to display in the snake.
      */
-    public void updateGameGrid(int[][] snakeGrid, String comingSoon) {
+    public void updateGameGrid(final int[][] snake2DArray, final String comingSoon) {
         int counter = 0;
 
         for (int i = 0; i < snakeCellCount; i++) {
             for (int j = 0; j < snakeCellCount; j++) {
                 this.snakeGridCells[i][j].removeAll();
 
-                if (snakeGrid[i][j] == 1) {  // Displays the snake and the letters in the grid
+                if (snake2DArray[i][j] == 1) {  // Displays the snake and the letters in the grid
                     JLabel comingSoonChar = new JLabel(String.valueOf(comingSoon.charAt(counter)));
                     this.styleSnakeBanner(comingSoonChar);
 
@@ -226,7 +224,7 @@ public class SnakeView extends JPanel implements GameView{
      *
      * @param snakeChar The JLabel to be styled.
      */
-    public void styleSnakeBanner(JLabel snakeChar) {
+    public void styleSnakeBanner(final JLabel snakeChar) {
         snakeChar.setVerticalAlignment(SwingConstants.CENTER);
         snakeChar.setHorizontalAlignment(SwingConstants.CENTER);
         snakeChar.setFont(AppConfigLab3.MONOSPACE_BOLD);
@@ -259,7 +257,7 @@ public class SnakeView extends JPanel implements GameView{
         this.controlPanel.add(snakeBackBtn, gbc);
 
         this.controlPanel.setBackground(AppConfigLab3.COLOR_DARKER_GREY);
-        this.controlPanel.setBorder(BorderFactory.createMatteBorder(5,5,5,5,AppConfigLab3.COLOR_SNAKE_GAME_ACCENT));
+        this.controlPanel.setBorder(AppConfigLab3.CONTROLS_BORDER);
 
         this.add(controlPanel);
 
@@ -277,7 +275,7 @@ public class SnakeView extends JPanel implements GameView{
      * @param startBtnListener The mouse listener to be added to the start button,
      * allowing for interaction when the button is clicked.
      */
-    public void addStartBtnListener(MouseAdapter startBtnListener) {
+    public void addStartBtnListener(final MouseAdapter startBtnListener) {
         this.startBtn.addMouseListener(startBtnListener);
     }
 
@@ -287,7 +285,7 @@ public class SnakeView extends JPanel implements GameView{
      * @param multiplayerBtnListener The mouse listener to be added to the multiplayer button,
      * allowing for interaction when the button is clicked.
      */
-    public void addMultiplayerBtnListener(MouseAdapter multiplayerBtnListener) {
+    public void addMultiplayerBtnListener(final MouseAdapter multiplayerBtnListener) {
         this.multiplayerBtn.addMouseListener(multiplayerBtnListener);
     }
 
@@ -297,7 +295,7 @@ public class SnakeView extends JPanel implements GameView{
      * @param settingsBtnListener The mouse listener to be added to the settings button,
      * allowing for interaction when the button is clicked.
      */
-    public void addSettingsBtnListener(MouseAdapter settingsBtnListener) {
+    public void addSettingsBtnListener(final MouseAdapter settingsBtnListener) {
         this.settingsBtn.addMouseListener(settingsBtnListener);
     }
 
@@ -307,7 +305,7 @@ public class SnakeView extends JPanel implements GameView{
      * @param controlsBtnListener The mouse listener to be added to the controls button,
      * allowing for interaction when the button is clicked.
      */
-    public void addControlsBtnListener(MouseAdapter controlsBtnListener) {
+    public void addControlsBtnListener(final MouseAdapter controlsBtnListener) {
         this.controlsBtn.addMouseListener(controlsBtnListener);
     }
 
@@ -317,7 +315,7 @@ public class SnakeView extends JPanel implements GameView{
      * @param controlsBackBtnListener The mouse listener to be added to the back button,
      * allowing for interaction when the button is clicked.
      */
-    public void addControlsBackBtnListener(MouseAdapter controlsBackBtnListener) {
+    public void addControlsBackBtnListener(final MouseAdapter controlsBackBtnListener) {
         this.snakeBackBtn.addMouseListener(controlsBackBtnListener);
     }
 

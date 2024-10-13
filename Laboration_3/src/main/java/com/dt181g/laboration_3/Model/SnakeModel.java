@@ -90,7 +90,7 @@ public class SnakeModel implements GameModel {
                 this.snake[i][1] = this.snake[i + 1][1];
             } else {
                 // Updates the head.
-                if (this.snake[i][1] != this.snakeGrid.length - 1){
+                if (this.snake[i][1] != this.snakeGrid.length - 1) {
                     this.snake[i][1]++;
                 } else {  // When snake part reach end of the grid it wraps around.
                     this.snake[i][1] = 0;

@@ -9,7 +9,24 @@ package com.dt181g.laboration_3.model;
  * </p>
  */
 public interface GameModel {
+   /**
+     * Retrieves the path to the game's icon.
+     *
+     * @return A {@code String} representing the file path to the game's icon.
+     */
    String getIconPath();
+
+   /**
+     * Retrieves the title of the game.
+     *
+     * @return A {@code String} containing the title of the game.
+     */
    String getTitle();
+
+   /**
+     * Retrieves the size of the game's grid.
+     *
+     * @return An {@code int} representing the size of the grid.
+     */
    int getGridSize();
 }

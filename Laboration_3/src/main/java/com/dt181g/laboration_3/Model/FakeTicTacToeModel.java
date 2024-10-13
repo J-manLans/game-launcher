@@ -11,7 +11,7 @@ import com.dt181g.laboration_3.support.AppConfigLab3;
  * </p>
  */
 public class FakeTicTacToeModel implements GameModel {
-    private  final String IconPath = AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.TIC_TAC_TOE_ICON;
+    private final String iconPath = AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.TIC_TAC_TOE_ICON;
     private final String title = AppConfigLab3.TIC_TAC_TOE_TITLE;
 
     /**
@@ -36,6 +36,6 @@ public class FakeTicTacToeModel implements GameModel {
      */
     @Override
     public String getIconPath() {
-        return IconPath;
+        return iconPath;
     }
 }

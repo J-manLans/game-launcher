@@ -22,7 +22,7 @@ public enum DebugLogger {
     * Singleton instance of the DebugLogger enum.
     */
     INSTANCE;
-    private final Logger LOGGER = Logger.getLogger("Logger");
+    private final Logger logger = Logger.getLogger("Logger");
 
     /*================================
         ↓ CONSTRUCTOR
@@ -33,22 +33,22 @@ public enum DebugLogger {
      * {@code ConsoleHandler} set to INFO level with a simplified
      * {@code SimpleFormatter} that logs messages directly.     *
      */
-    private DebugLogger() {
-            // Initializes the console handler
-            final ConsoleHandler consoleHandler = new ConsoleHandler();
+    DebugLogger() {
+        // Initializes the console handler
+        final ConsoleHandler consoleHandler = new ConsoleHandler();
 
-            // Configures the handler
-            consoleHandler.setFormatter(new SimpleFormatter() {
-                @Override
-                public synchronized String format(final LogRecord logRecord) {
-                    return String.format("%s%n", logRecord.getMessage());
-                }
-            });
+        // Configures the handler
+        consoleHandler.setFormatter(new SimpleFormatter() {
+            @Override
+            public synchronized String format(final LogRecord logRecord) {
+                return String.format("%s%n", logRecord.getMessage());
+            }
+        });
 
-            // Configures the logger
-            LOGGER.addHandler(consoleHandler);
-            LOGGER.setLevel(Level.INFO);
-            LOGGER.setUseParentHandlers(false); // Disable the default console handler to avoid duplicate logs
+        // Configures the logger
+        logger.addHandler(consoleHandler);
+        logger.setLevel(Level.INFO);
+        logger.setUseParentHandlers(false); // Disable the default console handler to avoid duplicate logs
     }
 
     /*================================
@@ -60,8 +60,8 @@ public enum DebugLogger {
      *
      * @param message the message to be logged
      */
-    private void performLog(String message) {
-        LOGGER.info(message);
+    private void performLog(final String message) {
+        logger.info(message);
     }
 
     // ===== Statistical logs =====
@@ -71,7 +71,7 @@ public enum DebugLogger {
      *
      * @param message the message to be logged
      */
-    public void logInfo(String message) {
+    public void logInfo(final String message) {
         performLog(String.format("%s%s%s", AppConfigLab3.ANSI_YELLOW, message, AppConfigLab3.ANSI_RESET));
 
     }
@@ -82,7 +82,7 @@ public enum DebugLogger {
      *
      * @param message the message to be logged
      */
-    public void logWarning(String message) {
+    public void logWarning(final String message) {
         performLog(String.format("%s%s%s", AppConfigLab3.ANSI_RED, message, AppConfigLab3.ANSI_RESET));
     }
 }

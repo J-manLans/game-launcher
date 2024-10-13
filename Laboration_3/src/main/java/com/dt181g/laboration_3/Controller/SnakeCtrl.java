@@ -35,7 +35,7 @@ import javax.swing.Timer;
  *
  * @author Joel Lansgren
  */
-public class SnakeCtrl implements GameCtrl{
+public class SnakeCtrl implements GameCtrl {
     private final SnakeView snakeView;
     private final SnakeModel snakeModel;
     private boolean restart;
@@ -47,7 +47,7 @@ public class SnakeCtrl implements GameCtrl{
      * @param snakeView the view associated with the Snake game
      * @param snakeModel the model representing the game's logic
      */
-    public SnakeCtrl(GameView snakeView, GameModel snakeModel) {
+    public SnakeCtrl(final GameView snakeView, final GameModel snakeModel) {
         this.snakeView = (SnakeView) snakeView;
         this.snakeModel = (SnakeModel) snakeModel;
         this.initializeListeners();
@@ -88,7 +88,7 @@ public class SnakeCtrl implements GameCtrl{
      * @param button the button to update
      * @param isHovered true if the button is hovered, false otherwise
      */
-    private void updateButtonAppearance(JLabel button, boolean isHovered) {
+    private void updateButtonAppearance(final JLabel button, final boolean isHovered) {
         button.setOpaque(isHovered);
         button.setForeground(isHovered ? AppConfigLab3.COLOR_DARKER_GREY : AppConfigLab3.COLOR_WHITE);
     }
@@ -97,7 +97,7 @@ public class SnakeCtrl implements GameCtrl{
      * Listener for the Start button. It starts the game and manages the game loop.
      */
     class StartBtnListener extends MouseAdapter {
-        JLabel startBtn = snakeView.getStartBtn();
+        private final JLabel startBtn = snakeView.getStartBtn();
         private Timer gameLoop;
 
         StartBtnListener() {
@@ -105,7 +105,7 @@ public class SnakeCtrl implements GameCtrl{
         }
 
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mouseClicked(final MouseEvent e) {
             // Makes sure the label button is transparent and has
             // the right text color on the next startup.
             startBtn.setOpaque(false);
@@ -119,9 +119,9 @@ public class SnakeCtrl implements GameCtrl{
             restart = false;
 
             // Game loop.
-            gameLoop = new Timer(200, new ActionListener() {
+            gameLoop = new Timer(AppConfigLab3.NUM_200, new ActionListener() {
                 @Override
-                public void actionPerformed(ActionEvent e) {
+                public void actionPerformed(final ActionEvent e) {
                     if (!restart) {
                         snakeModel.updateGameGrid();
                         snakeView.updateGameGrid(snakeModel.getSnakeGrid(), snakeModel.getComingSoon());
@@ -134,12 +134,12 @@ public class SnakeCtrl implements GameCtrl{
         }
 
         @Override
-        public void mouseEntered(MouseEvent e) {
+        public void mouseEntered(final MouseEvent e) {
             updateButtonAppearance(startBtn, true);
         }
 
         @Override
-        public void mouseExited(MouseEvent e) {
+        public void mouseExited(final MouseEvent e) {
             updateButtonAppearance(startBtn, false);
         }
     }
@@ -149,19 +149,19 @@ public class SnakeCtrl implements GameCtrl{
      * Not yet implemented.
      */
     class MultiplayerBtnListener extends MouseAdapter {
-        JLabel multiplayerBtn = snakeView.getMultiplayerBtn();
+        private final JLabel multiplayerBtn = snakeView.getMultiplayerBtn();
 
         MultiplayerBtnListener() {
             multiplayerBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
 
         @Override
-        public void mouseEntered(MouseEvent e) {
+        public void mouseEntered(final MouseEvent e) {
             updateButtonAppearance(multiplayerBtn, true);
         }
 
         @Override
-        public void mouseExited(MouseEvent e) {
+        public void mouseExited(final MouseEvent e) {
             updateButtonAppearance(multiplayerBtn, false);
         }
     }
@@ -171,19 +171,19 @@ public class SnakeCtrl implements GameCtrl{
      * Not yet implemented.
      */
     class SettingsBtnListener extends MouseAdapter {
-        JLabel settingsBtn = snakeView.getSettingsBtn();
+        private final JLabel settingsBtn = snakeView.getSettingsBtn();
 
         SettingsBtnListener() {
             settingsBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
 
         @Override
-        public void mouseEntered(MouseEvent e) {
+        public void mouseEntered(final MouseEvent e) {
             updateButtonAppearance(settingsBtn, true);
         }
 
         @Override
-        public void mouseExited(MouseEvent e) {
+        public void mouseExited(final MouseEvent e) {
             updateButtonAppearance(settingsBtn, false);
         }
     }
@@ -192,7 +192,7 @@ public class SnakeCtrl implements GameCtrl{
      * Listener for the Controls button.
      */
     class ControlsBtnListener extends MouseAdapter {
-        JLabel controlsBtn = snakeView.getControlsBtn();
+        private final JLabel controlsBtn = snakeView.getControlsBtn();
 
 
         ControlsBtnListener() {
@@ -200,7 +200,7 @@ public class SnakeCtrl implements GameCtrl{
         }
 
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mouseClicked(final MouseEvent e) {
             // Makes sure the label button is transparent and has
             // the right text color on the next startup.
             controlsBtn.setOpaque(false);
@@ -209,12 +209,12 @@ public class SnakeCtrl implements GameCtrl{
         }
 
         @Override
-        public void mouseEntered(MouseEvent e) {
+        public void mouseEntered(final MouseEvent e) {
             updateButtonAppearance(controlsBtn, true);
         }
 
         @Override
-        public void mouseExited(MouseEvent e) {
+        public void mouseExited(final MouseEvent e) {
             updateButtonAppearance(controlsBtn, false);
         }
     }
@@ -223,7 +223,7 @@ public class SnakeCtrl implements GameCtrl{
      * Listener for the back button in the Snake game.
      */
     class SnakeBackBtnListener extends MouseAdapter {
-        JLabel snakeBackBtn = snakeView.getSnakeBackBtn();
+        private final JLabel snakeBackBtn = snakeView.getSnakeBackBtn();
 
 
         SnakeBackBtnListener() {
@@ -231,7 +231,7 @@ public class SnakeCtrl implements GameCtrl{
         }
 
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mouseClicked(final MouseEvent e) {
             // Makes sure the label button is transparent and has
             // the right text color on the next startup.
             snakeBackBtn.setOpaque(false);
@@ -240,12 +240,12 @@ public class SnakeCtrl implements GameCtrl{
         }
 
         @Override
-        public void mouseEntered(MouseEvent e) {
+        public void mouseEntered(final MouseEvent e) {
             updateButtonAppearance(snakeBackBtn, true);
         }
 
         @Override
-        public void mouseExited(MouseEvent e) {
+        public void mouseExited(final MouseEvent e) {
             updateButtonAppearance(snakeBackBtn, false);
         }
     }
