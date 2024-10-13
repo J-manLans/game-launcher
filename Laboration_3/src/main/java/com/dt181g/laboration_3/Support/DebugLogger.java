@@ -6,6 +6,17 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+/**
+ * A singleton logger utility for debugging and logging messages in the application.
+ *
+ * <p>
+ * The {@code DebugLogger} is designed to provide a centralized logging mechanism,
+ * allowing different parts of the application to log messages with various severity levels.
+ * It formats log messages with specific colors for better visibility in the console.
+ * </p>
+ *
+ * @author Joel Lansgren
+ */
 public enum DebugLogger {
     /**
     * Singleton instance of the DebugLogger enum.

@@ -9,16 +9,45 @@ import com.dt181g.laboration_3.model.GameListModel;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.view.GameLauncherView;
 
+/**
+ * The controller class for managing the game launcher.
+ * <p>
+ * This class acts as the intermediary between the {@link GameLauncherView} and
+ * {@link GameListModel}, coordinating interactions and ensuring that user
+ * actions in the view trigger the appropriate responses in the model.
+ * </p>
+ *
+ * <p>
+ * It also manages the creation and storage of individual game controllers,
+ * allowing the selected game to be loaded and reset within the game launcher.
+ * </p>
+ *
+ * @author Joel lansgren
+ */
 public class GameLauncherCtrl {
     private final GameLauncherView gameLauncherView;
     private final GameListModel gameListModel;
     private final Map<String, GameCtrl> gameControllers = new HashMap<>();
 
+    /**
+     * Constructs a new GameLauncherCtrl with the specified view and model.
+     *
+     * @param gameLauncherView the view component for the game launcher
+     * @param gameListModel the model component containing the list of games that the launcher will display
+     */
     public GameLauncherCtrl(GameLauncherView gameLauncherView, GameListModel gameListModel) {
         this.gameLauncherView = gameLauncherView;
         this.gameListModel = gameListModel;
     }
 
+    /**
+     * Initializes the game launcher by setting up the game icons and their listeners.
+     * <p>
+     * This method populates the game launcher view with the icons for each game
+     * retrieved from the model and sets up listeners for user interactions
+     * with these icons.
+     * </p>
+     */
     public void initializeLauncher() {
         this.gameLauncherView.addGameIcons(this.gameListModel.getIconPath(),
             gameListModel.getTitleList()
@@ -29,6 +58,16 @@ public class GameLauncherCtrl {
     /*========================
      * Listeners
      =======================*/
+     /**
+     * Listener for game icon clicks in the launcher.
+     * <p>
+     * This inner class handles actions triggered when a user clicks a game
+     * icon from the launcher. It identifies the selected game and either
+     * creates a new game controller if one does not already exist, or retrieves
+     * the existing one. The selected game is then reset and displayed in the
+     * game launcher view.
+     * </p>
+     */
     class GameIconListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {

@@ -26,6 +26,25 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
+/**
+ * The view component of the Game Launcher.
+ * <p>
+ * This class represents the user interface for the game launcher, providing
+ * a scrollable list of game icons and a panel to display the selected game.
+ * It interacts with the controller by accepting listeners for user actions.
+ * </p>
+ *
+ * <p>
+ * It extends {@link JFrame} and organizes components using {@link JPanel},
+ * {@link JScrollPane}, and various layout managers for an intuitive interface.
+ * </p>
+ *
+ * <p>
+ * Uses {@link AppConfigLab3} for styling and layout configurations.
+ * </p>
+ *
+ * @author Joel Lansgren
+ */
 public class GameLauncherView extends JFrame{
     DebugLogger logger = DebugLogger.INSTANCE;
 
@@ -35,10 +54,17 @@ public class GameLauncherView extends JFrame{
     private final JPanel gamePanel = new JPanel();
     private final List<JButton> gameIcons = new ArrayList<JButton>();
 
+    /**
+     * Constructs the GameLauncherView and sets up its components.
+     * <p>
+     * Initializes the game selection panel, the scroll pane that holds it, and the game display panel.
+     * Also sets the layout for the JFrame and configures general window properties.
+     * </p>
+     */
     public GameLauncherView() {
         // GameSelectorPanel
         gameSelectorPanel.setLayout(new BoxLayout(gameSelectorPanel, BoxLayout.Y_AXIS));
-        gameSelectorPanel.setBackground(AppConfigLab3.DARK_GREY);
+        gameSelectorPanel.setBackground(AppConfigLab3.COLOR_DARK_GREY);
         AppConfigLab3.LABEL_STYLING(pickAGameLabel);
         gameSelectorPanel.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
         gameSelectorPanel.add(pickAGameLabel);
@@ -49,7 +75,7 @@ public class GameLauncherView extends JFrame{
         // GamePanel
         gamePanel.setLayout(new BorderLayout());
         gamePanel.setPreferredSize(AppConfigLab3.GAME_PANEL_DIMENSIONS);
-        gamePanel.setBackground(AppConfigLab3.DARKER_GREY);
+        gamePanel.setBackground(AppConfigLab3.COLOR_DARKER_GREY);
 
         // JFrame
         this.setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
@@ -60,6 +86,13 @@ public class GameLauncherView extends JFrame{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    /**
+     * Helper method to configure the scroll pane for the game selector panel.
+     * <p>
+     * Disables the vertical scroll bar, removes the border, and sets up a mouse wheel listener
+     * to allow faster scrolling through the game selection panel.
+     * </p>
+     */
     private void setupScrollPane() {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(AppConfigLab3.REMOVE_BORDER);
@@ -70,11 +103,22 @@ public class GameLauncherView extends JFrame{
             public void mouseWheelMoved(MouseWheelEvent e) {
                 int notches = e.getWheelRotation();
                 JScrollBar vertical = scrollPane.getVerticalScrollBar();
-                vertical.setValue(vertical.getValue() + (notches * 20));
+                vertical.setValue(vertical.getValue() + (notches * AppConfigLab3.SCROLL_SPEED_MULTIPLIER));
             }
         });
     }
 
+    /**
+     * Adds game icons to the selection panel.
+     * <p>
+     * Takes a list of image paths and corresponding game titles, and creates
+     * a clickable icon for each game. Each icon is set up with the appropriate
+     * image and action command, and is stored for later use in event listeners.
+     * </p>
+     *
+     * @param pathToIcon a list of file paths for the game icons
+     * @param titles a list of game titles corresponding to each icon
+     */
     public void addGameIcons(List<String> pathToIcon, List<String> titles) {
         for (int i = 0; i < pathToIcon.size(); i++) {
             // Set up the icon.
@@ -85,7 +129,7 @@ public class GameLauncherView extends JFrame{
             gameIcon.setBorderPainted(false);
             gameIcon.setPreferredSize(AppConfigLab3.GAME_ICON_SIZE);
             gameIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            // Fetch the icon image.
+            // Fetch  and sets the icon image.
             gameIcon.setIcon(loadIcon(pathToIcon.get(i)));
             // Set the action command od the icon to the game title,
             // to let the action listener know which game was clicked.
@@ -103,23 +147,47 @@ public class GameLauncherView extends JFrame{
         gameSelectorPanel.add(Box.createVerticalGlue());
     }
 
+    /**
+     * Helper class for setting game icons.
+     * Loads and scales an image from a given path to fit as a game icon.
+     *
+     * @param path the file path to the image
+     * @return an ImageIcon containing the scaled image, or null if an error occurs
+     */
     private ImageIcon loadIcon(String path) {
         try {
             BufferedImage originalImage = ImageIO.read(new File(path));
             Image scaledImage = originalImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
             return new ImageIcon(scaledImage);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.logWarning(e + "\nSomething went wrong while loading the picture to the game icons");
             return null;
         }
     }
 
+    /**
+     * Adds an {@link ActionListener} to each game icon for handling game selection.
+     *
+     * @param listenForGameIconClicks the listener to be added to each game icon
+     */
     public void addGameIconListener(ActionListener listenForGameIconClicks) {
         for (JButton gameBtn : gameIcons) {
             gameBtn.addActionListener(listenForGameIconClicks);
         }
     }
 
+    /**
+     * Loads the selected game's view into the game display panel.
+     *
+     * <p>
+     * This method is called from the {@link ActionListener} attached to the game icons.
+     * It clears the existing contents of the game panel and adds the
+     * new game's view to it. It then triggers a revalidation and repaint to ensure
+     * the new content is displayed correctly.
+     * </p>
+     *
+     * @param gameView the {@link GameView} to be displayed in the panel
+     */
     public void loadGame(GameView gameView) {
         // Clears the panel and adds the game view.
         gamePanel.removeAll();
