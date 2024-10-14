@@ -27,7 +27,11 @@ import com.dt181g.laboration_3.support.AppConfigLab3;
  * @author Joel Lansgren
  */
 public class FakeTicTacToeView extends JPanel implements GameView {
-    private final JLabel title = new JLabel(AppConfigLab3.TIC_TAC_TOE_TITLE);
+    private final JLabel title;
+
+    public FakeTicTacToeView(final String title) {
+        this.title = new JLabel(title);
+    }
 
     /**
      * May be implemented in the future.
@@ -66,7 +70,7 @@ public class FakeTicTacToeView extends JPanel implements GameView {
      */
     @Override
     public String getTitle() {
-       return AppConfigLab3.TIC_TAC_TOE_TITLE;
+       return title.getText();
     }
 
     /**

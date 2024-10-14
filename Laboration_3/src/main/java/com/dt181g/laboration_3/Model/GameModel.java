@@ -22,11 +22,4 @@ public interface GameModel {
      * @return A {@code String} containing the title of the game.
      */
    String getTitle();
-
-   /**
-     * Retrieves the size of the game's grid.
-     *
-     * @return An {@code int} representing the size of the grid.
-     */
-   int getGridSize();
 }

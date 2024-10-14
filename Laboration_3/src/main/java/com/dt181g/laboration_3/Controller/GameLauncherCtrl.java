@@ -2,12 +2,9 @@ package com.dt181g.laboration_3.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 import javax.swing.SwingUtilities;
-import java.util.Map;
 
 import com.dt181g.laboration_3.model.GameListModel;
-import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.view.GameLauncherView;
 
 /**
@@ -28,7 +25,6 @@ import com.dt181g.laboration_3.view.GameLauncherView;
 public class GameLauncherCtrl {
     private final GameLauncherView gameLauncherView;
     private final GameListModel gameListModel;
-    private final Map<String, GameCtrl> gameControllers = new HashMap<>();
 
     /**
      * Constructs a new GameLauncherCtrl with the specified view and model.
@@ -42,20 +38,34 @@ public class GameLauncherCtrl {
     }
 
     /**
-     * Initializes the game launcher by setting up the game icons and their listeners.
-     * Then it displays the game launcher UI on the Event Dispatch Thread (EDT) using invokeLater.
-     * <p>
-     * This method populates the game launcher view with the icons for each game
-     * retrieved from the model and sets up listeners for user interactions
-     * with these icons.
-     * </p>
+     * Initializes the game launcher using various helper methods.
      */
-    public void initializeLauncher() {
+    public void initialize() {
+        this.addGameIcons();
+        this.initializeListeners();
+        this.startLauncher();
+    }
+
+    /**
+     * Helper method that sets up the game icons in the launcher view.
+     */
+    private void addGameIcons() {
         this.gameLauncherView.addGameIcons(this.gameListModel.getIconPath(),
             gameListModel.getTitleList()
         );
-        this.gameLauncherView.addGameIconListener(new GameIconListener());
+    }
 
+    /**
+     * Helper method that initialize listeners.
+     */
+    private void initializeListeners() {
+        this.gameLauncherView.addGameIconListener(new GameIconListener());
+    }
+
+    /**
+     * Helper method that displays the game launcher UI on the Event Dispatch Thread (EDT) using invokeLater.
+     */
+    private void startLauncher() {
         SwingUtilities.invokeLater(() -> {
             gameLauncherView.setVisible(true);
         });
@@ -68,10 +78,8 @@ public class GameLauncherCtrl {
      * Listener for game icon clicks in the launcher.
      * <p>
      * This inner class handles actions triggered when a user clicks a game
-     * icon from the launcher. It identifies the selected game and either
-     * creates a new game controller if one does not already exist, or retrieves
-     * the existing one. The selected game is then reset and displayed in the
-     * game launcher view.
+     * icon from the launcher. It identifies the selected game.
+     * The selected game is then reset and displayed in the game launcher view.
      * </p>
      */
     class GameIconListener implements ActionListener {
@@ -80,29 +88,8 @@ public class GameLauncherCtrl {
             // Get the game title from the clicked button's action command set earlier.
             String title = e.getActionCommand();
 
-            // Create and store the game controller if it doesn't exist yet.
-            switch (title) {
-                case AppConfigLab3.SNAKE_TITLE -> {
-                    if (!gameControllers.containsKey(title)) {
-                        GameCtrl snakeCtrl = new SnakeCtrl(
-                            gameListModel.getGameView(title),
-                            gameListModel.getGameModel(title)
-                        );
-                        gameControllers.put(title, snakeCtrl);
-                    }
-                } case AppConfigLab3.TIC_TAC_TOE_TITLE -> {
-                    if (!gameControllers.containsKey(title)) {
-                        GameCtrl ticTacToeCtrl = new FakeTicTacToeCtrl(
-                            gameListModel.getGameView(title),
-                            gameListModel.getGameModel(title)
-                        );
-                        gameControllers.put(title, ticTacToeCtrl);
-                    }
-                }
-            }
-
             // Reset the game and load it into the launcher.
-            gameControllers.get(title).resetGame();
+            gameListModel.getGameController(title).resetGame();
             gameLauncherView.loadGame(gameListModel.getGameView(title));
         }
     }

@@ -26,15 +26,6 @@ public class FakeTicTacToeModel implements GameModel {
      * May be implemented in the future.
      */
     @Override
-    public int getGridSize() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getGridSize'");
-    }
-
-    /**
-     * May be implemented in the future.
-     */
-    @Override
     public String getIconPath() {
         return iconPath;
     }

@@ -138,16 +138,6 @@ public class SnakeModel implements GameModel {
     }
 
     /**
-     * Returns the size of the game grid.
-     *
-     * @return the size of the grid as an integer.
-     */
-    @Override
-    public int getGridSize() {
-        return this.gridSize;
-    }
-
-    /**
      * Returns the string indicating the game is coming soon.
      *
      * @return the "coming soon" string.

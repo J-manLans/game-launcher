@@ -35,19 +35,22 @@ import javax.swing.Timer;
  *
  * @author Joel Lansgren
  */
-public class SnakeCtrl implements GameCtrl {
+public class SnakeCtrl implements GameController {
     private final SnakeView snakeView;
     private final SnakeModel snakeModel;
+    private final String title;
     private boolean restart;
 
     /**
-     * Constructs a SnakeCtrl with the specified SnakeView and SnakeModel.
+     * Constructs a SnakeCtrl with the specified game title, SnakeView and SnakeModel.
      * It also initialize the listeners.
      *
+     * @param title the snake game title
      * @param snakeView the view associated with the Snake game
      * @param snakeModel the model representing the game's logic
      */
-    public SnakeCtrl(final GameView snakeView, final GameModel snakeModel) {
+    public SnakeCtrl(final String title, final GameView snakeView, final GameModel snakeModel) {
+        this.title = title;
         this.snakeView = (SnakeView) snakeView;
         this.snakeModel = (SnakeModel) snakeModel;
         this.initializeListeners();
@@ -76,6 +79,11 @@ public class SnakeCtrl implements GameCtrl {
         this.snakeModel.clearSnakeGrid();
         // stops the EDT thread from executing
         this.restart = true;
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
     }
 
     /*========================

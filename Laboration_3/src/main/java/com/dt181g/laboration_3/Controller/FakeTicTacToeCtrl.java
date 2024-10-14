@@ -1,3 +1,4 @@
+
 package com.dt181g.laboration_3.controller;
 
 import com.dt181g.laboration_3.model.GameModel;
@@ -14,19 +15,22 @@ import com.dt181g.laboration_3.view.GameView;
  * initializing listeners.
  * </p>
  */
-public class FakeTicTacToeCtrl implements GameCtrl {
+public class FakeTicTacToeCtrl implements GameController {
     private final GameView ticTacToePanelView;
     private final GameModel ticTacToeModel;
+    private final String title;
 
     /**
-     * Constructs a FakeTicTacToeCtrl with the specified game view and model.
+     * Constructs a FakeTicTacToeCtrl with the specified game title, view and model.
      *
+     * @param title the tic tac toe game title
      * @param ticTacToePanelView the view representing the Tic Tac Toe game
      * @param ticTacToeModel the model representing the game's state
      */
-    public FakeTicTacToeCtrl(final GameView ticTacToePanelView, final GameModel ticTacToeModel) {
+    public FakeTicTacToeCtrl(final String title, final GameView ticTacToePanelView, final GameModel ticTacToeModel) {
         this.ticTacToePanelView = ticTacToePanelView;
         this.ticTacToeModel = ticTacToeModel;
+        this.title = title;
     }
 
     /**
@@ -48,6 +52,12 @@ public class FakeTicTacToeCtrl implements GameCtrl {
     public void initializeListeners() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'initializeListeners'");
+    }
+
+
+    @Override
+    public String getTitle() {
+        return title;
     }
 
 }

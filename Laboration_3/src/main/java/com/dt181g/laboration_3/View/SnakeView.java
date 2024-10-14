@@ -40,7 +40,6 @@ public class SnakeView extends JPanel implements GameView {
     private final JLabel controlsBtn = new JLabel("Controls");
 
     // Snake panel
-    private int snakeCellCount;
     private JPanel snakeGrid;
     private JPanel[][] snakeGridCells;
     private final JLabel snakeBackBtn = new JLabel("Back");
@@ -54,16 +53,12 @@ public class SnakeView extends JPanel implements GameView {
      * Constructs a SnakeView with the specified title and snake cell count.
      *
      * @param title The title to be displayed on the view.
-     * @param snakeCellCount The number of cells in the snake grid (width and height).
      */
-    public SnakeView(final String title, final int snakeCellCount) {
+    public SnakeView(final String title) {
         this.setLayout(new GridBagLayout());
 
         // Initialize instance variables
         this.title = new JLabel(title);
-        this.snakeCellCount = snakeCellCount;
-        this.snakeGrid = new JPanel(new GridLayout(snakeCellCount, snakeCellCount));
-        this.snakeGridCells = new JPanel[snakeCellCount][snakeCellCount];
 
         // Style snake components
         AppConfigLab3.labelStyling(this.title);
@@ -76,7 +71,6 @@ public class SnakeView extends JPanel implements GameView {
         AppConfigLab3.labelBtn(snakeBackBtn, AppConfigLab3.COLOR_WHITE);
 
         // Panel settings
-        this.snakeGrid.setPreferredSize(AppConfigLab3.SNAKE_GRID_SIZE);
         this.controlPanel.setPreferredSize(AppConfigLab3.SNAKE_CONTROLS_SIZE);
     }
 
@@ -134,6 +128,12 @@ public class SnakeView extends JPanel implements GameView {
     public void startGame(final int[][] snake2DArray, final String comingSoon) {
         this.removeAll();
 
+        if (snakeGrid == null) {
+            this.snakeGrid = new JPanel(new GridLayout(snake2DArray.length, snake2DArray.length));
+            this.snakeGrid.setPreferredSize(AppConfigLab3.SNAKE_GRID_SIZE);
+            this.snakeGridCells = new JPanel[snake2DArray.length][snake2DArray.length];
+        }
+
         // Setting up the snake grid
         this.initializeGrid(snake2DArray, comingSoon);
 
@@ -162,8 +162,8 @@ public class SnakeView extends JPanel implements GameView {
         // used for displaying the text inside the snake
         int counter = 0;
 
-        for (int i = 0; i < this.snakeCellCount; i++) {
-            for (int j = 0; j < this.snakeCellCount; j++) {
+        for (int i = 0; i < snake2DArray.length; i++) {
+            for (int j = 0; j < snake2DArray.length; j++) {
                 // Create cells to put in the grid
                 JPanel cell = new JPanel(new BorderLayout());
                 cell.setBorder(BorderFactory.createLineBorder(AppConfigLab3.COLOR_DARK_GREY));
@@ -197,8 +197,8 @@ public class SnakeView extends JPanel implements GameView {
     public void updateGameGrid(final int[][] snake2DArray, final String comingSoon) {
         int counter = 0;
 
-        for (int i = 0; i < snakeCellCount; i++) {
-            for (int j = 0; j < snakeCellCount; j++) {
+        for (int i = 0; i < snake2DArray.length; i++) {
+            for (int j = 0; j < snake2DArray.length; j++) {
                 this.snakeGridCells[i][j].removeAll();
 
                 if (snake2DArray[i][j] == 1) {  // Displays the snake and the letters in the grid

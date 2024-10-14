@@ -19,9 +19,13 @@ public interface GameController {
      * Resets the game to its initial state.
      * This method should clear any current game data, restore initial settings,
      * and prepare the game for a new session.
-     * It may also update the user interface to reflect the reset state.
+     * It should also update the user interface to reflect the reset state.
      */
     void resetGame();
 
+    /**
+     * Returns the game title
+     * @return the game title
+     */
     Object getTitle();
 }
