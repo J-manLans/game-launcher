@@ -25,9 +25,9 @@ public enum GameLauncherInitializer {
     INSTANCE;
 
     /**
-     * Initializes and runs the game launcher through the GameLauncherCtrl class.     *
+     * Initializes and runs the game launcher through the GameLauncherCtrl class.
      */
     public void runLauncher() {
-        new GameLauncherCtrl(new GameLauncherView(), new GameListModel()).initializeLauncher();
+        new GameLauncherCtrl(new GameLauncherView(), new GameListModel()).initialize();
     }
 }
