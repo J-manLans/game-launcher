@@ -1,7 +1,5 @@
 package com.dt181g.laboration_3.issuer;
 
-import javax.swing.SwingUtilities;
-
 import com.dt181g.laboration_3.controller.GameLauncherCtrl;
 import com.dt181g.laboration_3.model.GameListModel;
 import com.dt181g.laboration_3.view.GameLauncherView;
@@ -26,22 +24,10 @@ import com.dt181g.laboration_3.view.GameLauncherView;
 public enum GameLauncherInitializer {
     INSTANCE;
 
-    private final GameLauncherView gameLauncherView = new GameLauncherView();
-    private final GameListModel gameListModel = new GameListModel();
-    private final GameLauncherCtrl gameLauncherController = new GameLauncherCtrl(gameLauncherView, gameListModel);
-
     /**
-     * Initializes and runs the game launcher.
-     * <p>
-     * This method sets up the controller and displays the game launcher UI
-     * on the Event Dispatch Thread (EDT) using invokeLater.
-     * </p>
+     * Initializes and runs the game launcher through the GameLauncherCtrl class.     *
      */
     public void runLauncher() {
-        gameLauncherController.initializeLauncher();
-
-        SwingUtilities.invokeLater(() -> {
-            gameLauncherView.setVisible(true);
-        });
+        new GameLauncherCtrl(new GameLauncherView(), new GameListModel()).initializeLauncher();
     }
 }

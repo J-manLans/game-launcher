@@ -3,6 +3,7 @@ package com.dt181g.laboration_3.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import javax.swing.SwingUtilities;
 import java.util.Map;
 
 import com.dt181g.laboration_3.model.GameListModel;
@@ -42,6 +43,7 @@ public class GameLauncherCtrl {
 
     /**
      * Initializes the game launcher by setting up the game icons and their listeners.
+     * Then it displays the game launcher UI on the Event Dispatch Thread (EDT) using invokeLater.
      * <p>
      * This method populates the game launcher view with the icons for each game
      * retrieved from the model and sets up listeners for user interactions
@@ -53,6 +55,10 @@ public class GameLauncherCtrl {
             gameListModel.getTitleList()
         );
         this.gameLauncherView.addGameIconListener(new GameIconListener());
+
+        SwingUtilities.invokeLater(() -> {
+            gameLauncherView.setVisible(true);
+        });
     }
 
     /*========================
