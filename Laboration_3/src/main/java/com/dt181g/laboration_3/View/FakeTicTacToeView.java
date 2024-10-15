@@ -1,5 +1,7 @@
 package com.dt181g.laboration_3.view;
 
+import java.util.List;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -34,9 +36,12 @@ public class FakeTicTacToeView extends JPanel implements GameView {
     }
 
     /**
-     * May be implemented in the future.
+     * May be properly implemented in the future.
      */
-    private void initializeStartMenu() {
+    @Override
+    public void initializeStartMenu() {
+        this.removeAll();
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JLabel gameLabel = new JLabel("Sorry! The game isn't available at the moment.");
@@ -46,15 +51,6 @@ public class FakeTicTacToeView extends JPanel implements GameView {
         this.add(Box.createVerticalGlue());
         this.add(gameLabel);
         this.add(Box.createVerticalGlue());
-    }
-
-    /**
-     * May be implemented in the future.
-     */
-    @Override
-    public void resetGame() {
-        this.removeAll();
-        initializeStartMenu();
     }
 
     /**
@@ -77,7 +73,7 @@ public class FakeTicTacToeView extends JPanel implements GameView {
      * May be implemented in the future.
      */
     @Override
-    public void startGame(final int[][] pellets, final String text) {
+    public void startGame(final List<Object> gameAssets) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'startGame'");
     }

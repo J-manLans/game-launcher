@@ -1,5 +1,7 @@
 package com.dt181g.laboration_3.view;
 
+import java.util.List;
+
 import javax.swing.JPanel;
 
 /**
@@ -14,11 +16,11 @@ public interface GameView {
     /**
      * Starts the game with the provided game model and title.
      *
-     * @param gameModel A 2D array representing the current state of the game.
+     * @param gamePanel A 2D array representing the current state of the game.
      *                  Each element in the array corresponds to a game entity.
      * @param text      The title or description to display for the game.
      */
-    void startGame(int[][] gameModel, String text);
+    void startGame(List<Object> gameAssets);
 
     /**
      * Retrieves the main panel of the game view.
@@ -32,7 +34,7 @@ public interface GameView {
      * This method should clear any previous game data and prepare
      * the view for a new game session.
      */
-    void resetGame();
+    void initializeStartMenu();
 
     /**
      * Retrieves the title of the game.

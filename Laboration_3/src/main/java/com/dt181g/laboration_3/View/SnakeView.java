@@ -3,6 +3,7 @@ package com.dt181g.laboration_3.view;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 
 import java.awt.event.MouseAdapter;
+import java.util.List;
 import java.awt.GridBagLayout;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -86,7 +87,10 @@ public class SnakeView extends JPanel implements GameView {
      * to allow the user to start the game, access multiplayer, settings, and controls.
      * </p>
      */
-    private void initializeStartMenu() {
+    @Override
+    public void initializeStartMenu() {
+        this.removeAll();
+
         // Resets the Insets before adding each component
         this.gbc.insets = AppConfigLab3.RESET_INSETS;
 
@@ -122,10 +126,11 @@ public class SnakeView extends JPanel implements GameView {
      /**
      * Starts the game by displaying the game grid and the back button.
      *
-     * @param snake2DArray  A 2D array representing the current state of the snake grid.
-     * @param comingSoon A string representing the characters to display in the snake.
+     * @param gameAssets the 2D array representing the snake and a String just for fun.
      */
-    public void startGame(final int[][] snake2DArray, final String comingSoon) {
+    public void startGame(final List<Object> gameAssets) {
+        String comingSoon = (String) gameAssets.getFirst();
+        int[][] snake2DArray = (int[][]) gameAssets.getLast();
         this.removeAll();
 
         if (snakeGrid == null) {
@@ -191,10 +196,11 @@ public class SnakeView extends JPanel implements GameView {
     /**
      * Updates the game grid with the current state of the snake.
      *
-     * @param snake2DArray  A 2D array representing the current state of the snake grid.
-     * @param comingSoon A string representing the characters to display in the snake.
+     * @param gameAssets the 2D array representing the snake and a String just for fun.
      */
-    public void updateGameGrid(final int[][] snake2DArray, final String comingSoon) {
+    public void updateGameGrid(final List<Object> gameAssets) {
+        String comingSoon = (String) gameAssets.getFirst();
+        int[][] snake2DArray = (int[][]) gameAssets.getLast();
         int counter = 0;
 
         for (int i = 0; i < snake2DArray.length; i++) {
@@ -400,17 +406,4 @@ public class SnakeView extends JPanel implements GameView {
     /*==============================
     * Override methods (not Override getters)
     ==============================*/
-
-    /**
-     * Resets the game view to the start menu.
-     * <p>
-     * This method clears the current view and re-initializes the start menu
-     * to allow the user to start a new game or access other options.
-     * </p>
-     */
-    @Override
-    public void resetGame() {
-        this.removeAll();
-        initializeStartMenu();
-    }
 }

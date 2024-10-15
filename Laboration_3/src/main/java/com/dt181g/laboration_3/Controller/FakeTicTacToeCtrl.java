@@ -38,7 +38,7 @@ public class FakeTicTacToeCtrl implements GameController {
      */
     @Override
     public void resetGame() {
-        this.ticTacToePanelView.resetGame();
+        this.ticTacToePanelView.initializeStartMenu();
     }
 
     /**

@@ -157,8 +157,8 @@ public class GameLauncherView extends JFrame {
         try {
             BufferedImage originalImage = ImageIO.read((getClass().getClassLoader().getResourceAsStream(path)));
             Image scaledImage = originalImage.getScaledInstance(
-                AppConfigLab3.NUM_200,
-                AppConfigLab3.NUM_200,
+                AppConfigLab3.SNAKE_SPEED,
+                AppConfigLab3.SNAKE_SPEED,
                 Image.SCALE_SMOOTH
             );
             return new ImageIcon(scaledImage);
@@ -191,10 +191,10 @@ public class GameLauncherView extends JFrame {
      *
      * @param gameView the {@link GameView} to be displayed in the panel
      */
-    public void loadGame(final GameView gameView) {
+    public void loadGame(final JPanel gameView) {
         // Clears the panel and adds the game view.
         gamePanel.removeAll();
-        gamePanel.add(gameView.getPanel(), BorderLayout.CENTER);
+        gamePanel.add(gameView, BorderLayout.CENTER);
 
         // Redraws the panel
         gamePanel.revalidate();

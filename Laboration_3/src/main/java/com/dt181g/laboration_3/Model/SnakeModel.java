@@ -1,6 +1,10 @@
 package com.dt181g.laboration_3.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.dt181g.laboration_3.support.AppConfigLab3;
+import com.dt181g.laboration_3.support.DebugLogger;
 
 /**
  * The SnakeModel class represents the model for the Snake game.
@@ -24,9 +28,13 @@ public class SnakeModel implements GameModel {
     // Remove when game functionality is implemented
     private final String comingSoon = " COMING SOON ";
 
+    DebugLogger logger = DebugLogger.INSTANCE;
+
+
     private final String title = AppConfigLab3.SNAKE_TITLE;
     private final String iconPath = AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON;
     private final int gridSize = AppConfigLab3.SNAKE_CELL_COUNT;
+    private final List<Object> gameAssets = new ArrayList<>();
     // A snake that has length of the comingSoon string and stores
     // y and x-coordinates in each of its body parts.
     private final int[][] snake = new int[comingSoon.length()][2];
@@ -50,6 +58,8 @@ public class SnakeModel implements GameModel {
         for (int[] part : snake) {
             snakeGrid[part[0]][part[1]] = 1;
         }
+        this.gameAssets.add(comingSoon);
+        this.gameAssets.add(snakeGrid);
     }
 
     /**
@@ -62,6 +72,8 @@ public class SnakeModel implements GameModel {
      * </p>
      */
     public void updateGameGrid() {
+        // Removes the old grid.
+        this.gameAssets.remove(snakeGrid);
         this.updateSnake();
 
         // Clears the grid and then draws the new snake on it.
@@ -69,6 +81,9 @@ public class SnakeModel implements GameModel {
         for (int[] part : this.snake) {
             this.snakeGrid[part[0]][part[1]] = 1;
         }
+
+        // Adds the updated grid.
+        this.gameAssets.add(snakeGrid);
     }
 
     /**
@@ -100,7 +115,7 @@ public class SnakeModel implements GameModel {
     }
 
     /**
-     * Clears the game grid by setting all values to zero.
+     * Helper method to clear the game grid by setting all values to zero.
      *
      * <p>
      * This method is called to reset the grid before drawing
@@ -129,21 +144,11 @@ public class SnakeModel implements GameModel {
     }
 
     /**
-     * Returns the current state of the snake grid.
-     *
-     * @return a 2D array representing the snake grid.
+     * Returns the game assets used by the view
+     * @return the game assets
      */
-    public int[][] getSnakeGrid() {
-        return this.snakeGrid;
-    }
-
-    /**
-     * Returns the string indicating the game is coming soon.
-     *
-     * @return the "coming soon" string.
-     */
-    public String getComingSoon() {
-        return this.comingSoon;
+    public List<Object> getGameAssets() {
+        return gameAssets;
     }
 
     /**

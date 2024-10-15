@@ -100,7 +100,7 @@ public final class AppConfigLab3 {
     public static final Dimension GAME_PANEL_DIMENSIONS = new Dimension(1300, 900);
 
     /** A number of 200, free for use.*/
-    public static final int NUM_200 = 200;
+    public static final int SNAKE_SPEED = 200;
 
     /** Dimension for the game icons. */
     public static final Dimension GAME_ICON_SIZE = new Dimension(200, 90);

@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import com.dt181g.laboration_3.controller.FakeTicTacToeCtrl;
 import com.dt181g.laboration_3.controller.GameController;
-import com.dt181g.laboration_3.controller.SnakeCtrl;
+import com.dt181g.laboration_3.controller.SnakeController;
 import com.dt181g.laboration_3.factories.GameControllerFactory;
 import com.dt181g.laboration_3.factories.GameViewFactory;
 import com.dt181g.laboration_3.support.AppConfigLab3;
@@ -26,12 +26,12 @@ import com.dt181g.laboration_3.view.SnakeView;
  * @author Joel Lansgren
  */
 public class GameListModel {
-    private final List<GameModel> gameModels = new ArrayList<GameModel>();
-    private final List<GameView> gameViews = new ArrayList<GameView>();
-    private final List<GameController> gameControllers = new ArrayList<GameController>();
+    private final List<GameModel> gameModels = new ArrayList<>();
+    private final List<GameView> gameViews = new ArrayList<>();
+    private final List<GameController> gameControllers = new ArrayList<>();
 
     /**
-     * Constructs a GameListModel and initializes the game models and views.
+     * Constructs a GameListModel and initializes the game models, views and controllers.
      */
     public GameListModel() {
         // Instantiating game models
@@ -42,7 +42,7 @@ public class GameListModel {
         for (String title : this.getTitleList()) {
             switch (title) {
                 case AppConfigLab3.SNAKE_TITLE -> {
-                    this.instantiateViewAndController(SnakeView::new, SnakeCtrl::new, title);
+                    this.instantiateViewAndController(SnakeView::new, SnakeController::new, title);
                 } case AppConfigLab3.TIC_TAC_TOE_TITLE -> {
                     this.instantiateViewAndController(FakeTicTacToeView::new, FakeTicTacToeCtrl::new, title);
                 }
@@ -51,7 +51,7 @@ public class GameListModel {
     }
 
     /**
-     * Instantiates a view and a controller for a game based on the provided factories and title.
+     * Helper method that instantiates a view and a controller for a game based on the provided factories and title.
      *
      * @param gameViewFactory A functional interface used to create the game view.
      * In this case it's a method reference to a game views constructor.

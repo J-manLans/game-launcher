@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import javax.swing.SwingUtilities;
 
 import com.dt181g.laboration_3.model.GameListModel;
+import com.dt181g.laboration_3.support.DebugLogger;
 import com.dt181g.laboration_3.view.GameLauncherView;
 
 /**
@@ -23,6 +24,7 @@ import com.dt181g.laboration_3.view.GameLauncherView;
  * @author Joel lansgren
  */
 public class GameLauncherController {
+    DebugLogger logger = DebugLogger.INSTANCE;
     private final GameLauncherView gameLauncherView;
     private final GameListModel gameListModel;
 
@@ -39,6 +41,8 @@ public class GameLauncherController {
 
     /**
      * Initializes the game launcher using various helper methods.
+     * First it sets up the game icons, then attach listeners to them
+     * and lastly displays the launcher.
      */
     public void initialize() {
         this.addGameIcons();
