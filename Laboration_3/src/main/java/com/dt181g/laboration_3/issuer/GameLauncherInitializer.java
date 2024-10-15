@@ -1,6 +1,6 @@
 package com.dt181g.laboration_3.issuer;
 
-import com.dt181g.laboration_3.controller.GameLauncherCtrl;
+import com.dt181g.laboration_3.controller.GameLauncherController;
 import com.dt181g.laboration_3.model.GameListModel;
 import com.dt181g.laboration_3.view.GameLauncherView;
 
@@ -28,6 +28,6 @@ public enum GameLauncherInitializer {
      * Initializes and runs the game launcher through the GameLauncherCtrl class.
      */
     public void runLauncher() {
-        new GameLauncherCtrl(new GameLauncherView(), new GameListModel()).initialize();
+        new GameLauncherController(new GameLauncherView(), new GameListModel()).initialize();
     }
 }
