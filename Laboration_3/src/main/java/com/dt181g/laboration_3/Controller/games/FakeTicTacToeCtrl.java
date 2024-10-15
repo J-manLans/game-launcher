@@ -1,7 +1,11 @@
 
-package com.dt181g.laboration_3.controller;
+package com.dt181g.laboration_3.controller.games;
 
+import javax.swing.Timer;
+
+import com.dt181g.laboration_3.controller.GameController;
 import com.dt181g.laboration_3.model.GameModel;
+import com.dt181g.laboration_3.support.DebugLogger;
 import com.dt181g.laboration_3.view.GameView;
 
 /**
@@ -16,9 +20,12 @@ import com.dt181g.laboration_3.view.GameView;
  * </p>
  */
 public class FakeTicTacToeCtrl implements GameController {
+    DebugLogger logger = DebugLogger.INSTANCE;
     private final GameView ticTacToePanelView;
     private final GameModel ticTacToeModel;
     private final String title;
+    private Timer gameLoop = new Timer(0, null);
+    private boolean isRunning = true;
 
     /**
      * Constructs a FakeTicTacToeCtrl with the specified game title, view and model.
@@ -37,8 +44,9 @@ public class FakeTicTacToeCtrl implements GameController {
      * Resets the Tic Tac Toe game by invoking the reset method on the game view.
      */
     @Override
-    public void resetGame() {
+    public void initiateGame() {
         this.ticTacToePanelView.initializeStartMenu();
+        logger.logWarning(title + " has been restarted.\n");
     }
 
     /**
@@ -60,4 +68,23 @@ public class FakeTicTacToeCtrl implements GameController {
         return title;
     }
 
+    @Override
+    public void closeGame() {
+
+    }
+
+    @Override
+    public boolean getIsRunning() {
+        return isRunning;
+    }
+
+    @Override
+    public void setIsRunning(boolean isRunning) {
+        this.isRunning = isRunning;
+    }
+
+    @Override
+    public Timer getGameLoop() {
+        return gameLoop;
+    }
 }

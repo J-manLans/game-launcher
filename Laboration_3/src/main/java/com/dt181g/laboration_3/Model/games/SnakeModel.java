@@ -1,8 +1,9 @@
-package com.dt181g.laboration_3.model;
+package com.dt181g.laboration_3.model.games;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dt181g.laboration_3.model.GameModel;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
 

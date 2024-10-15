@@ -1,4 +1,4 @@
-package com.dt181g.laboration_3.view;
+package com.dt181g.laboration_3.view.games;
 
 import java.util.List;
 
@@ -8,6 +8,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.dt181g.laboration_3.support.AppConfigLab3;
+import com.dt181g.laboration_3.view.GameView;
+import com.dt181g.laboration_3.view.launcher.GameLauncherView;
 
 /**
  * A mock implementation of the {@link GameView} interface for the Tic Tac Toe game.
@@ -30,6 +32,7 @@ import com.dt181g.laboration_3.support.AppConfigLab3;
  */
 public class FakeTicTacToeView extends JPanel implements GameView {
     private final JLabel title;
+    private JPanel gamePanel;
 
     public FakeTicTacToeView(final String title) {
         this.title = new JLabel(title);
@@ -57,14 +60,6 @@ public class FakeTicTacToeView extends JPanel implements GameView {
      * May be implemented in the future.
      */
     @Override
-    public JPanel getPanel() {
-       return this;
-    }
-
-    /**
-     * May be implemented in the future.
-     */
-    @Override
     public String getTitle() {
        return title.getText();
     }
@@ -76,5 +71,15 @@ public class FakeTicTacToeView extends JPanel implements GameView {
     public void startGame(final List<Object> gameAssets) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'startGame'");
+    }
+
+    @Override
+    public void closeGameView() {
+        clearGameView(this.gamePanel, this, title.getText());
+    }
+
+    @Override
+    public void setGamePanel(JPanel gamePanel) {
+        this.gamePanel = gamePanel;
     }
 }

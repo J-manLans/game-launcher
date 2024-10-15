@@ -1,19 +1,22 @@
-package com.dt181g.laboration_3.model;
+package com.dt181g.laboration_3.model.launcher;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
-import com.dt181g.laboration_3.controller.FakeTicTacToeCtrl;
 import com.dt181g.laboration_3.controller.GameController;
-import com.dt181g.laboration_3.controller.SnakeController;
+import com.dt181g.laboration_3.controller.games.FakeTicTacToeCtrl;
+import com.dt181g.laboration_3.controller.games.SnakeController;
 import com.dt181g.laboration_3.factories.GameControllerFactory;
 import com.dt181g.laboration_3.factories.GameViewFactory;
+import com.dt181g.laboration_3.model.GameModel;
+import com.dt181g.laboration_3.model.games.FakeTicTacToeModel;
+import com.dt181g.laboration_3.model.games.SnakeModel;
 import com.dt181g.laboration_3.support.AppConfigLab3;
-import com.dt181g.laboration_3.view.FakeTicTacToeView;
+import com.dt181g.laboration_3.support.DebugLogger;
 import com.dt181g.laboration_3.view.GameView;
-import com.dt181g.laboration_3.view.SnakeView;
+import com.dt181g.laboration_3.view.games.FakeTicTacToeView;
+import com.dt181g.laboration_3.view.games.SnakeView;
 
 /**
  * The GameListModel class maintains a list of game models their corresponding views and controllers.
@@ -26,6 +29,7 @@ import com.dt181g.laboration_3.view.SnakeView;
  * @author Joel Lansgren
  */
 public class GameListModel {
+    DebugLogger logger = DebugLogger.INSTANCE;
     private final List<GameModel> gameModels = new ArrayList<>();
     private final List<GameView> gameViews = new ArrayList<>();
     private final List<GameController> gameControllers = new ArrayList<>();
@@ -50,6 +54,21 @@ public class GameListModel {
         }
     }
 
+    public void reInstantiate(String title) {
+        // Instantiating complete game again.
+        switch (title) {
+            case AppConfigLab3.SNAKE_TITLE -> {
+                this.gameModels.add(new SnakeModel());
+                this.instantiateViewAndController(SnakeView::new, SnakeController::new, title);
+            } case AppConfigLab3.TIC_TAC_TOE_TITLE -> {
+                this.gameModels.add(new FakeTicTacToeModel());
+                this.instantiateViewAndController(FakeTicTacToeView::new, FakeTicTacToeCtrl::new, title);
+            }
+        }
+
+        logger.logWarning(title + " has been re-instantiated.");
+    }
+
     /**
      * Helper method that instantiates a view and a controller for a game based on the provided factories and title.
      *
@@ -70,6 +89,14 @@ public class GameListModel {
         );
     }
 
+    public void removeGame(String title) {
+        this.gameModels.remove(this.getGameModel(title));
+        this.gameViews.remove(this.getGameView(title));
+        this.gameControllers.remove(this.getGameController(title));
+
+        logger.logWarning(title + " has been removed\n");
+    }
+
     /**
      * Retrieves a list of game titles from the game models.
      *
@@ -79,6 +106,10 @@ public class GameListModel {
         return gameModels.stream()
             .map(GameModel::getTitle)
             .collect(Collectors.toList());
+    }
+
+    public GameView displayFirstGame() {
+        return this.gameViews.getFirst();
     }
 
     /**
@@ -95,16 +126,20 @@ public class GameListModel {
     /**
      * Retrieves the GameModel associated with the specified title.
      *
+     * <p>
+     * If the title isn't present null is returned.
+     * </p>
+     *
      * @param title the title of the game to retrieve the model for.
      * @return the GameModel associated with the title, or null if not found.
      */
-    private GameModel getGameModel(final String title) {
+    public GameModel getGameModel(final String title) {
         for (GameModel gameModel : gameModels) {
             if (gameModel.getTitle().equals(title)) {
-                return gameModel; // Return the first match found
+                return gameModel;
             }
         }
-        return null; // Return null if no match found
+        return null;
     }
 
     /**

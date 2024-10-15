@@ -1,5 +1,7 @@
 package com.dt181g.laboration_3.controller;
 
+import javax.swing.Timer;
+
 /**
  * Interface representing the controllers for the game in the game launcher application.
  *
@@ -21,7 +23,27 @@ public interface GameController {
      * and prepare the game for a new session.
      * It should also update the user interface to reflect the reset state.
      */
-    void resetGame();
+    void initiateGame();
+
+    /**
+     * Method that shall handle closing of the game.
+     *
+     * <p>
+     * Stopping active threads, remove listeners, close the view and make variables ready
+     * for garbage collection.
+     * </p>
+     */
+    void closeGame();
+
+    boolean getIsRunning();
+
+    void setIsRunning(boolean isRunning);
+
+    /**
+     * Returns the swing timer that runs the game loop.
+     * @return the swing timer.
+     */
+    Timer getGameLoop();
 
     /**
      * Returns the game title

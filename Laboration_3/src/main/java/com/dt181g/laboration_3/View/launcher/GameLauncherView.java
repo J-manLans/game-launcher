@@ -1,6 +1,7 @@
-package com.dt181g.laboration_3.view;
+package com.dt181g.laboration_3.view.launcher;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
+import com.dt181g.laboration_3.view.GameView;
 
 import java.awt.Component;
 import java.awt.Cursor;
@@ -191,13 +192,17 @@ public class GameLauncherView extends JFrame {
      *
      * @param gameView the {@link GameView} to be displayed in the panel
      */
-    public void loadGame(final JPanel gameView) {
+    public void displayGame(final GameView gameView) {
         // Clears the panel and adds the game view.
         gamePanel.removeAll();
-        gamePanel.add(gameView, BorderLayout.CENTER);
+        gamePanel.add((JPanel) gameView, BorderLayout.CENTER);
 
         // Redraws the panel
         gamePanel.revalidate();
         gamePanel.repaint();
+    }
+
+    public JPanel getGamePanel() {
+        return gamePanel;
     }
 }

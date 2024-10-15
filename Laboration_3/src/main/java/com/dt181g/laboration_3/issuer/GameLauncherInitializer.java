@@ -1,8 +1,8 @@
 package com.dt181g.laboration_3.issuer;
 
-import com.dt181g.laboration_3.controller.GameLauncherController;
-import com.dt181g.laboration_3.model.GameListModel;
-import com.dt181g.laboration_3.view.GameLauncherView;
+import com.dt181g.laboration_3.controller.launcher.GameLauncherController;
+import com.dt181g.laboration_3.model.launcher.GameListModel;
+import com.dt181g.laboration_3.view.launcher.GameLauncherView;
 
 /**
  * Singleton for initializing and running the game launcher.

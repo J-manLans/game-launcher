@@ -1,6 +1,8 @@
-package com.dt181g.laboration_3.view;
+package com.dt181g.laboration_3.view.games;
 
 import com.dt181g.laboration_3.support.AppConfigLab3;
+import com.dt181g.laboration_3.support.DebugLogger;
+import com.dt181g.laboration_3.view.GameView;
 
 import java.awt.event.MouseAdapter;
 import java.util.List;
@@ -31,6 +33,7 @@ import javax.swing.SwingConstants;
  * @author Joel Lansgren
  */
 public class SnakeView extends JPanel implements GameView {
+    DebugLogger logger = DebugLogger.INSTANCE;
 
     // Start menu components
     private final GridBagConstraints gbc = new GridBagConstraints();
@@ -49,6 +52,9 @@ public class SnakeView extends JPanel implements GameView {
     private final JPanel controlPanel = new JPanel(new GridBagLayout());
     private final JLabel controlsMainLabel = new JLabel("CONTROLS:");
     private final JLabel controlsSubLabel = new JLabel("W,S,A,D or arrow keys to move the snake around");
+
+    // The panel this panel resides in, used for proper closing of the game.
+    private JPanel gamePanel;
 
     /**
      * Constructs a SnakeView with the specified title and snake cell count.
@@ -73,6 +79,9 @@ public class SnakeView extends JPanel implements GameView {
 
         // Panel settings
         this.controlPanel.setPreferredSize(AppConfigLab3.SNAKE_CONTROLS_SIZE);
+
+        // Initialize the start menu
+        this.initializeStartMenu();
     }
 
     /*===============================
@@ -89,6 +98,7 @@ public class SnakeView extends JPanel implements GameView {
      */
     @Override
     public void initializeStartMenu() {
+        // Clear the menu before each initialization
         this.removeAll();
 
         // Resets the Insets before adding each component
@@ -271,6 +281,14 @@ public class SnakeView extends JPanel implements GameView {
         this.repaint();
     }
 
+    @Override
+    public void closeGameView() {
+        if (this.gamePanel != null) {
+            clearGameView(this.gamePanel, this, title.getText());
+        }
+    }
+
+
     /*==============================
      * Listener methods
      ==============================*/
@@ -321,24 +339,13 @@ public class SnakeView extends JPanel implements GameView {
      * @param controlsBackBtnListener The mouse listener to be added to the back button,
      * allowing for interaction when the button is clicked.
      */
-    public void addControlsBackBtnListener(final MouseAdapter controlsBackBtnListener) {
+    public void addSnakeBackBtnListener(final MouseAdapter controlsBackBtnListener) {
         this.snakeBackBtn.addMouseListener(controlsBackBtnListener);
     }
 
     /*==============================
     * Getters
     ==============================*/
-
-    /**
-     * Returns the main panel of the SnakeView.
-     *
-     * @return The JPanel representing the entire view of the Snake game.
-     */
-    @Override
-    public JPanel getPanel() {
-        return this;
-    }
-
     /**
      * Returns the panel that represents the snake grid.
      *
@@ -406,4 +413,9 @@ public class SnakeView extends JPanel implements GameView {
     /*==============================
     * Override methods (not Override getters)
     ==============================*/
+
+    @Override
+    public void setGamePanel(JPanel gamePanel) {
+        this.gamePanel = gamePanel;
+    }
 }

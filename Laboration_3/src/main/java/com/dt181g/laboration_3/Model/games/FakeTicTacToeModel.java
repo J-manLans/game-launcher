@@ -1,5 +1,6 @@
-package com.dt181g.laboration_3.model;
+package com.dt181g.laboration_3.model.games;
 
+import com.dt181g.laboration_3.model.GameModel;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 
 /**
