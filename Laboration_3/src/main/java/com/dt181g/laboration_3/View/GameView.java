@@ -3,6 +3,7 @@ package com.dt181g.laboration_3.view;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
 import com.dt181g.laboration_3.support.DebugLogger;
@@ -60,4 +61,11 @@ public interface GameView {
         });
         logger.logInfo(title + " view has been reset.");
     }
+
+    /**
+     * Gets the quit button from games so the launcher controller can show the start screen
+     * of the view.
+     * @return the games quit button
+     */
+    JLabel getQuitBtn();
 }

@@ -102,7 +102,7 @@ public class SnakeController implements GameController {
         // stops the EDT thread from executing
         this.restart = true;
 
-        logger.logWarning(title + " has been restarted.\n");
+        logger.logInfo(title + " has been initiated.\n");
     }
 
     @Override

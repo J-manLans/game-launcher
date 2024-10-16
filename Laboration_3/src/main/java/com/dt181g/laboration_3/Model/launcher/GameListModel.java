@@ -2,7 +2,6 @@ package com.dt181g.laboration_3.model.launcher;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.dt181g.laboration_3.controller.GameController;
 import com.dt181g.laboration_3.controller.games.FakeTicTacToeCtrl;
@@ -30,43 +29,39 @@ import com.dt181g.laboration_3.view.games.SnakeView;
  */
 public class GameListModel {
     DebugLogger logger = DebugLogger.INSTANCE;
+    private final List<String> iconPaths = new ArrayList<>();
+    private final List<String> gameTitles = new ArrayList<>();
     private final List<GameModel> gameModels = new ArrayList<>();
     private final List<GameView> gameViews = new ArrayList<>();
     private final List<GameController> gameControllers = new ArrayList<>();
 
     /**
-     * Constructs a GameListModel and initializes the game models, views and controllers.
+     * Constructs a GameListModel and initializes the game icons and titles.
      */
     public GameListModel() {
-        // Instantiating game models
-        this.gameModels.add(new SnakeModel());
-        this.gameModels.add(new FakeTicTacToeModel());
-
-        // Instantiating game views and controllers using their factories
-        for (String title : this.getTitleList()) {
-            switch (title) {
-                case AppConfigLab3.SNAKE_TITLE -> {
-                    this.instantiateViewAndController(SnakeView::new, SnakeController::new, title);
-                } case AppConfigLab3.TIC_TAC_TOE_TITLE -> {
-                    this.instantiateViewAndController(FakeTicTacToeView::new, FakeTicTacToeCtrl::new, title);
-                }
-            }
-        }
+        // TODO: Will refactor this in the future to fetch info from the games themselves.
+        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON);
+        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.TIC_TAC_TOE_ICON);
+        this.gameTitles.add(AppConfigLab3.SNAKE_TITLE);
+        this.gameTitles.add(AppConfigLab3.TIC_TAC_TOE_TITLE);
     }
 
-    public void reInstantiate(String title) {
-        // Instantiating complete game again.
-        switch (title) {
+    /**
+     * Starts the game clicked in the games list in the launcher.
+     * @param game the clicked games title.
+     */
+    public void StartGame(String game) {
+        switch (game) {
             case AppConfigLab3.SNAKE_TITLE -> {
                 this.gameModels.add(new SnakeModel());
-                this.instantiateViewAndController(SnakeView::new, SnakeController::new, title);
+                this.instantiateViewAndController(SnakeView::new, SnakeController::new, game);
             } case AppConfigLab3.TIC_TAC_TOE_TITLE -> {
                 this.gameModels.add(new FakeTicTacToeModel());
-                this.instantiateViewAndController(FakeTicTacToeView::new, FakeTicTacToeCtrl::new, title);
+                this.instantiateViewAndController(FakeTicTacToeView::new, FakeTicTacToeCtrl::new, game);
             }
         }
 
-        logger.logWarning(title + " has been re-instantiated.");
+        logger.logWarning(game + " has been instantiated.");
     }
 
     /**
@@ -89,38 +84,40 @@ public class GameListModel {
         );
     }
 
-    public void removeGame(String title) {
-        this.gameModels.remove(this.getGameModel(title));
-        this.gameViews.remove(this.getGameView(title));
-        this.gameControllers.remove(this.getGameController(title));
+    /**
+     * Remove the game from each list whenever it closes.
+     * @param game the games title.
+     */
+    public void removeGame(String game) {
+        this.gameModels.remove(this.getGameModel(game));
+        this.gameViews.remove(this.getGameView(game));
+        this.gameControllers.remove(this.getGameController(game));
 
-        logger.logWarning(title + " has been removed\n");
+        logger.logWarning(game + " has been removed\n");
     }
 
     /**
-     * Retrieves a list of game titles from the game models.
-     *
+     * Returns the icon paths to the games.
+     * @return a list of icon paths.
+     */
+    public List<String> getIconPaths() {
+        return this.iconPaths;
+    }
+
+    /**
+     * Returns the title of the games.
      * @return a list of game titles.
      */
     public List<String> getTitleList() {
-        return gameModels.stream()
-            .map(GameModel::getTitle)
-            .collect(Collectors.toList());
-    }
-
-    public GameView displayFirstGame() {
-        return this.gameViews.getFirst();
+        return this.gameTitles;
     }
 
     /**
-     * Retrieves a list of icon paths from the game models.
-     *
-     * @return a list of icon paths.
+     * Returns the title of the games.
+     * @return a list of game titles.
      */
-    public List<String> getIconPath() {
-        return gameModels.stream()
-            .map(GameModel::getIconPath)
-            .collect(Collectors.toList());
+    public List<GameController> gameControllers() {
+        return this.gameControllers;
     }
 
     /**
@@ -129,46 +126,61 @@ public class GameListModel {
      * <p>
      * If the title isn't present null is returned.
      * </p>
-     *
      * @param title the title of the game to retrieve the model for.
      * @return the GameModel associated with the title, or null if not found.
      */
     public GameModel getGameModel(final String title) {
-        for (GameModel gameModel : gameModels) {
-            if (gameModel.getTitle().equals(title)) {
-                return gameModel;
-            }
-        }
-        return null;
+        // As of now the list always contain only one element.
+        // But for the project this will change since I will
+        // initiate all games in this class constructor so I can
+        // fetch the images and icons from them.
+        return gameModels.stream()
+        .filter(gameModel -> gameModel.getTitle().equals(title))
+        .findFirst()
+        .orElse(null);
     }
 
     /**
      * Retrieves the GameView associated with the specified title.
      *
+     * <p>
+     * This method searches through a collection of game views to find one that matches
+     * the provided title. If a matching game view is found, it is returned; otherwise,
+     * this method returns null.
+     * </p>
      * @param title the title of the game to retrieve the view for.
-     * @return the GameView associated with the title, or null if not found.
+     * @return the view associated with the title, or null if not found.
      */
     public GameView getGameView(final String title) {
-        for (GameView gameView : gameViews) {
-            if (gameView.getTitle().equals(title)) {
-                return gameView;
-            }
-        }
-        return null;
+        // As of now the list always contain only one element.
+        // But for the project this will change since I will
+        // initiate all games in this class constructor so I can
+        // fetch the images and icons from them.
+        return gameViews.stream()
+        .filter(gameView -> gameView.getTitle().equals(title))
+        .findFirst()
+        .orElse(null);
     }
 
     /**
      * Retrieves the GameController associated with the specified title.
      *
+     * <p>
+     * This method searches through a collection of game controllers to find one that matches
+     * the provided title. If a matching game controller is found, it is returned; otherwise,
+     * this method returns null.
+     * </p>
      * @param title the title of the game to retrieve the view for.
-     * @return the GameController associated with the title, or null if not found.
+     * @return the controller associated with the title, or null if not found.
      */
     public GameController getGameController(final String title) {
-        for (GameController gameController : gameControllers) {
-            if (gameController.getTitle().equals(title)) {
-                return gameController;
-            }
-        }
-        return null;
+        // As of now the list always contain only one element.
+        // But for the project this will change since I will
+        // initiate all games in this class constructor so I can
+        // fetch the images and icons from them.
+        return gameControllers.stream()
+        .filter(gameController -> gameController.getTitle().equals(title))
+        .findFirst()
+        .orElse(null);
     }
 }

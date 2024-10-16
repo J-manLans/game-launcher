@@ -32,6 +32,7 @@ import com.dt181g.laboration_3.view.launcher.GameLauncherView;
  */
 public class FakeTicTacToeView extends JPanel implements GameView {
     private final JLabel title;
+    private final JLabel quitBtn = new JLabel("Quit");
     private JPanel gamePanel;
 
     public FakeTicTacToeView(final String title) {
@@ -81,5 +82,10 @@ public class FakeTicTacToeView extends JPanel implements GameView {
     @Override
     public void setGamePanel(JPanel gamePanel) {
         this.gamePanel = gamePanel;
+    }
+
+    @Override
+    public JLabel getQuitBtn() {
+        return this.quitBtn;
     }
 }

@@ -23,11 +23,20 @@ import com.dt181g.laboration_3.view.launcher.GameLauncherView;
  */
 public enum GameLauncherInitializer {
     INSTANCE;
+    private GameLauncherController gameLauncherController;
 
     /**
-     * Initializes and runs the game launcher through the GameLauncherCtrl class.
+     * Initializes and runs the game launcher.
+     *
+     * <p>This method creates an instance of {@link GameLauncherController}
+     * if it has not already been initialized. The controller is then initialized
+     * and ready to handle the game launching process. This method should be called
+     * to start the game launcher.</p>
      */
     public void runLauncher() {
-        new GameLauncherController(new GameLauncherView(), new GameListModel()).initialize();
+        if (gameLauncherController == null) {
+            this.gameLauncherController = new GameLauncherController(new GameLauncherView(), new GameListModel());
+            this.gameLauncherController.initialize();
+        }
     }
 }

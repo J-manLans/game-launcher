@@ -46,7 +46,9 @@ public class FakeTicTacToeCtrl implements GameController {
     @Override
     public void initiateGame() {
         this.ticTacToePanelView.initializeStartMenu();
-        logger.logWarning(title + " has been restarted.\n");
+        logger.logInfo(title +
+            " has been initiated.\n"
+        );
     }
 
     /**
@@ -70,7 +72,7 @@ public class FakeTicTacToeCtrl implements GameController {
 
     @Override
     public void closeGame() {
-
+        this.ticTacToePanelView.closeGameView();
     }
 
     @Override
