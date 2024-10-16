@@ -7,9 +7,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 
 /**
@@ -29,11 +29,17 @@ public final class AppConfigLab3 {
     private AppConfigLab3() { throw new IllegalStateException("Utility class"); }
 
     /* ---------------------------------------
-    Paths to game icons.
+    Paths to game assets.
     ------------------------------------------ */
 
     /** Path to icon images folder. */
     public static final String PATH_TO_ICONS = "icons/";
+
+    /** Path to images folder */
+    public static final String PATH_TO_IMAGES = "img/";
+
+    /** Path to background image */
+    public static final String START_SCREEN_BACKGROUND = "GameLauncherLekfull.png";
 
     /** Extension to snake image. */
     public static final String SNAKE_ICON = "snake.jpeg";
@@ -69,6 +75,9 @@ public final class AppConfigLab3 {
     Colors.
     ------------------------------------------ */
 
+    /** Transparent color. */
+    public static final Color COLOR_TRANSPARENT = new Color(0, 0, 0, 0);
+
     /** Dark grey color. */
     public static final Color COLOR_DARK_GREY = new Color(40, 40, 40);
 
@@ -88,11 +97,14 @@ public final class AppConfigLab3 {
     /** Creates space underneath the element. */
     public static final Border BOTTOM_SPACER_30 = BorderFactory.createEmptyBorder(0, 0, 30, 0);
 
+    /** Creates space to the right and beneath the element. */
+    public static final Border RIGHT_BOTTOM_CORNER_SPACER_30 = BorderFactory.createEmptyBorder(0, 0, 30, 30);
+
     /** Removes borders. */
     public static final Border REMOVE_BORDER = BorderFactory.createEmptyBorder();
 
     /** A little bit thicker border. */
-    public static final Border CONTROLS_BORDER = BorderFactory.createMatteBorder(5, 5, 5, 5, COLOR_SNAKE_GAME_ACCENT);
+    public static final Border CONTROLS_BORDER = BorderFactory.createMatteBorder(10, 10, 10, 10, COLOR_SNAKE_GAME_ACCENT);
 
     /** An empty border that's part of a compound border. */
     public static final Border LABEL_BTN_INNER_SPACE = BorderFactory.createEmptyBorder(10, 10, 10, 10);
@@ -101,11 +113,27 @@ public final class AppConfigLab3 {
     public static final int LABEL_BTN_OUTER_BORDER_WIDTH = 3;
 
     /* ---------------------------------------
+    Insets.
+    ------------------------------------------ */
+
+    /** Resetting the GridBag insets. */
+    public static final Insets RESET_INSETS = new Insets(0, 0, 0, 0);
+
+    /** A GridBag inset. */
+    public static final Insets INSET_BOTTOM_20 = new Insets(0, 0, 20, 0);
+
+    /** Another GridBag inset. */
+    public static final Insets INSET_BOTTOM_30 = new Insets(0, 0, 30, 0);
+
+    public static final Insets INSET_LEFT_BOTTOM_CORNER_30 = new Insets(0, 30, 30, 0);
+
+
+    /* ---------------------------------------
     GameLauncherView Settings.
     ------------------------------------------ */
 
     /** Dimension for the game selector panel. */
-    public static final Dimension GAME_SELECTOR_PANEL_DIMENSIONS = new Dimension(270, 900);
+    public static final Dimension GAME_SELECTOR_PANEL_DIMENSIONS = new Dimension(270, 940);
 
     /** Dimension for the game panel.*/
     public static final Dimension GAME_LAUNCHER_DIMENSIONS = new Dimension(1700, 940);
@@ -138,12 +166,6 @@ public final class AppConfigLab3 {
     /** Number of cells in the grid. */
     public static final int SNAKE_CELL_COUNT = 38;
 
-    /** Resetting the GridBag insets. */
-    public static final Insets RESET_INSETS = new Insets(0, 0, 0, 0);
-
-    /** A GridBag inset. */
-    public static final Insets BOTTOM_20_INSET = new Insets(0, 0, 20, 0);
-
     /* ---------------------------------------
     Helper methods.
     ------------------------------------------ */
@@ -152,23 +174,22 @@ public final class AppConfigLab3 {
      * Styles a label to look like a button with specific color and border.
      *
      * @param labelToBtn the JLabel to style
-     * @param lightClr the color used for the label's foreground and background
+     * @param borderAndHoverBackgroundClr the color used for the label's foreground and background
      */
-    public static void labelBtn(final JLabel labelToBtn, final Color lightClr) {
+    public static void labelBtn(final JLabel labelToBtn, final Color borderAndHoverBackgroundClr) {
         labelToBtn.setFont(new Font("Monospace", Font.BOLD, TEXT_SIZE_NORMAL));
-        labelToBtn.setForeground(lightClr);
-        labelToBtn.setBackground(lightClr); // Used for hovering effect.
+        labelToBtn.setForeground(borderAndHoverBackgroundClr);
+        labelToBtn.setBackground(borderAndHoverBackgroundClr); // Used for hovering effect.
         labelToBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        Border emptyBorder = LABEL_BTN_INNER_SPACE;
         Border matteBorder = BorderFactory.createMatteBorder(
             LABEL_BTN_OUTER_BORDER_WIDTH,
             LABEL_BTN_OUTER_BORDER_WIDTH,
             LABEL_BTN_OUTER_BORDER_WIDTH,
             LABEL_BTN_OUTER_BORDER_WIDTH,
-            lightClr
+            borderAndHoverBackgroundClr
         );
-        labelToBtn.setBorder(BorderFactory.createCompoundBorder(matteBorder, emptyBorder));
+        labelToBtn.setBorder(BorderFactory.createCompoundBorder(matteBorder, LABEL_BTN_INNER_SPACE));
     }
 
     /**
@@ -183,8 +204,6 @@ public final class AppConfigLab3 {
         if (snakeText) {
             label.setHorizontalAlignment(SwingConstants.CENTER);
             label.setVerticalAlignment(SwingConstants.CENTER);
-        } else {
-            label.setBorder(BOTTOM_SPACER_30);
         }
     }
 

@@ -104,13 +104,14 @@ public class SnakeView extends JPanel implements GameView {
 
         // Resets the Insets before adding each component
         this.gbc.insets = AppConfigLab3.RESET_INSETS;
+        this.gbc.insets = AppConfigLab3.INSET_BOTTOM_30;
 
         // Adds and place the components on the grid.
         this.gbc.gridy = 0;
         this.add(title, this.gbc);
 
         this.gbc.gridy++;
-        this.gbc.insets = AppConfigLab3.BOTTOM_20_INSET;
+        this.gbc.insets = AppConfigLab3.INSET_BOTTOM_20;
 
         this.add(startBtn, this.gbc);
 
@@ -158,7 +159,7 @@ public class SnakeView extends JPanel implements GameView {
 
         // Display settings
         this.gbc.gridy = 0;
-        this.gbc.insets = AppConfigLab3.BOTTOM_20_INSET;
+        this.gbc.insets = AppConfigLab3.INSET_BOTTOM_20;
         this.add(this.snakeGrid, gbc);
 
         this.gbc.gridy++;
@@ -288,7 +289,6 @@ public class SnakeView extends JPanel implements GameView {
             clearGameView(this.gamePanel, this, title.getText());
         }
     }
-
 
     /*==============================
      * Listener methods

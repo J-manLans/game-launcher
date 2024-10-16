@@ -42,7 +42,17 @@ public class GameListModel {
         // TODO: Will refactor this in the future to fetch info from the games themselves.
         this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON);
         this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.TIC_TAC_TOE_ICON);
+        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.TIC_TAC_TOE_ICON);
+        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.TIC_TAC_TOE_ICON);
+        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.TIC_TAC_TOE_ICON);
+        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.TIC_TAC_TOE_ICON);
+        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.TIC_TAC_TOE_ICON);
         this.gameTitles.add(AppConfigLab3.SNAKE_TITLE);
+        this.gameTitles.add(AppConfigLab3.TIC_TAC_TOE_TITLE);
+        this.gameTitles.add(AppConfigLab3.TIC_TAC_TOE_TITLE);
+        this.gameTitles.add(AppConfigLab3.TIC_TAC_TOE_TITLE);
+        this.gameTitles.add(AppConfigLab3.TIC_TAC_TOE_TITLE);
+        this.gameTitles.add(AppConfigLab3.TIC_TAC_TOE_TITLE);
         this.gameTitles.add(AppConfigLab3.TIC_TAC_TOE_TITLE);
     }
 

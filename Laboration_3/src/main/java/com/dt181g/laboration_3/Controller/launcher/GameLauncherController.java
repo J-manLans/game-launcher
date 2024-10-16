@@ -8,6 +8,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.JScrollBar;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -72,7 +73,7 @@ public class GameLauncherController {
         }
         // Adds flexible space below the icons,
         // allowing the panel to respect the preferred size of the buttons.
-        this.gameLauncherView.getGameSelectorPanel().add(Box.createVerticalGlue());
+        this.gameLauncherView.getGamesPanel().add(Box.createVerticalGlue());
     }
 
     /**
@@ -101,15 +102,48 @@ public class GameLauncherController {
      * Helper method that initialize listeners.
      */
     private void initializeListeners() {
-        for (JButton gameBtn : this.gameLauncherView.getGameIconsList()) {
-            gameBtn.addActionListener(new GameIconListener());
+        // For game icons
+        for (JButton gameIcon : this.gameLauncherView.getGameIconsList()) {
+            gameIcon.addActionListener(new GameIconListener());
         }
+
+        // For scroll pane speed
         this.gameLauncherView.getScrollPane().addMouseWheelListener(new MouseWheelListener() {
             @Override
             public void mouseWheelMoved(final MouseWheelEvent e) {
-                int notches = e.getWheelRotation();
+                int notches = e.getWheelRotation();  // Gets the direction (1 or -1).
                 JScrollBar vertical = gameLauncherView.getScrollPane().getVerticalScrollBar();
+                // Sets the new position either up (-1) or down (1) depending on scroll direction.
                 vertical.setValue(vertical.getValue() + (notches * AppConfigLab3.SCROLL_SPEED_MULTIPLIER));
+            }
+        });
+
+        // For exiting the launcher
+        this.gameLauncherView.getExitLauncherBtn().addMouseListener(new MouseAdapter() {
+            /**
+             * Helper method to update the appearance of the specified button based on hover state.
+             *
+             * @param button the button to update
+             * @param isHovered true if the button is hovered, false otherwise
+             */
+            private void updateButtonAppearance(final JLabel button, final boolean isHovered) {
+                button.setOpaque(isHovered);
+                button.setForeground(isHovered ? AppConfigLab3.COLOR_DARKER_GREY : AppConfigLab3.COLOR_WHITE);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                gameLauncherView.exitLauncher();
+            }
+
+            @Override
+            public void mouseEntered(final MouseEvent e) {
+                updateButtonAppearance(gameLauncherView.getExitLauncherBtn(), true);
+            }
+
+            @Override
+            public void mouseExited(final MouseEvent e) {
+                updateButtonAppearance(gameLauncherView.getExitLauncherBtn(), false);
             }
         });
     }
