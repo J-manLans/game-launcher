@@ -1,9 +1,8 @@
 
-package com.dt181g.laboration_3.controller.games;
+package com.dt181g.laboration_3.controller;
 
 import javax.swing.Timer;
 
-import com.dt181g.laboration_3.controller.GameController;
 import com.dt181g.laboration_3.model.GameModel;
 import com.dt181g.laboration_3.support.DebugLogger;
 import com.dt181g.laboration_3.view.GameView;

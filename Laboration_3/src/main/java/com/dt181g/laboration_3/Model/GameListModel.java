@@ -1,21 +1,18 @@
-package com.dt181g.laboration_3.model.launcher;
+package com.dt181g.laboration_3.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.dt181g.laboration_3.controller.GameController;
-import com.dt181g.laboration_3.controller.games.FakeTicTacToeCtrl;
-import com.dt181g.laboration_3.controller.games.SnakeController;
+import com.dt181g.laboration_3.controller.FakeTicTacToeCtrl;
+import com.dt181g.laboration_3.controller.SnakeController;
 import com.dt181g.laboration_3.factories.GameControllerFactory;
 import com.dt181g.laboration_3.factories.GameViewFactory;
-import com.dt181g.laboration_3.model.GameModel;
-import com.dt181g.laboration_3.model.games.FakeTicTacToeModel;
-import com.dt181g.laboration_3.model.games.SnakeModel;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
 import com.dt181g.laboration_3.view.GameView;
-import com.dt181g.laboration_3.view.games.FakeTicTacToeView;
-import com.dt181g.laboration_3.view.games.SnakeView;
+import com.dt181g.laboration_3.view.FakeTicTacToeView;
+import com.dt181g.laboration_3.view.SnakeView;
 
 /**
  * The GameListModel class maintains a list of game models their corresponding views and controllers.

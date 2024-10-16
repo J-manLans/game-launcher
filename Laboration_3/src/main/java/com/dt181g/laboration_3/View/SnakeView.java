@@ -1,8 +1,7 @@
-package com.dt181g.laboration_3.view.games;
+package com.dt181g.laboration_3.view;
 
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
-import com.dt181g.laboration_3.view.GameView;
 
 import java.awt.event.MouseAdapter;
 import java.util.List;

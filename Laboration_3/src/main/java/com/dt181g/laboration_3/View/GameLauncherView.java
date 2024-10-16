@@ -1,7 +1,5 @@
-package com.dt181g.laboration_3.view.launcher;
+package com.dt181g.laboration_3.view;
 import com.dt181g.laboration_3.support.AppConfigLab3;
-import com.dt181g.laboration_3.support.DebugLogger;
-import com.dt181g.laboration_3.view.GameView;
 
 import java.awt.Component;
 import java.awt.Cursor;
@@ -43,8 +41,6 @@ import javax.swing.JScrollPane;
  * @author Joel Lansgren
  */
 public class GameLauncherView extends JFrame {
-    private final DebugLogger logger = DebugLogger.INSTANCE;
-
     // Game selector panel
     private final JPanel gameSelectorPanel = new JPanel();
     private final JLabel pickAGameLabel = new JLabel("PICK A GAME");

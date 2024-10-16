@@ -1,12 +1,11 @@
-package com.dt181g.laboration_3.controller.games;
+package com.dt181g.laboration_3.controller;
 
-import com.dt181g.laboration_3.controller.GameController;
 import com.dt181g.laboration_3.model.GameModel;
-import com.dt181g.laboration_3.model.games.SnakeModel;
+import com.dt181g.laboration_3.model.SnakeModel;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
 import com.dt181g.laboration_3.view.GameView;
-import com.dt181g.laboration_3.view.games.SnakeView;
+import com.dt181g.laboration_3.view.SnakeView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

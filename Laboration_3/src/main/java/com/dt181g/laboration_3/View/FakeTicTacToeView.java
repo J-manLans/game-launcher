@@ -1,4 +1,4 @@
-package com.dt181g.laboration_3.view.games;
+package com.dt181g.laboration_3.view;
 
 import java.util.List;
 
@@ -8,8 +8,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.dt181g.laboration_3.support.AppConfigLab3;
-import com.dt181g.laboration_3.view.GameView;
-import com.dt181g.laboration_3.view.launcher.GameLauncherView;
 
 /**
  * A mock implementation of the {@link GameView} interface for the Tic Tac Toe game.
