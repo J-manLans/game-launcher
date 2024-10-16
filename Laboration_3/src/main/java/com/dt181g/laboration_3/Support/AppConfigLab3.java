@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -147,6 +148,7 @@ public final class AppConfigLab3 {
         labelToBtn.setFont(MONOSPACE_BOLD);
         labelToBtn.setForeground(lightClr);
         labelToBtn.setBackground(lightClr); // Used for hovering effect.
+        labelToBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         Border emptyBorder = LABEL_BTN_INNER_SPACE;
         Border matteBorder = BorderFactory.createMatteBorder(

@@ -42,6 +42,7 @@ public class SnakeView extends JPanel implements GameView {
     private final JLabel multiplayerBtn = new JLabel("Multiplayer");
     private final JLabel settingsBtn = new JLabel("Settings");
     private final JLabel controlsBtn = new JLabel("Controls");
+    private final JLabel quitBtn = new JLabel("Quit");
 
     // Snake panel
     private JPanel snakeGrid;
@@ -73,6 +74,7 @@ public class SnakeView extends JPanel implements GameView {
         AppConfigLab3.labelBtn(multiplayerBtn, AppConfigLab3.COLOR_DARK_GREY);
         AppConfigLab3.labelBtn(settingsBtn, AppConfigLab3.COLOR_DARK_GREY);
         AppConfigLab3.labelBtn(controlsBtn, AppConfigLab3.COLOR_WHITE);
+        AppConfigLab3.labelBtn(quitBtn, AppConfigLab3.COLOR_DARK_GREY);
         AppConfigLab3.labelStyling(controlsMainLabel);
         AppConfigLab3.labelStyling(controlsSubLabel);
         AppConfigLab3.labelBtn(snakeBackBtn, AppConfigLab3.COLOR_WHITE);
@@ -121,6 +123,9 @@ public class SnakeView extends JPanel implements GameView {
 
         this.gbc.gridy++;
         this.add(controlsBtn, this.gbc);
+
+        this.gbc.gridy++;
+        this.add(quitBtn, this.gbc);
 
         // Sets the background color
         this.setBackground(AppConfigLab3.COLOR_DARKER_GREY);
@@ -334,6 +339,16 @@ public class SnakeView extends JPanel implements GameView {
     }
 
     /**
+     * Adds a mouse listener to the quit button.
+     *
+     * @param quitBtnListener The mouse listener to be added to the quit button,
+     * allowing for interaction when the button is clicked.
+     */
+    public void addQuitBtnListener(final MouseAdapter quitBtnListener) {
+        this.quitBtn.addMouseListener(quitBtnListener);
+    }
+
+    /**
      * Adds a mouse listener to the back button in the controls menu.
      *
      * @param controlsBackBtnListener The mouse listener to be added to the back button,
@@ -399,6 +414,15 @@ public class SnakeView extends JPanel implements GameView {
      */
     public JLabel getControlsBtn() {
         return this.controlsBtn;
+    }
+
+    /**
+     * Returns the quit button.
+     *
+     * @return The JLabel representing the quit button.
+     */
+    public JLabel getQuitBtn() {
+        return this.quitBtn;
     }
 
     /**

@@ -8,7 +8,6 @@ import com.dt181g.laboration_3.support.DebugLogger;
 import com.dt181g.laboration_3.view.GameView;
 import com.dt181g.laboration_3.view.games.SnakeView;
 
-import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -44,7 +43,10 @@ public class SnakeController implements GameController {
     private final SnakeModel snakeModel;
     private final String title;
     private final StartBtnListener startBtnListener;
+    // private final MultiplayerBtnListener multiplayerBtnListener;
+    // private final SettingsBtnListener settingsBtnListener;
     private final ControlsBtnListener controlsBtnListener;
+    // private final QuitBtnListener quitBtnListener;
     private final SnakeBackBtnListener snakeBackBtnListener;
     private Timer gameLoop;
     private boolean restart;
@@ -62,9 +64,14 @@ public class SnakeController implements GameController {
         this.title = title;
         this.snakeView = (SnakeView) snakeView;
         this.snakeModel = (SnakeModel) snakeModel;
+
         this.startBtnListener = new StartBtnListener();
+        // this.multiplayerBtnListener = new MultiplayerBtnListener();
+        // this.settingsBtnListener = new SettingsBtnListener();
         this.controlsBtnListener = new ControlsBtnListener();
+        // this.quitBtnListener = new QuitBtnListener();
         this.snakeBackBtnListener = new SnakeBackBtnListener();
+
         this.initializeListeners();
     }
 
@@ -73,7 +80,10 @@ public class SnakeController implements GameController {
      */
     public void initializeListeners() {
         snakeView.addStartBtnListener(this.startBtnListener);
+        // snakeView.addMultiplayerBtnListener(this.multiplayerBtnListener);
+        // snakeView.addSettingsBtnListener(this.settingsBtnListener);
         snakeView.addControlsBtnListener(this.controlsBtnListener);
+        // snakeView.addQuitBtnListener(this.quitBtnListener);
         snakeView.addSnakeBackBtnListener(this.snakeBackBtnListener);
     }
 
@@ -166,7 +176,7 @@ public class SnakeController implements GameController {
         private Timer gameLoop;
 
         StartBtnListener() {
-            startBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
         }
 
         @Override
@@ -217,10 +227,6 @@ public class SnakeController implements GameController {
     class MultiplayerBtnListener extends MouseAdapter {
         private final JLabel multiplayerBtn = snakeView.getMultiplayerBtn();
 
-        MultiplayerBtnListener() {
-            multiplayerBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        }
-
         @Override
         public void mouseEntered(final MouseEvent e) {
             updateButtonAppearance(multiplayerBtn, true);
@@ -239,10 +245,6 @@ public class SnakeController implements GameController {
     class SettingsBtnListener extends MouseAdapter {
         private final JLabel settingsBtn = snakeView.getSettingsBtn();
 
-        SettingsBtnListener() {
-            settingsBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        }
-
         @Override
         public void mouseEntered(final MouseEvent e) {
             updateButtonAppearance(settingsBtn, true);
@@ -259,11 +261,6 @@ public class SnakeController implements GameController {
      */
     class ControlsBtnListener extends MouseAdapter {
         private final JLabel controlsBtn = snakeView.getControlsBtn();
-
-
-        ControlsBtnListener() {
-            controlsBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        }
 
         @Override
         public void mousePressed(final MouseEvent e ) {
@@ -286,15 +283,27 @@ public class SnakeController implements GameController {
     }
 
     /**
+     * Listener for the quit button.
+     */
+    class QuitBtnListener extends MouseAdapter {
+        private final JLabel quitBtn = snakeView.getQuitBtn();
+
+        @Override
+        public void mouseEntered(final MouseEvent e) {
+            updateButtonAppearance(quitBtn, true);
+        }
+
+        @Override
+        public void mouseExited(final MouseEvent e) {
+            updateButtonAppearance(quitBtn, false);
+        }
+    }
+
+    /**
      * Listener for the back button in the Snake game.
      */
     class SnakeBackBtnListener extends MouseAdapter {
         private final JLabel snakeBackBtn = snakeView.getSnakeBackBtn();
-
-
-        SnakeBackBtnListener() {
-            snakeBackBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        }
 
         @Override
         public void mousePressed(final MouseEvent e) {
@@ -315,6 +324,4 @@ public class SnakeController implements GameController {
             updateButtonAppearance(snakeBackBtn, false);
         }
     }
-
-
 }
