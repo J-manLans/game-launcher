@@ -48,7 +48,7 @@ public class FakeTicTacToeView extends JPanel implements GameView {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JLabel gameLabel = new JLabel("Sorry! The game isn't available at the moment.");
-        AppConfigLab3.labelStyling(gameLabel);
+        AppConfigLab3.labelStyling(gameLabel, AppConfigLab3.TEXT_SIZE_NORMAL, false);
 
         this.setBackground(AppConfigLab3.COLOR_DARKER_GREY);
         this.add(Box.createVerticalGlue());

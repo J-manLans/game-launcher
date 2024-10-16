@@ -7,14 +7,13 @@ import com.dt181g.laboration_3.view.GameView;
 import java.awt.event.MouseAdapter;
 import java.util.List;
 import java.awt.GridBagLayout;
-import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JLabel;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 /**
  * Represents the view component of the Snake game, responsible for rendering
@@ -69,14 +68,14 @@ public class SnakeView extends JPanel implements GameView {
         this.title = new JLabel(title);
 
         // Style snake components
-        AppConfigLab3.labelStyling(this.title);
+        AppConfigLab3.labelStyling(this.title, AppConfigLab3.TEXT_HEADING_2, false);
         AppConfigLab3.labelBtn(startBtn, AppConfigLab3.COLOR_WHITE);
         AppConfigLab3.labelBtn(multiplayerBtn, AppConfigLab3.COLOR_DARK_GREY);
         AppConfigLab3.labelBtn(settingsBtn, AppConfigLab3.COLOR_DARK_GREY);
         AppConfigLab3.labelBtn(controlsBtn, AppConfigLab3.COLOR_WHITE);
         AppConfigLab3.labelBtn(quitBtn, AppConfigLab3.COLOR_DARK_GREY);
-        AppConfigLab3.labelStyling(controlsMainLabel);
-        AppConfigLab3.labelStyling(controlsSubLabel);
+        AppConfigLab3.labelStyling(controlsMainLabel, AppConfigLab3.TEXT_HEADING_2, false);
+        AppConfigLab3.labelStyling(controlsSubLabel, AppConfigLab3.TEXT_SIZE_NORMAL, false);
         AppConfigLab3.labelBtn(snakeBackBtn, AppConfigLab3.COLOR_WHITE);
 
         // Panel settings
@@ -246,10 +245,7 @@ public class SnakeView extends JPanel implements GameView {
      * @param snakeChar The JLabel to be styled.
      */
     public void styleSnakeBanner(final JLabel snakeChar) {
-        snakeChar.setVerticalAlignment(SwingConstants.CENTER);
-        snakeChar.setHorizontalAlignment(SwingConstants.CENTER);
-        snakeChar.setFont(AppConfigLab3.MONOSPACE_BOLD);
-        snakeChar.setForeground(AppConfigLab3.COLOR_WHITE);
+        AppConfigLab3.labelStyling(snakeChar, AppConfigLab3.TEXT_SIZE_NORMAL, true);
     }
 
     /*===============================

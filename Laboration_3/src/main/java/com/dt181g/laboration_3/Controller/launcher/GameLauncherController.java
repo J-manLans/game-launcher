@@ -67,7 +67,6 @@ public class GameLauncherController {
      */
     private void startLauncher() {
         SwingUtilities.invokeLater(() -> {
-            this.gameLauncherView.displayGame(this.gameListModel.displayFirstGame());
             gameLauncherView.setVisible(true);
         });
     }

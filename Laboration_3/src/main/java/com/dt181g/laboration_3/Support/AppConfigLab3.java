@@ -9,6 +9,7 @@ import java.awt.Cursor;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 /**
@@ -53,12 +54,21 @@ public final class AppConfigLab3 {
     Fonts.
     ------------------------------------------ */
 
-    /** Monospace used everywhere. */
-    public static final Font MONOSPACE_BOLD = new Font("Monospace", Font.BOLD, 15);
+    // Sizes
+
+    /** Normal text size. */
+    public static final int TEXT_SIZE_NORMAL = 16;
+
+    /** Heading 1. */
+    public static final int TEXT_HEADING_1 = 25;
+
+    /** Heading 2. */
+    public static final int TEXT_HEADING_2 = 20;
 
     /* ---------------------------------------
     Colors.
     ------------------------------------------ */
+
     /** Dark grey color. */
     public static final Color COLOR_DARK_GREY = new Color(40, 40, 40);
 
@@ -95,10 +105,10 @@ public final class AppConfigLab3 {
     ------------------------------------------ */
 
     /** Dimension for the game selector panel. */
-    public static final Dimension GAME_SELECTOR_PANEL_DIMENSIONS = new Dimension(400, 900);
+    public static final Dimension GAME_SELECTOR_PANEL_DIMENSIONS = new Dimension(270, 900);
 
     /** Dimension for the game panel.*/
-    public static final Dimension GAME_PANEL_DIMENSIONS = new Dimension(1300, 900);
+    public static final Dimension GAME_LAUNCHER_DIMENSIONS = new Dimension(1700, 940);
 
     /** A number of 200, free for use.*/
     public static final int SNAKE_SPEED = 200;
@@ -145,7 +155,7 @@ public final class AppConfigLab3 {
      * @param lightClr the color used for the label's foreground and background
      */
     public static void labelBtn(final JLabel labelToBtn, final Color lightClr) {
-        labelToBtn.setFont(MONOSPACE_BOLD);
+        labelToBtn.setFont(new Font("Monospace", Font.BOLD, TEXT_SIZE_NORMAL));
         labelToBtn.setForeground(lightClr);
         labelToBtn.setBackground(lightClr); // Used for hovering effect.
         labelToBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -166,11 +176,16 @@ public final class AppConfigLab3 {
      *
      * @param label the JLabel to style
      */
-    public static void labelStyling(final JLabel label) {
+    public static void labelStyling(final JLabel label, int textSize, boolean snakeText) {
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
-        label.setFont(MONOSPACE_BOLD);
+        label.setFont(new Font("Monospace", Font.BOLD, textSize));
         label.setForeground(COLOR_WHITE);
-        label.setBorder(BOTTOM_SPACER_30);
+        if (snakeText) {
+            label.setHorizontalAlignment(SwingConstants.CENTER);
+            label.setVerticalAlignment(SwingConstants.CENTER);
+        } else {
+            label.setBorder(BOTTOM_SPACER_30);
+        }
     }
 
     /* ---------------------------------------

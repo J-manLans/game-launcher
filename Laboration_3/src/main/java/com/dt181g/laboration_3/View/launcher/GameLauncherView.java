@@ -10,13 +10,19 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
 import java.awt.image.BufferedImage;
+
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
+
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -48,11 +54,19 @@ import javax.swing.JScrollPane;
 public class GameLauncherView extends JFrame {
     private final DebugLogger logger = DebugLogger.INSTANCE;
 
+    // Game selector panel
     private final JPanel gameSelectorPanel = new JPanel();
     private final JLabel pickAGameLabel = new JLabel("PICK A GAME");
     private final JScrollPane scrollPane = new JScrollPane(gameSelectorPanel);
-    private final JPanel gamePanel = new JPanel();
     private final List<JButton> gameIcons = new ArrayList<JButton>();
+
+    // Game panel
+    private final GridBagConstraints gbc = new GridBagConstraints();
+    CardLayout gamePanelCL = new CardLayout();
+    private final JPanel gamePanel = new JPanel();
+    private final JPanel startScreen = new JPanel();
+    private final JLabel startScreenText = new JLabel("HELLO AND WELCOME!");
+    private final JLabel closeLauncher = new JLabel("Exit");
 
     /**
      * Constructs the GameLauncherView and sets up its components.
@@ -63,25 +77,38 @@ public class GameLauncherView extends JFrame {
      */
     public GameLauncherView() {
         // GameSelectorPanel
-        gameSelectorPanel.setLayout(new BoxLayout(gameSelectorPanel, BoxLayout.Y_AXIS));
-        gameSelectorPanel.setBackground(AppConfigLab3.COLOR_DARK_GREY);
-        AppConfigLab3.labelStyling(pickAGameLabel);
-        gameSelectorPanel.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
-        gameSelectorPanel.add(pickAGameLabel);
+        this.gameSelectorPanel.setLayout(new BoxLayout(gameSelectorPanel, BoxLayout.Y_AXIS));
+        this.gameSelectorPanel.setBackground(AppConfigLab3.COLOR_DARK_GREY);
+        AppConfigLab3.labelStyling(pickAGameLabel, AppConfigLab3.TEXT_SIZE_NORMAL, false);
+        this.gameSelectorPanel.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
+        this.gameSelectorPanel.add(pickAGameLabel);
 
         // ScrollPane (handles size of gameSelectorPanel)
         this.setupScrollPane();
 
         // GamePanel
-        gamePanel.setLayout(new BorderLayout());
-        gamePanel.setPreferredSize(AppConfigLab3.GAME_PANEL_DIMENSIONS);
-        gamePanel.setBackground(AppConfigLab3.COLOR_DARKER_GREY);
+        this.gamePanel.setLayout(this.gamePanelCL);
+        this.startScreen.setLayout(new GridBagLayout());
+        AppConfigLab3.labelStyling(startScreenText, AppConfigLab3.TEXT_HEADING_1, false);
+        AppConfigLab3.labelBtn(closeLauncher, AppConfigLab3.COLOR_WHITE);
+
+        this.gbc.gridy = 0;
+        this.gbc.insets = AppConfigLab3.BOTTOM_20_INSET;
+        this.startScreen.add(startScreenText, this.gbc);
+
+        this.gbc.gridy++;
+        this.gbc.insets = AppConfigLab3.RESET_INSETS;
+
+        this.startScreen.add(closeLauncher, this.gbc);
+
+        this.startScreen.setBackground(AppConfigLab3.COLOR_DARKER_GREY);
+        this.gamePanel.add(startScreen, "Start Screen");
 
         // JFrame
-        this.setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
-        this.add(scrollPane);
-        this.add(gamePanel);
-        this.pack();
+        this.setLayout(new BorderLayout());
+        this.setSize(AppConfigLab3.GAME_LAUNCHER_DIMENSIONS);
+        this.add(scrollPane, BorderLayout.WEST);
+        this.add(gamePanel, BorderLayout.CENTER);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -185,21 +212,15 @@ public class GameLauncherView extends JFrame {
      *
      * <p>
      * This method is called from the {@link ActionListener} attached to the game icons.
-     * It clears the existing contents of the game panel and adds the
-     * new game's view to it. It then triggers a revalidation and repaint to ensure
-     * the new content is displayed correctly.
+     * It adds the new game's view to the card layout panel. It then shows the view.
      * </p>
      *
      * @param gameView the {@link GameView} to be displayed in the panel
      */
     public void displayGame(final GameView gameView) {
-        // Clears the panel and adds the game view.
-        gamePanel.removeAll();
-        gamePanel.add((JPanel) gameView, BorderLayout.CENTER);
-
-        // Redraws the panel
-        gamePanel.revalidate();
-        gamePanel.repaint();
+        // Adds the panel and show the game view.
+        this.gamePanel.add((JPanel) gameView, "Game");
+        this.gamePanelCL.show(gamePanel, "Game");
     }
 
     public JPanel getGamePanel() {
