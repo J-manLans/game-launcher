@@ -1,5 +1,6 @@
-package com.dt181g.laboration_3.view.games;
+package com.dt181g.laboration_3.games.tictactoe.view;
 
+import java.awt.event.MouseAdapter;
 import java.util.List;
 
 import javax.swing.Box;
@@ -7,9 +8,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.dt181g.laboration_3.games.GameView;
+import com.dt181g.laboration_3.launcher.view.GameLauncherView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
-import com.dt181g.laboration_3.view.GameView;
-import com.dt181g.laboration_3.view.launcher.GameLauncherView;
 
 /**
  * A mock implementation of the {@link GameView} interface for the Tic Tac Toe game.
@@ -51,10 +52,26 @@ public class FakeTicTacToeView extends JPanel implements GameView {
         JLabel gameLabel = new JLabel("Sorry! The game isn't available at the moment.");
         AppConfigLab3.labelStyling(gameLabel, AppConfigLab3.TEXT_SIZE_NORMAL, false);
 
+        AppConfigLab3.labelBtn(quitBtn, AppConfigLab3.COLOR_WHITE);
+        quitBtn.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
+
+
         this.setBackground(AppConfigLab3.COLOR_DARKER_GREY);
         this.add(Box.createVerticalGlue());
         this.add(gameLabel);
+        this.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
+        this.add(quitBtn);
         this.add(Box.createVerticalGlue());
+    }
+
+    /**
+     * Adds a mouse listener to the quit button.
+     *
+     * @param quitBtnListener The mouse listener to be added to the quit button,
+     * allowing for interaction when the button is clicked.
+     */
+    public void addQuitBtnListener(final MouseAdapter quitBtnListener) {
+        this.quitBtn.addMouseListener(quitBtnListener);
     }
 
     /**

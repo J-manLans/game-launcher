@@ -1,6 +1,6 @@
 package com.dt181g.laboration_3.factories;
 
-import com.dt181g.laboration_3.model.GameModel;
+import com.dt181g.laboration_3.games.GameModel;
 
 /**
  * A factory interface for creating instances of {@link GameModel}.

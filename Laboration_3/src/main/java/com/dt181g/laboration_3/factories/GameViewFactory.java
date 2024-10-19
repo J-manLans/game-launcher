@@ -1,6 +1,6 @@
 package com.dt181g.laboration_3.factories;
 
-import com.dt181g.laboration_3.view.GameView;
+import com.dt181g.laboration_3.games.GameView;
 
 /**
  * A factory interface for creating instances of {@link GameView}.

@@ -1,4 +1,4 @@
-package com.dt181g.laboration_3.controller;
+package com.dt181g.laboration_3.games;
 
 import javax.swing.Timer;
 

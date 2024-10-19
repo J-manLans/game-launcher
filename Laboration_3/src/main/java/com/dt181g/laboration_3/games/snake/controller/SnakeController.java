@@ -1,12 +1,12 @@
-package com.dt181g.laboration_3.controller.games;
+package com.dt181g.laboration_3.games.snake.controller;
 
-import com.dt181g.laboration_3.controller.GameController;
-import com.dt181g.laboration_3.model.GameModel;
-import com.dt181g.laboration_3.model.games.SnakeModel;
+import com.dt181g.laboration_3.games.GameController;
+import com.dt181g.laboration_3.games.GameModel;
+import com.dt181g.laboration_3.games.GameView;
+import com.dt181g.laboration_3.games.snake.model.SnakeModel;
+import com.dt181g.laboration_3.games.snake.view.SnakeView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
-import com.dt181g.laboration_3.view.GameView;
-import com.dt181g.laboration_3.view.games.SnakeView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -46,7 +46,7 @@ public class SnakeController implements GameController {
     // private final MultiplayerBtnListener multiplayerBtnListener;
     // private final SettingsBtnListener settingsBtnListener;
     private final ControlsBtnListener controlsBtnListener;
-    // private final QuitBtnListener quitBtnListener;
+    private final QuitBtnListener quitBtnListener;
     private final SnakeBackBtnListener snakeBackBtnListener;
     private Timer gameLoop;
     private boolean restart;
@@ -65,26 +65,26 @@ public class SnakeController implements GameController {
         this.snakeView = (SnakeView) snakeView;
         this.snakeModel = (SnakeModel) snakeModel;
 
+        // Initiate listeners!
         this.startBtnListener = new StartBtnListener();
         // this.multiplayerBtnListener = new MultiplayerBtnListener();
         // this.settingsBtnListener = new SettingsBtnListener();
         this.controlsBtnListener = new ControlsBtnListener();
-        // this.quitBtnListener = new QuitBtnListener();
+        this.quitBtnListener = new QuitBtnListener();
         this.snakeBackBtnListener = new SnakeBackBtnListener();
 
         this.initializeListeners();
     }
 
-    /**
-     * Helper method that initializes action listeners for start menu buttons.
-     */
+
+    @Override
     public void initializeListeners() {
-        snakeView.addStartBtnListener(this.startBtnListener);
-        // snakeView.addMultiplayerBtnListener(this.multiplayerBtnListener);
-        // snakeView.addSettingsBtnListener(this.settingsBtnListener);
-        snakeView.addControlsBtnListener(this.controlsBtnListener);
-        // snakeView.addQuitBtnListener(this.quitBtnListener);
-        snakeView.addSnakeBackBtnListener(this.snakeBackBtnListener);
+        this.snakeView.addStartBtnListener(this.startBtnListener);
+        // this.snakeView.addMultiplayerBtnListener(this.multiplayerBtnListener);
+        // this.snakeView.addSettingsBtnListener(this.settingsBtnListener);
+        this.snakeView.addControlsBtnListener(this.controlsBtnListener);
+        this.snakeView.addQuitBtnListener(this.quitBtnListener);
+        this.snakeView.addSnakeBackBtnListener(this.snakeBackBtnListener);
     }
 
     /**
@@ -118,8 +118,11 @@ public class SnakeController implements GameController {
 
     private void removeListeners() {
         this.snakeView.getStartBtn().removeMouseListener(this.startBtnListener);
+        // this.snakeView.getMultiplayerBtn().removeMouseListener(this.multiplayerBtnListener);
+        // this.snakeView.getSettingsBtn().removeMouseListener(this.settingsBtnListener);
         this.snakeView.getControlsBtn().removeMouseListener(this.controlsBtnListener);
         this.snakeView.getSnakeBackBtn().removeMouseListener(this.snakeBackBtnListener);
+        this.snakeView.getQuitBtn().removeMouseListener(this.quitBtnListener);
     }
 
     private void stopGameLoop() {

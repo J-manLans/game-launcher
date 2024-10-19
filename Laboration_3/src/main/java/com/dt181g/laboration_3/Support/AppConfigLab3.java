@@ -32,20 +32,20 @@ public final class AppConfigLab3 {
     Paths to game assets.
     ------------------------------------------ */
 
-    /** Path to icon images folder. */
-    public static final String PATH_TO_ICONS = "icons/";
-
-    /** Path to images folder */
-    public static final String PATH_TO_IMAGES = "img/";
-
-    /** Path to background image */
-    public static final String START_SCREEN_BACKGROUND = "GameLauncherLekfull.png";
+    /** Path to game icons folder. */
+    public static final String PATH_TO_ICONS = "/icons/";
 
     /** Extension to snake image. */
     public static final String SNAKE_ICON = "snake.jpeg";
 
     /** Extension to tic tac toe image. */
     public static final String TIC_TAC_TOE_ICON = "tictactoe.jpg";
+
+    /** Path to images folder */
+    public static final String PATH_TO_IMAGES = "/img/";
+
+    /** Launcher backgrounds array */
+    public static final String[] LAUNCHER_BACKGROUNDS = {"GameLauncher01.png", "GameLauncher02.png"};
 
     /* ---------------------------------------
     Game titles.
@@ -189,6 +189,7 @@ public final class AppConfigLab3 {
             LABEL_BTN_OUTER_BORDER_WIDTH,
             borderAndHoverBackgroundClr
         );
+
         labelToBtn.setBorder(BorderFactory.createCompoundBorder(matteBorder, LABEL_BTN_INNER_SPACE));
     }
 

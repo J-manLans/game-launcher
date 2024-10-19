@@ -1,8 +1,8 @@
-package com.dt181g.laboration_3.view.games;
+package com.dt181g.laboration_3.games.snake.view;
 
+import com.dt181g.laboration_3.games.GameView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
-import com.dt181g.laboration_3.view.GameView;
 
 import java.awt.event.MouseAdapter;
 import java.util.List;
@@ -73,7 +73,7 @@ public class SnakeView extends JPanel implements GameView {
         AppConfigLab3.labelBtn(multiplayerBtn, AppConfigLab3.COLOR_DARK_GREY);
         AppConfigLab3.labelBtn(settingsBtn, AppConfigLab3.COLOR_DARK_GREY);
         AppConfigLab3.labelBtn(controlsBtn, AppConfigLab3.COLOR_WHITE);
-        AppConfigLab3.labelBtn(quitBtn, AppConfigLab3.COLOR_DARK_GREY);
+        AppConfigLab3.labelBtn(quitBtn, AppConfigLab3.COLOR_WHITE);
         AppConfigLab3.labelStyling(controlsMainLabel, AppConfigLab3.TEXT_HEADING_2, false);
         AppConfigLab3.labelStyling(controlsSubLabel, AppConfigLab3.TEXT_SIZE_NORMAL, false);
         AppConfigLab3.labelBtn(snakeBackBtn, AppConfigLab3.COLOR_WHITE);

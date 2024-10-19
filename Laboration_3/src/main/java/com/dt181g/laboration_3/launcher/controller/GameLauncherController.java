@@ -1,4 +1,4 @@
-package com.dt181g.laboration_3.controller.launcher;
+package com.dt181g.laboration_3.launcher.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,10 +19,10 @@ import javax.imageio.ImageIO;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-import com.dt181g.laboration_3.model.launcher.GameListModel;
+import com.dt181g.laboration_3.launcher.model.GameListModel;
+import com.dt181g.laboration_3.launcher.view.GameLauncherView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
-import com.dt181g.laboration_3.view.launcher.GameLauncherView;
 
 /**
  * The controller class for managing the game launcher.
@@ -85,7 +85,7 @@ public class GameLauncherController {
      */
     private ImageIcon loadIcon(final String path) {
         try {
-            BufferedImage originalImage = ImageIO.read((getClass().getClassLoader().getResourceAsStream(path)));
+            BufferedImage originalImage = ImageIO.read((getClass().getResourceAsStream(path)));
             Image scaledImage = originalImage.getScaledInstance(
                 AppConfigLab3.SNAKE_SPEED,
                 AppConfigLab3.SNAKE_SPEED,

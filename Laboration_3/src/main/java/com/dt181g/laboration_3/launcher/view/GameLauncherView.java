@@ -1,6 +1,7 @@
-package com.dt181g.laboration_3.view.launcher;
+package com.dt181g.laboration_3.launcher.view;
+import com.dt181g.laboration_3.games.GameView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
-import com.dt181g.laboration_3.view.GameView;
+import com.dt181g.laboration_3.support.BackgroundPanel;
 
 import java.awt.Component;
 import java.awt.Cursor;
@@ -55,7 +56,8 @@ public class GameLauncherView extends JFrame {
     private final GridBagConstraints gbc = new GridBagConstraints();
     CardLayout gamePanelCL = new CardLayout();
     private final JPanel gamePanel = new JPanel();
-    private final JPanel startScreen = new BackgroundPanel(AppConfigLab3.PATH_TO_IMAGES + AppConfigLab3.START_SCREEN_BACKGROUND);
+    private final BackgroundPanel backgroundPanel = new BackgroundPanel(AppConfigLab3.PATH_TO_IMAGES, AppConfigLab3.LAUNCHER_BACKGROUNDS);
+    private final JPanel startScreen = backgroundPanel;
     private final JLabel exitLauncherBtn = new JLabel("Exit");
 
     /**
@@ -188,6 +190,7 @@ public class GameLauncherView extends JFrame {
     }
 
     public void displayStartScreen() {
+        backgroundPanel.toggleBackgroundRepaint(true);
         this.gamePanelCL.show(gamePanel, "Start Screen");
     }
 

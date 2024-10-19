@@ -1,4 +1,4 @@
-package com.dt181g.laboration_3.view;
+package com.dt181g.laboration_3.games;
 
 import java.util.List;
 
