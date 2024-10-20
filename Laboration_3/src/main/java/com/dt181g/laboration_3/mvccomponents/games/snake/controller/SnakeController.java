@@ -1,10 +1,10 @@
-package com.dt181g.laboration_3.games.snake.controller;
+package com.dt181g.laboration_3.mvccomponents.games.snake.controller;
 
-import com.dt181g.laboration_3.games.GameController;
-import com.dt181g.laboration_3.games.GameModel;
-import com.dt181g.laboration_3.games.GameView;
-import com.dt181g.laboration_3.games.snake.model.SnakeModel;
-import com.dt181g.laboration_3.games.snake.view.SnakeView;
+import com.dt181g.laboration_3.mvccomponents.games.GameController;
+import com.dt181g.laboration_3.mvccomponents.games.GameModel;
+import com.dt181g.laboration_3.mvccomponents.games.GameView;
+import com.dt181g.laboration_3.mvccomponents.games.snake.model.SnakeModel;
+import com.dt181g.laboration_3.mvccomponents.games.snake.view.SnakeView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
 

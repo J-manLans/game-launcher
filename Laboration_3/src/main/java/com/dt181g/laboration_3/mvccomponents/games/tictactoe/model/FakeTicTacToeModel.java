@@ -1,6 +1,6 @@
-package com.dt181g.laboration_3.games.tictactoe.model;
+package com.dt181g.laboration_3.mvccomponents.games.tictactoe.model;
 
-import com.dt181g.laboration_3.games.GameModel;
+import com.dt181g.laboration_3.mvccomponents.games.GameModel;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 
 /**

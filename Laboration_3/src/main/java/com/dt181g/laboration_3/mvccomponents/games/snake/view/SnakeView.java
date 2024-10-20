@@ -1,6 +1,6 @@
-package com.dt181g.laboration_3.games.snake.view;
+package com.dt181g.laboration_3.mvccomponents.games.snake.view;
 
-import com.dt181g.laboration_3.games.GameView;
+import com.dt181g.laboration_3.mvccomponents.games.GameView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
 

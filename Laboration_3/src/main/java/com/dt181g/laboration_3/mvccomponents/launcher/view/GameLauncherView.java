@@ -1,5 +1,5 @@
-package com.dt181g.laboration_3.launcher.view;
-import com.dt181g.laboration_3.games.GameView;
+package com.dt181g.laboration_3.mvccomponents.launcher.view;
+import com.dt181g.laboration_3.mvccomponents.games.GameView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.BackgroundPanel;
 

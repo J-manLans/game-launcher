@@ -45,7 +45,12 @@ public final class AppConfigLab3 {
     public static final String PATH_TO_IMAGES = "/img/";
 
     /** Launcher backgrounds array */
-    public static final String[] LAUNCHER_BACKGROUNDS = {"GameLauncher01.png", "GameLauncher02.png"};
+    public static final String[] LAUNCHER_BACKGROUNDS = {
+        "GameLauncher01.png",
+        "GameLauncher02.png",
+        "GameLauncher03.png",
+        "GameLauncher04.png"
+    };
 
     /* ---------------------------------------
     Game titles.

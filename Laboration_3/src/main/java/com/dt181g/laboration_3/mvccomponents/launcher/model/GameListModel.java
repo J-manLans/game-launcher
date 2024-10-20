@@ -1,19 +1,19 @@
-package com.dt181g.laboration_3.launcher.model;
+package com.dt181g.laboration_3.mvccomponents.launcher.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.dt181g.laboration_3.factories.GameControllerFactory;
 import com.dt181g.laboration_3.factories.GameViewFactory;
-import com.dt181g.laboration_3.games.GameController;
-import com.dt181g.laboration_3.games.GameModel;
-import com.dt181g.laboration_3.games.GameView;
-import com.dt181g.laboration_3.games.snake.controller.SnakeController;
-import com.dt181g.laboration_3.games.snake.model.SnakeModel;
-import com.dt181g.laboration_3.games.snake.view.SnakeView;
-import com.dt181g.laboration_3.games.tictactoe.controller.FakeTicTacToeCtrl;
-import com.dt181g.laboration_3.games.tictactoe.model.FakeTicTacToeModel;
-import com.dt181g.laboration_3.games.tictactoe.view.FakeTicTacToeView;
+import com.dt181g.laboration_3.mvccomponents.games.GameController;
+import com.dt181g.laboration_3.mvccomponents.games.GameModel;
+import com.dt181g.laboration_3.mvccomponents.games.GameView;
+import com.dt181g.laboration_3.mvccomponents.games.snake.controller.SnakeController;
+import com.dt181g.laboration_3.mvccomponents.games.snake.model.SnakeModel;
+import com.dt181g.laboration_3.mvccomponents.games.snake.view.SnakeView;
+import com.dt181g.laboration_3.mvccomponents.games.tictactoe.controller.FakeTicTacToeCtrl;
+import com.dt181g.laboration_3.mvccomponents.games.tictactoe.model.FakeTicTacToeModel;
+import com.dt181g.laboration_3.mvccomponents.games.tictactoe.view.FakeTicTacToeView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
 

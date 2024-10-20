@@ -1,9 +1,9 @@
-package com.dt181g.laboration_3.games.snake.model;
+package com.dt181g.laboration_3.mvccomponents.games.snake.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dt181g.laboration_3.games.GameModel;
+import com.dt181g.laboration_3.mvccomponents.games.GameModel;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
 

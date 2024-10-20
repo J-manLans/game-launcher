@@ -1,4 +1,4 @@
-package com.dt181g.laboration_3.launcher.controller;
+package com.dt181g.laboration_3.mvccomponents.launcher.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,8 +19,8 @@ import javax.imageio.ImageIO;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-import com.dt181g.laboration_3.launcher.model.GameListModel;
-import com.dt181g.laboration_3.launcher.view.GameLauncherView;
+import com.dt181g.laboration_3.mvccomponents.launcher.model.GameListModel;
+import com.dt181g.laboration_3.mvccomponents.launcher.view.GameLauncherView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
 

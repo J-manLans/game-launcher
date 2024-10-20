@@ -1,4 +1,4 @@
-package com.dt181g.laboration_3.games;
+package com.dt181g.laboration_3.mvccomponents.games;
 
 /**
  * An interface representing the essential model of a game.

@@ -1,4 +1,4 @@
-package com.dt181g.laboration_3.games.tictactoe.view;
+package com.dt181g.laboration_3.mvccomponents.games.tictactoe.view;
 
 import java.awt.event.MouseAdapter;
 import java.util.List;
@@ -8,8 +8,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.dt181g.laboration_3.games.GameView;
-import com.dt181g.laboration_3.launcher.view.GameLauncherView;
+import com.dt181g.laboration_3.mvccomponents.games.GameView;
+import com.dt181g.laboration_3.mvccomponents.launcher.view.GameLauncherView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 
 /**
