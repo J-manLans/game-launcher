@@ -1,11 +1,11 @@
 package com.dt181g.laboration_3.mvccomponents.games.snake.view;
 
-import com.dt181g.laboration_3.mvccomponents.BaseView;
 import com.dt181g.laboration_3.mvccomponents.games.GameView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
 
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseListener;
 import java.util.List;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -32,7 +32,7 @@ import javax.swing.JPanel;
  *
  * @author Joel Lansgren
  */
-public class SnakeView extends JPanel implements GameView, BaseView {
+public class SnakeView extends JPanel implements GameView {
     DebugLogger logger = DebugLogger.INSTANCE;
 
     // Start menu components
@@ -145,8 +145,8 @@ public class SnakeView extends JPanel implements GameView, BaseView {
      * @param gameAssets the 2D array representing the snake and a String just for fun.
      */
     public void startGame(final List<Object> gameAssets) {
-        String comingSoon = (String) gameAssets.getFirst();
-        int[][] snake2DArray = (int[][]) gameAssets.getLast();
+        String comingSoon = (String) gameAssets.get(0);
+        int[][] snake2DArray = (int[][]) gameAssets.get(gameAssets.size() - 1);
         this.removeAll();
 
         if (snakeGrid == null) {
@@ -215,8 +215,8 @@ public class SnakeView extends JPanel implements GameView, BaseView {
      * @param gameAssets the 2D array representing the snake and a String just for fun.
      */
     public void updateGameGrid(final List<Object> gameAssets) {
-        String comingSoon = (String) gameAssets.getFirst();
-        int[][] snake2DArray = (int[][]) gameAssets.getLast();
+        String comingSoon = (String) gameAssets.get(0);
+        int[][] snake2DArray = (int[][]) gameAssets.get(gameAssets.size() - 1);
         int counter = 0;
 
         for (int i = 0; i < snake2DArray.length; i++) {
@@ -354,6 +354,32 @@ public class SnakeView extends JPanel implements GameView, BaseView {
     public void addSnakeBackBtnListener(final MouseAdapter controlsBackBtnListener) {
         this.snakeBackBtn.addMouseListener(controlsBackBtnListener);
     }
+
+
+    /**
+     * Removes all mouse listeners from the game control buttons.
+     * This method iterates through each button and removes any attached mouse listeners,
+     * ensuring that no event handlers remain active on these buttons.
+     */
+    public void removeListeners() {
+        removeAllListenersFromButton(this.startBtn);
+        removeAllListenersFromButton(this.multiplayerBtn);
+        removeAllListenersFromButton(this.settingsBtn);
+        removeAllListenersFromButton(this.quitBtn);
+        removeAllListenersFromButton(this.snakeBackBtn);
+    }
+
+    /**
+     * Removes all mouse listeners from the specified button.
+     *
+     * @param button the JButton from which to remove all mouse listeners.
+     */
+    private void removeAllListenersFromButton(JLabel button) {
+        for (MouseListener listener : button.getMouseListeners()) {
+            button.removeMouseListener(listener);
+        }
+    }
+
 
     /*==============================
     * Getters

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dt181g.laboration_3.factories.GameControllerFactory;
+import com.dt181g.laboration_3.factories.GameModelFactory;
 import com.dt181g.laboration_3.factories.GameViewFactory;
 import com.dt181g.laboration_3.mvccomponents.games.GameController;
 import com.dt181g.laboration_3.mvccomponents.games.GameModel;
@@ -18,7 +19,7 @@ import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
 
 /**
- * The GameListModel class maintains a list of game models their corresponding views and controllers.
+ * The GameListModel class maintains a list of game models, their corresponding views and controllers.
  *
  * <p>
  * It initializes the game models, views and controllers at construction and provides methods
@@ -50,14 +51,12 @@ public class GameListModel {
      * Starts the game clicked in the games list in the launcher.
      * @param game the clicked games title.
      */
-    public void StartGame(String game) {
+    public void startGame(String game) {
         switch (game) {
             case AppConfigLab3.SNAKE_TITLE -> {
-                this.gameModels.add(new SnakeModel());
-                this.instantiateViewAndController(SnakeView::new, SnakeController::new, game);
+                this.instantiateViewAndController(SnakeModel::new, SnakeView::new, SnakeController::new, game);
             } case AppConfigLab3.TIC_TAC_TOE_TITLE -> {
-                this.gameModels.add(new FakeTicTacToeModel());
-                this.instantiateViewAndController(FakeTicTacToeView::new, FakeTicTacToeCtrl::new, game);
+                this.instantiateViewAndController(FakeTicTacToeModel::new, FakeTicTacToeView::new, FakeTicTacToeCtrl::new, game);
             }
         }
 
@@ -67,6 +66,8 @@ public class GameListModel {
     /**
      * Helper method that instantiates a view and a controller for a game based on the provided factories and title.
      *
+     * @param gameModelFactory A functional interface used to create the game model.
+     * In this case it's a method reference to a game models constructor.
      * @param gameViewFactory A functional interface used to create the game view.
      * In this case it's a method reference to a game views constructor.
      * @param gameControllerFactory A functional interface used to create the game controller.
@@ -74,10 +75,12 @@ public class GameListModel {
      * @param title The title of the game, which is used for initializing both the view and the controller.
      */
     private void instantiateViewAndController(
+        GameModelFactory gameModelFactory,
         GameViewFactory gameViewFactory,
         GameControllerFactory gameControllerFactory,
         String title
     ) {
+        this.gameModels.add(gameModelFactory.create());
         this.gameViews.add(gameViewFactory.create(title));
         this.gameControllers.add(
             gameControllerFactory.create(title, this.getGameView(title), this.getGameModel(title))
@@ -85,13 +88,13 @@ public class GameListModel {
     }
 
     /**
-     * Remove the game from each list whenever it closes.
+     * Clears each game list since a new one is about to be re-instantiated.
      * @param game the games title.
      */
     public void removeGame(String game) {
-        this.gameModels.remove(this.getGameModel(game));
-        this.gameViews.remove(this.getGameView(game));
-        this.gameControllers.remove(this.getGameController(game));
+        this.gameModels.clear();
+        this.gameViews.clear();
+        this.gameControllers.clear();
 
         logger.logWarning(game + " has been removed\n");
     }

@@ -1,10 +1,6 @@
 
 package com.dt181g.laboration_3.mvccomponents.games.tictactoe.controller;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import javax.swing.JLabel;
 import javax.swing.Timer;
 
 import com.dt181g.laboration_3.mvccomponents.games.GameController;
@@ -12,7 +8,6 @@ import com.dt181g.laboration_3.mvccomponents.games.GameModel;
 import com.dt181g.laboration_3.mvccomponents.games.GameView;
 import com.dt181g.laboration_3.mvccomponents.games.tictactoe.model.FakeTicTacToeModel;
 import com.dt181g.laboration_3.mvccomponents.games.tictactoe.view.FakeTicTacToeView;
-import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
 
 /**
@@ -33,7 +28,6 @@ public class FakeTicTacToeCtrl implements GameController {
     private final String title;
     private Timer gameLoop = new Timer(0, null);
     private boolean isRunning = true;
-    private final QuitBtnListener quitBtnListener;
 
     /**
      * Constructs a FakeTicTacToeCtrl with the specified game title, view and model.
@@ -42,12 +36,11 @@ public class FakeTicTacToeCtrl implements GameController {
      * @param ticTacToePanelView the view representing the Tic Tac Toe game
      * @param ticTacToeModel the model representing the game's state
      */
-    public FakeTicTacToeCtrl(final String title, final GameView ticTacToePanelView, final GameModel ticTacToeModel) {
-        this.ticTacToeView = (FakeTicTacToeView) ticTacToePanelView;
+    public FakeTicTacToeCtrl(final String title, final GameView ticTacToeView, final GameModel ticTacToeModel) {
+        this.ticTacToeView = (FakeTicTacToeView) ticTacToeView;
         this.ticTacToeModel = (FakeTicTacToeModel) ticTacToeModel;
         this.title = title;
 
-        this.quitBtnListener = new QuitBtnListener();
         this.initializeListeners();
     }
 
@@ -56,7 +49,6 @@ public class FakeTicTacToeCtrl implements GameController {
      */
     @Override
     public void initializeListeners() {
-        this.ticTacToeView.addQuitBtnListener(this.quitBtnListener);
     }
 
     /**
@@ -93,33 +85,5 @@ public class FakeTicTacToeCtrl implements GameController {
     @Override
     public Timer getGameLoop() {
         return gameLoop;
-    }
-
-    /**
-     * Helper method to update the appearance of the specified button based on hover state.
-     *
-     * @param button the button to update
-     * @param isHovered true if the button is hovered, false otherwise
-     */
-    private void updateButtonAppearance(final JLabel button, final boolean isHovered) {
-        button.setOpaque(isHovered);
-        button.setForeground(isHovered ? AppConfigLab3.COLOR_DARKER_GREY : AppConfigLab3.COLOR_WHITE);
-    }
-
-    /**
-     * Listener for the quit button.
-     */
-    class QuitBtnListener extends MouseAdapter {
-        private final JLabel quitBtn = ticTacToeView.getQuitBtn();
-
-        @Override
-        public void mouseEntered(final MouseEvent e) {
-            updateButtonAppearance(quitBtn, true);
-        }
-
-        @Override
-        public void mouseExited(final MouseEvent e) {
-            updateButtonAppearance(quitBtn, false);
-        }
     }
 }

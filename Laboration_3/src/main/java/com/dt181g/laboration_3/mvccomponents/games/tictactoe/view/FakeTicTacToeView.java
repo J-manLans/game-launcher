@@ -8,7 +8,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.dt181g.laboration_3.mvccomponents.BaseView;
 import com.dt181g.laboration_3.mvccomponents.games.GameView;
 import com.dt181g.laboration_3.mvccomponents.launcher.view.GameLauncherView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
@@ -32,7 +31,7 @@ import com.dt181g.laboration_3.support.AppConfigLab3;
  * </p>
  * @author Joel Lansgren
  */
-public class FakeTicTacToeView extends JPanel implements GameView, BaseView {
+public class FakeTicTacToeView extends JPanel implements GameView {
     private final JLabel title;
     private final JLabel quitBtn = new JLabel("Quit");
     private JPanel gamePanel;
@@ -88,7 +87,6 @@ public class FakeTicTacToeView extends JPanel implements GameView, BaseView {
      */
     @Override
     public void startGame(final List<Object> gameAssets) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'startGame'");
     }
 

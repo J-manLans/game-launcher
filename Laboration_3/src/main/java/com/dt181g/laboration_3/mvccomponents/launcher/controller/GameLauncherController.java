@@ -1,28 +1,25 @@
 package com.dt181g.laboration_3.mvccomponents.launcher.controller;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import com.dt181g.laboration_3.mvccomponents.launcher.listeners.GameIconListener;
+import com.dt181g.laboration_3.mvccomponents.launcher.model.GameListModel;
+import com.dt181g.laboration_3.mvccomponents.launcher.view.GameLauncherView;
+import com.dt181g.laboration_3.mvccomponents.listeners.MenuButtonListener;
+import com.dt181g.laboration_3.support.AppConfigLab3;
+import com.dt181g.laboration_3.support.DebugLogger;
+
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+
 import javax.swing.SwingUtilities;
 import javax.swing.JScrollBar;
 import javax.swing.Box;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import javax.swing.ImageIcon;
+
+import java.io.IOException;
 import javax.imageio.ImageIO;
-
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-
-import com.dt181g.laboration_3.mvccomponents.launcher.model.GameListModel;
-import com.dt181g.laboration_3.mvccomponents.launcher.view.GameLauncherView;
-import com.dt181g.laboration_3.support.AppConfigLab3;
-import com.dt181g.laboration_3.support.DebugLogger;
 
 /**
  * The controller class for managing the game launcher.
@@ -34,7 +31,7 @@ import com.dt181g.laboration_3.support.DebugLogger;
  *
  * @author Joel lansgren
  */
-public class GameLauncherController {
+public class GameLauncherController{
     DebugLogger logger = DebugLogger.INSTANCE;
     private final GameLauncherView gameLauncherView;
     private final GameListModel gameListModel;
@@ -85,12 +82,18 @@ public class GameLauncherController {
      */
     private ImageIcon loadIcon(final String path) {
         try {
+            // Load the image from the specified path as an input stream.
+            // This is necessary to ensure the image can be included in the JAR file
+            // and accessed properly when the application is packaged.
             BufferedImage originalImage = ImageIO.read((getClass().getResourceAsStream(path)));
+
+            // Create a down-scaled version of the image to fit as a game icon.
             Image scaledImage = originalImage.getScaledInstance(
-                AppConfigLab3.SNAKE_SPEED,
-                AppConfigLab3.SNAKE_SPEED,
+                AppConfigLab3.NUM_200,
+                AppConfigLab3.NUM_200,
                 Image.SCALE_SMOOTH
             );
+
             return new ImageIcon(scaledImage);
         } catch (IOException e) {
             logger.logWarning(e + "\nSomething went wrong while loading the picture to the game icons");
@@ -102,50 +105,26 @@ public class GameLauncherController {
      * Helper method that initialize listeners.
      */
     private void initializeListeners() {
-        // For game icons
+        // For game icons so they start the game when clicked
         for (JButton gameIcon : this.gameLauncherView.getGameIconsList()) {
-            gameIcon.addActionListener(new GameIconListener());
+            this.gameLauncherView.addGameIconListeners(gameIcon, new GameIconListener(this.gameLauncherView, this.gameListModel));
         }
 
         // For scroll pane speed
-        this.gameLauncherView.getScrollPane().addMouseWheelListener(new MouseWheelListener() {
-            @Override
-            public void mouseWheelMoved(final MouseWheelEvent e) {
-                int notches = e.getWheelRotation();  // Gets the direction (1 or -1).
-                JScrollBar vertical = gameLauncherView.getScrollPane().getVerticalScrollBar();
-                // Sets the new position either up (-1) or down (1) depending on scroll direction.
-                vertical.setValue(vertical.getValue() + (notches * AppConfigLab3.SCROLL_SPEED_MULTIPLIER));
-            }
+        this.gameLauncherView.addScrollPaneListener((MouseWheelEvent e) -> {
+            int notches = e.getWheelRotation();  // Gets the direction (1 or -1).
+            JScrollBar vertical = gameLauncherView.getScrollPane().getVerticalScrollBar();
+            // Sets the new position either up (-1) or down (1) depending on scroll direction.
+            vertical.setValue(vertical.getValue() + (notches * AppConfigLab3.SCROLL_SPEED_MULTIPLIER));
         });
 
         // For exiting the launcher
-        this.gameLauncherView.getExitLauncherBtn().addMouseListener(new MouseAdapter() {
-            /**
-             * Helper method to update the appearance of the specified button based on hover state.
-             *
-             * @param button the button to update
-             * @param isHovered true if the button is hovered, false otherwise
-             */
-            private void updateButtonAppearance(final JLabel button, final boolean isHovered) {
-                button.setOpaque(isHovered);
-                button.setForeground(isHovered ? AppConfigLab3.COLOR_DARKER_GREY : AppConfigLab3.COLOR_WHITE);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                gameLauncherView.exitLauncher();
-            }
-
-            @Override
-            public void mouseEntered(final MouseEvent e) {
-                updateButtonAppearance(gameLauncherView.getExitLauncherBtn(), true);
-            }
-
-            @Override
-            public void mouseExited(final MouseEvent e) {
-                updateButtonAppearance(gameLauncherView.getExitLauncherBtn(), false);
-            }
-        });
+        this.gameLauncherView.addQuitBtnListener(
+            new MenuButtonListener(
+                this.gameLauncherView.getQuitBtn(),
+                () -> { gameLauncherView.exitLauncher(); }
+            )
+        );
     }
 
     /**
@@ -155,85 +134,5 @@ public class GameLauncherController {
         SwingUtilities.invokeLater(() -> {
             gameLauncherView.setVisible(true);
         });
-    }
-
-    /*========================
-    * Listeners
-    =======================*/
-
-     /**
-     * Listener for game icon clicks in the launcher.
-     * <p>
-     * This inner class handles actions triggered when a user clicks a game
-     * icon from the launcher. It identifies the selected game.
-     * The selected game is then re-instantiated, re-initiated and displayed in the game launcher view.
-     * All other games will be disposed of.
-     * </p>
-     */
-    class GameIconListener implements ActionListener {
-        @Override
-        public void actionPerformed(final ActionEvent e) {
-            // Get the game title from the clicked button's action command set earlier.
-            String selectedGame = e.getActionCommand();
-
-            // Close the game that was active.
-            this.closeInactiveGame(selectedGame);
-
-            // Re-instantiate (if necessary).
-            if (gameListModel.getGameModel(selectedGame) == null) {
-                gameListModel.StartGame(selectedGame);
-                gameExitListener(selectedGame);
-            }
-
-            //initiates the game, and lets the launcher display it.
-            gameListModel.getGameController(selectedGame).initiateGame();
-            gameLauncherView.displayGame(gameListModel.getGameView(selectedGame));
-
-            // Hands the game panel to the view, must be below the re-instantiation,
-            // otherwise the game view is null.
-            gameListModel.getGameView(selectedGame).setGamePanel(gameLauncherView.getGamePanel());
-        }
-
-        /**
-         * Helper method that select each title from the title list and compares it to the one passed into the method.
-         *
-         * <p>
-         * If it's not a match the games controller is used to close the game
-         * and the gameListModel removes it from it's list.
-         *
-         * @param selectedGame The game icon clicked.
-         */
-        private void closeInactiveGame(String selectedGame) {
-            for (String inactiveGame : gameListModel.getTitleList()) {
-                if (inactiveGame != selectedGame) {
-                    closeGame(inactiveGame);
-                }
-            }
-        }
-
-        /**
-         *  Helper method to close game.
-         * @param game the game to be closed.
-         */
-        public void closeGame(String game) {
-            if (gameListModel.getGameController(game) != null) {
-                gameListModel.getGameController(game).closeGame();
-                gameListModel.removeGame(game);
-            }
-        }
-
-        /**
-         * A listener that closes the game that gets attached to whatever game that is being loaded.
-         * @param game the loaded game
-         */
-        public void gameExitListener(String game) {
-            gameListModel.getGameView(game).getQuitBtn().addMouseListener(new MouseAdapter() {
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    closeGame(game);
-                    gameLauncherView.displayStartScreen();
-                }
-            });
-        }
     }
 }

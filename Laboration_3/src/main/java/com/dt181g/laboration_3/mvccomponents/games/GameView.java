@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
+import com.dt181g.laboration_3.mvccomponents.BaseView;
 import com.dt181g.laboration_3.support.DebugLogger;
 
 /**
@@ -16,7 +17,7 @@ import com.dt181g.laboration_3.support.DebugLogger;
  * and retrieving information from a game view.
  * </p>
  */
-public interface GameView {
+public interface GameView extends BaseView {
     DebugLogger logger = DebugLogger.INSTANCE;
 
     /**

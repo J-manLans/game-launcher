@@ -31,7 +31,6 @@ public class SnakeModel implements GameModel {
 
     DebugLogger logger = DebugLogger.INSTANCE;
 
-
     private final String title = AppConfigLab3.SNAKE_TITLE;
     private final String iconPath = AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON;
     private final int gridSize = AppConfigLab3.SNAKE_CELL_COUNT;

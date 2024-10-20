@@ -1,5 +1,7 @@
 package com.dt181g.laboration_3.mvccomponents.games.snake.controller;
 
+import com.dt181g.laboration_3.mvccomponents.listeners.MenuButtonListener;
+import com.dt181g.laboration_3.mvccomponents.BaseController;
 import com.dt181g.laboration_3.mvccomponents.games.GameController;
 import com.dt181g.laboration_3.mvccomponents.games.GameModel;
 import com.dt181g.laboration_3.mvccomponents.games.GameView;
@@ -10,10 +12,7 @@ import com.dt181g.laboration_3.support.DebugLogger;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
-import javax.swing.JLabel;
 import javax.swing.Timer;
 
 /**
@@ -36,18 +35,12 @@ import javax.swing.Timer;
  *
  * @author Joel Lansgren
  */
-public class SnakeController implements GameController {
+public class SnakeController implements GameController, BaseController {
     DebugLogger logger = DebugLogger.INSTANCE;
 
     private final SnakeView snakeView;
     private final SnakeModel snakeModel;
     private final String title;
-    private final StartBtnListener startBtnListener;
-    // private final MultiplayerBtnListener multiplayerBtnListener;
-    // private final SettingsBtnListener settingsBtnListener;
-    private final ControlsBtnListener controlsBtnListener;
-    private final QuitBtnListener quitBtnListener;
-    private final SnakeBackBtnListener snakeBackBtnListener;
     private Timer gameLoop;
     private boolean restart;
     private boolean isRunning = true;
@@ -65,26 +58,38 @@ public class SnakeController implements GameController {
         this.snakeView = (SnakeView) snakeView;
         this.snakeModel = (SnakeModel) snakeModel;
 
-        // Initiate listeners!
-        this.startBtnListener = new StartBtnListener();
-        // this.multiplayerBtnListener = new MultiplayerBtnListener();
-        // this.settingsBtnListener = new SettingsBtnListener();
-        this.controlsBtnListener = new ControlsBtnListener();
-        this.quitBtnListener = new QuitBtnListener();
-        this.snakeBackBtnListener = new SnakeBackBtnListener();
-
         this.initializeListeners();
     }
 
 
     @Override
     public void initializeListeners() {
-        this.snakeView.addStartBtnListener(this.startBtnListener);
+        this.snakeView.addStartBtnListener(
+            new MenuButtonListener(
+                this.snakeView.getStartBtn(),
+                () -> {
+                    this.startGame();
+                }
+            )
+        );
+
         // this.snakeView.addMultiplayerBtnListener(this.multiplayerBtnListener);
+
         // this.snakeView.addSettingsBtnListener(this.settingsBtnListener);
-        this.snakeView.addControlsBtnListener(this.controlsBtnListener);
-        this.snakeView.addQuitBtnListener(this.quitBtnListener);
-        this.snakeView.addSnakeBackBtnListener(this.snakeBackBtnListener);
+
+        this.snakeView.addControlsBtnListener(
+            new MenuButtonListener(
+                this.snakeView.getControlsBtn(),
+                () -> { snakeView.showControlsMenu(); }
+            )
+        );
+
+        this.snakeView.addSnakeBackBtnListener(
+            new MenuButtonListener(
+                this.snakeView.getSnakeBackBtn(),
+                () -> { this.initiateGame(); }
+            )
+        );
     }
 
     /**
@@ -105,6 +110,34 @@ public class SnakeController implements GameController {
         logger.logInfo(title + " has been initiated.\n");
     }
 
+    /**
+     * Gets attached as a listener for the Start button. It starts the game and manages the game loop.
+     */
+    public void startGame() {
+        // Grid initialization.
+        this.snakeModel.initializeSnake();
+        this.snakeView.startGame(this.snakeModel.getGameAssets());
+
+        // For controlling the loop
+        this.restart = false;
+
+        // Game loop.
+        this.gameLoop = new Timer(AppConfigLab3.NUM_200, new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                if (!restart) {
+                    snakeModel.updateGameGrid();
+                    snakeView.updateGameGrid(snakeModel.getGameAssets());
+                } else {
+                    gameLoop.stop();
+                }
+            }
+        });
+
+        this.gameLoop.start();
+        this.setGameLoop(gameLoop);
+    }
+
     @Override
     public void closeGame() {
         this.stopGameLoop();
@@ -117,12 +150,7 @@ public class SnakeController implements GameController {
     }
 
     private void removeListeners() {
-        this.snakeView.getStartBtn().removeMouseListener(this.startBtnListener);
-        // this.snakeView.getMultiplayerBtn().removeMouseListener(this.multiplayerBtnListener);
-        // this.snakeView.getSettingsBtn().removeMouseListener(this.settingsBtnListener);
-        this.snakeView.getControlsBtn().removeMouseListener(this.controlsBtnListener);
-        this.snakeView.getSnakeBackBtn().removeMouseListener(this.snakeBackBtnListener);
-        this.snakeView.getQuitBtn().removeMouseListener(this.quitBtnListener);
+        this.snakeView.removeListeners();
     }
 
     private void stopGameLoop() {
@@ -154,173 +182,5 @@ public class SnakeController implements GameController {
     @Override
     public void setIsRunning(boolean isRunning) {
         this.isRunning = isRunning;
-    }
-
-    /*========================
-    * Listeners
-    =======================*/
-
-    /**
-     * Helper method to update the appearance of the specified button based on hover state.
-     *
-     * @param button the button to update
-     * @param isHovered true if the button is hovered, false otherwise
-     */
-    private void updateButtonAppearance(final JLabel button, final boolean isHovered) {
-        button.setOpaque(isHovered);
-        button.setForeground(isHovered ? AppConfigLab3.COLOR_DARKER_GREY : AppConfigLab3.COLOR_WHITE);
-    }
-
-    /**
-     * Listener for the Start button. It starts the game and manages the game loop.
-     */
-    class StartBtnListener extends MouseAdapter {
-        private final JLabel startBtn = snakeView.getStartBtn();
-        private Timer gameLoop;
-
-        @Override
-        public void mousePressed(final MouseEvent e) {
-            // Makes sure the label button is transparent and has
-            // the right text color on the next startup.
-            startBtn.setOpaque(false);
-            startBtn.setForeground(AppConfigLab3.COLOR_WHITE);
-
-            // Grid initialization.
-            snakeModel.initializeSnake();
-            snakeView.startGame(snakeModel.getGameAssets());
-
-            // For controlling the loop
-            restart = false;
-
-            // Game loop.
-            this.gameLoop = new Timer(AppConfigLab3.NUM_200, new ActionListener() {
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    if (!restart) {
-                        snakeModel.updateGameGrid();
-                        snakeView.updateGameGrid(snakeModel.getGameAssets());
-                    } else {
-                        gameLoop.stop();
-                    }
-                }
-            });
-            gameLoop.start();
-            setGameLoop(gameLoop);
-        }
-
-        @Override
-        public void mouseEntered(final MouseEvent e) {
-            updateButtonAppearance(startBtn, true);
-        }
-
-        @Override
-        public void mouseExited(final MouseEvent e) {
-            updateButtonAppearance(startBtn, false);
-        }
-    }
-
-    /**
-     * Listener for the Multiplayer button.
-     * Not yet implemented.
-     */
-    class MultiplayerBtnListener extends MouseAdapter {
-        private final JLabel multiplayerBtn = snakeView.getMultiplayerBtn();
-
-        @Override
-        public void mouseEntered(final MouseEvent e) {
-            updateButtonAppearance(multiplayerBtn, true);
-        }
-
-        @Override
-        public void mouseExited(final MouseEvent e) {
-            updateButtonAppearance(multiplayerBtn, false);
-        }
-    }
-
-    /**
-     * Listener for the Settings button.
-     * Not yet implemented.
-     */
-    class SettingsBtnListener extends MouseAdapter {
-        private final JLabel settingsBtn = snakeView.getSettingsBtn();
-
-        @Override
-        public void mouseEntered(final MouseEvent e) {
-            updateButtonAppearance(settingsBtn, true);
-        }
-
-        @Override
-        public void mouseExited(final MouseEvent e) {
-            updateButtonAppearance(settingsBtn, false);
-        }
-    }
-
-    /**
-     * Listener for the Controls button.
-     */
-    class ControlsBtnListener extends MouseAdapter {
-        private final JLabel controlsBtn = snakeView.getControlsBtn();
-
-        @Override
-        public void mousePressed(final MouseEvent e ) {
-            // Makes sure the label button is transparent and has
-            // the right text color on the next startup.
-            controlsBtn.setOpaque(false);
-            controlsBtn.setForeground(AppConfigLab3.COLOR_WHITE);
-            snakeView.showControlsMenu();
-        }
-
-        @Override
-        public void mouseEntered(final MouseEvent e) {
-            updateButtonAppearance(controlsBtn, true);
-        }
-
-        @Override
-        public void mouseExited(final MouseEvent e) {
-            updateButtonAppearance(controlsBtn, false);
-        }
-    }
-
-    /**
-     * Listener for the quit button.
-     */
-    class QuitBtnListener extends MouseAdapter {
-        private final JLabel quitBtn = snakeView.getQuitBtn();
-
-        @Override
-        public void mouseEntered(final MouseEvent e) {
-            updateButtonAppearance(quitBtn, true);
-        }
-
-        @Override
-        public void mouseExited(final MouseEvent e) {
-            updateButtonAppearance(quitBtn, false);
-        }
-    }
-
-    /**
-     * Listener for the back button in the Snake game.
-     */
-    class SnakeBackBtnListener extends MouseAdapter {
-        private final JLabel snakeBackBtn = snakeView.getSnakeBackBtn();
-
-        @Override
-        public void mousePressed(final MouseEvent e) {
-            // Makes sure the label button is transparent and has
-            // the right text color on the next startup.
-            snakeBackBtn.setOpaque(false);
-            snakeBackBtn.setForeground(AppConfigLab3.COLOR_WHITE);
-            initiateGame();
-        }
-
-        @Override
-        public void mouseEntered(final MouseEvent e) {
-            updateButtonAppearance(snakeBackBtn, true);
-        }
-
-        @Override
-        public void mouseExited(final MouseEvent e) {
-            updateButtonAppearance(snakeBackBtn, false);
-        }
     }
 }
