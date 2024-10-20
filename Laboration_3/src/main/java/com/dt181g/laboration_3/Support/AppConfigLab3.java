@@ -1,14 +1,9 @@
 package com.dt181g.laboration_3.support;
 
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Insets;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
 
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 
@@ -144,7 +139,7 @@ public final class AppConfigLab3 {
     public static final Dimension GAME_LAUNCHER_DIMENSIONS = new Dimension(1700, 940);
 
     /** A number of 200, free for use.*/
-    public static final int SNAKE_SPEED = 200;
+    public static final int NUM_200 = 200;
 
     /** Dimension for the game icons. */
     public static final Dimension GAME_ICON_SIZE = new Dimension(200, 90);
@@ -170,48 +165,6 @@ public final class AppConfigLab3 {
 
     /** Number of cells in the grid. */
     public static final int SNAKE_CELL_COUNT = 38;
-
-    /* ---------------------------------------
-    Helper methods.
-    ------------------------------------------ */
-
-    /**
-     * Styles a label to look like a button with specific color and border.
-     *
-     * @param labelToBtn the JLabel to style
-     * @param borderAndHoverBackgroundClr the color used for the label's foreground and background
-     */
-    public static void labelBtn(final JLabel labelToBtn, final Color borderAndHoverBackgroundClr) {
-        labelToBtn.setFont(new Font("Monospace", Font.BOLD, TEXT_SIZE_NORMAL));
-        labelToBtn.setForeground(borderAndHoverBackgroundClr);
-        labelToBtn.setBackground(borderAndHoverBackgroundClr); // Used for hovering effect.
-        labelToBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        Border matteBorder = BorderFactory.createMatteBorder(
-            LABEL_BTN_OUTER_BORDER_WIDTH,
-            LABEL_BTN_OUTER_BORDER_WIDTH,
-            LABEL_BTN_OUTER_BORDER_WIDTH,
-            LABEL_BTN_OUTER_BORDER_WIDTH,
-            borderAndHoverBackgroundClr
-        );
-
-        labelToBtn.setBorder(BorderFactory.createCompoundBorder(matteBorder, LABEL_BTN_INNER_SPACE));
-    }
-
-    /**
-     * Applies styling to a label for uniform appearance.
-     *
-     * @param label the JLabel to style
-     */
-    public static void labelStyling(final JLabel label, int textSize, boolean snakeText) {
-        label.setAlignmentX(Component.CENTER_ALIGNMENT);
-        label.setFont(new Font("Monospace", Font.BOLD, textSize));
-        label.setForeground(COLOR_WHITE);
-        if (snakeText) {
-            label.setHorizontalAlignment(SwingConstants.CENTER);
-            label.setVerticalAlignment(SwingConstants.CENTER);
-        }
-    }
 
     /* ---------------------------------------
     ANSI COLOR CODES for console output.

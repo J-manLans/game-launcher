@@ -8,6 +8,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.dt181g.laboration_3.mvccomponents.BaseView;
 import com.dt181g.laboration_3.mvccomponents.games.GameView;
 import com.dt181g.laboration_3.mvccomponents.launcher.view.GameLauncherView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
@@ -31,7 +32,7 @@ import com.dt181g.laboration_3.support.AppConfigLab3;
  * </p>
  * @author Joel Lansgren
  */
-public class FakeTicTacToeView extends JPanel implements GameView {
+public class FakeTicTacToeView extends JPanel implements GameView, BaseView {
     private final JLabel title;
     private final JLabel quitBtn = new JLabel("Quit");
     private JPanel gamePanel;
@@ -50,9 +51,9 @@ public class FakeTicTacToeView extends JPanel implements GameView {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JLabel gameLabel = new JLabel("Sorry! The game isn't available at the moment.");
-        AppConfigLab3.labelStyling(gameLabel, AppConfigLab3.TEXT_SIZE_NORMAL, false);
+        labelStyling(gameLabel, AppConfigLab3.TEXT_SIZE_NORMAL, false);
 
-        AppConfigLab3.labelBtn(quitBtn, AppConfigLab3.COLOR_WHITE);
+        labelBtn(quitBtn, AppConfigLab3.COLOR_WHITE);
         quitBtn.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
 
 

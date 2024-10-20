@@ -178,10 +178,6 @@ public class SnakeController implements GameController {
         private final JLabel startBtn = snakeView.getStartBtn();
         private Timer gameLoop;
 
-        StartBtnListener() {
-
-        }
-
         @Override
         public void mousePressed(final MouseEvent e) {
             // Makes sure the label button is transparent and has
@@ -197,7 +193,7 @@ public class SnakeController implements GameController {
             restart = false;
 
             // Game loop.
-            this.gameLoop = new Timer(AppConfigLab3.SNAKE_SPEED, new ActionListener() {
+            this.gameLoop = new Timer(AppConfigLab3.NUM_200, new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     if (!restart) {

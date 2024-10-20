@@ -1,5 +1,6 @@
 package com.dt181g.laboration_3.mvccomponents.games.snake.view;
 
+import com.dt181g.laboration_3.mvccomponents.BaseView;
 import com.dt181g.laboration_3.mvccomponents.games.GameView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
@@ -31,7 +32,7 @@ import javax.swing.JPanel;
  *
  * @author Joel Lansgren
  */
-public class SnakeView extends JPanel implements GameView {
+public class SnakeView extends JPanel implements GameView, BaseView {
     DebugLogger logger = DebugLogger.INSTANCE;
 
     // Start menu components
@@ -68,15 +69,15 @@ public class SnakeView extends JPanel implements GameView {
         this.title = new JLabel(title);
 
         // Style snake components
-        AppConfigLab3.labelStyling(this.title, AppConfigLab3.TEXT_HEADING_2, false);
-        AppConfigLab3.labelBtn(startBtn, AppConfigLab3.COLOR_WHITE);
-        AppConfigLab3.labelBtn(multiplayerBtn, AppConfigLab3.COLOR_DARK_GREY);
-        AppConfigLab3.labelBtn(settingsBtn, AppConfigLab3.COLOR_DARK_GREY);
-        AppConfigLab3.labelBtn(controlsBtn, AppConfigLab3.COLOR_WHITE);
-        AppConfigLab3.labelBtn(quitBtn, AppConfigLab3.COLOR_WHITE);
-        AppConfigLab3.labelStyling(controlsMainLabel, AppConfigLab3.TEXT_HEADING_2, false);
-        AppConfigLab3.labelStyling(controlsSubLabel, AppConfigLab3.TEXT_SIZE_NORMAL, false);
-        AppConfigLab3.labelBtn(snakeBackBtn, AppConfigLab3.COLOR_WHITE);
+        labelStyling(this.title, AppConfigLab3.TEXT_HEADING_2, false);
+        labelBtn(startBtn, AppConfigLab3.COLOR_WHITE);
+        labelBtn(multiplayerBtn, AppConfigLab3.COLOR_DARK_GREY);
+        labelBtn(settingsBtn, AppConfigLab3.COLOR_DARK_GREY);
+        labelBtn(controlsBtn, AppConfigLab3.COLOR_WHITE);
+        labelBtn(quitBtn, AppConfigLab3.COLOR_WHITE);
+        labelStyling(controlsMainLabel, AppConfigLab3.TEXT_HEADING_2, false);
+        labelStyling(controlsSubLabel, AppConfigLab3.TEXT_SIZE_NORMAL, false);
+        labelBtn(snakeBackBtn, AppConfigLab3.COLOR_WHITE);
 
         // Panel settings
         this.controlPanel.setPreferredSize(AppConfigLab3.SNAKE_CONTROLS_SIZE);
@@ -246,7 +247,7 @@ public class SnakeView extends JPanel implements GameView {
      * @param snakeChar The JLabel to be styled.
      */
     public void styleSnakeBanner(final JLabel snakeChar) {
-        AppConfigLab3.labelStyling(snakeChar, AppConfigLab3.TEXT_SIZE_NORMAL, true);
+        labelStyling(snakeChar, AppConfigLab3.TEXT_SIZE_NORMAL, true);
     }
 
     /*===============================

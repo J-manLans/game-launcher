@@ -9,7 +9,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <!-- Project artifact ID -->
     <artifactId>Laboration_3</artifactId>
     <!-- Project packaging type -->
@@ -22,7 +21,6 @@
     <description>
         The third lab assignment.
     </description>
-
     <!-- Reporting plugins configuration -->
     <reporting>
         <plugins>
@@ -42,7 +40,6 @@
             </plugin>
         </plugins>
     </reporting>
-
     <!-- Stating path to JavaDoc output, so that pages link correctly -->
     <distributionManagement>
         <site>
@@ -50,7 +47,6 @@
             <url>file://${project.parent.artifactId}/${project.artifactId}/target/site/</url>
         </site>
     </distributionManagement>
-
     <!-- Build configuration -->
     <build>
         <plugins>

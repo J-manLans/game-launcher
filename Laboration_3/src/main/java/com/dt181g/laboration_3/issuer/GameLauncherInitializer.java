@@ -30,8 +30,7 @@ public enum GameLauncherInitializer {
      *
      * <p>This method creates an instance of {@link GameLauncherController}
      * if it has not already been initialized. The controller is then initialized
-     * and ready to handle the game launching process. This method should be called
-     * to start the game launcher.</p>
+     * and ready to handle the game launching process.</p>
      */
     public void runLauncher() {
         if (gameLauncherController == null) {

@@ -1,4 +1,5 @@
 package com.dt181g.laboration_3.mvccomponents.launcher.view;
+import com.dt181g.laboration_3.mvccomponents.BaseView;
 import com.dt181g.laboration_3.mvccomponents.games.GameView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.BackgroundPanel;
@@ -43,7 +44,7 @@ import javax.swing.JScrollPane;
  *
  * @author Joel Lansgren
  */
-public class GameLauncherView extends JFrame {
+public class GameLauncherView extends JFrame implements BaseView {
     // Game selector panel
 
     private final JPanel gameSelectorPanel = new JPanel();
@@ -58,7 +59,7 @@ public class GameLauncherView extends JFrame {
     private final JPanel gamePanel = new JPanel();
     private final BackgroundPanel backgroundPanel = new BackgroundPanel(AppConfigLab3.PATH_TO_IMAGES, AppConfigLab3.LAUNCHER_BACKGROUNDS);
     private final JPanel startScreen = backgroundPanel;
-    private final JLabel exitLauncherBtn = new JLabel("Exit");
+    private final JLabel quitBtn = new JLabel("Exit");
 
     /**
      * Constructs the GameLauncherView and sets up its components.
@@ -74,7 +75,7 @@ public class GameLauncherView extends JFrame {
         this.gameSelectorPanel.setBackground(AppConfigLab3.COLOR_DARK_GREY);
         this.gamesPanel.setLayout(new BoxLayout(gamesPanel, BoxLayout.Y_AXIS));
         this.gamesPanel.setBackground(AppConfigLab3.COLOR_DARK_GREY);
-        AppConfigLab3.labelStyling(pickAGameLabel, AppConfigLab3.TEXT_SIZE_NORMAL, false);
+        labelStyling(pickAGameLabel, AppConfigLab3.TEXT_SIZE_NORMAL, false);
         this.pickAGameLabel.setBorder(AppConfigLab3.BOTTOM_SPACER_30);
         this.gamesPanel.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
         this.gamesPanel.add(pickAGameLabel);
@@ -92,12 +93,12 @@ public class GameLauncherView extends JFrame {
         this.gbc.fill = GridBagConstraints.BOTH;
         this.gameSelectorPanel.add(scrollPane, this.gbc);
 
-        AppConfigLab3.labelBtn(exitLauncherBtn, AppConfigLab3.COLOR_WHITE);
+        labelBtn(quitBtn, AppConfigLab3.COLOR_WHITE);
         this.gbc.gridy++;
         this.gbc.weighty = 0;
         this.gbc.fill = GridBagConstraints.NONE;
         this.gbc.insets = AppConfigLab3.INSET_BOTTOM_30;
-        this.gameSelectorPanel.add(exitLauncherBtn, this.gbc);
+        this.gameSelectorPanel.add(quitBtn, this.gbc);
 
         // GamePanel
         this.gamePanel.setLayout(this.gamePanelCL);
@@ -139,7 +140,7 @@ public class GameLauncherView extends JFrame {
             gameIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
             // Fetch  and sets the icon image.
             gameIcon.setIcon(imageIcon);
-            // Set the action command od the icon to the game title,
+            // Set the action command of the icon to the game title,
             // to let the action listener know which game was clicked.
             gameIcon.setActionCommand(title);
 
@@ -181,15 +182,15 @@ public class GameLauncherView extends JFrame {
         return scrollPane;
     }
 
-    public JLabel getExitLauncherBtn() {
-        return exitLauncherBtn;
+    public JLabel getQuitBtn() {
+        return quitBtn;
     }
 
     public List<JButton> getGameIconsList() {
         return this.gameIcons;
     }
 
-    public void displayStartScreen() {
+    public void display() {
         backgroundPanel.toggleBackgroundRepaint(true);
         this.gamePanelCL.show(gamePanel, "Start Screen");
     }
