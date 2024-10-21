@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import com.dt181g.project.mvccomponents.games.listeners.SnakeMovementListener;
 import com.dt181g.project.support.AppConfigProject;
 
 public class SnakeSinglePlayerView extends JPanel{
@@ -18,7 +19,7 @@ public class SnakeSinglePlayerView extends JPanel{
     private JPanel snakeGrid;
     private JPanel[][] snakeGridCells;
     private List<Object> gameAssets;
-    private int[][] snake2DArray;
+    private int[][] modelGameGrid;
 
     protected SnakeSinglePlayerView(final SnakeView snakeView) {
         this.setLayout(new GridBagLayout());
@@ -29,14 +30,14 @@ public class SnakeSinglePlayerView extends JPanel{
     protected void startGame() {
         this.removeAll();
 
-        if (snakeGrid == null) {
-            this.snakeGrid = new JPanel(new GridLayout(snake2DArray.length, snake2DArray.length));
+        if (this.snakeGrid == null) {
+            this.snakeGrid = new JPanel(new GridLayout(this.modelGameGrid.length, this.modelGameGrid.length));
             this.snakeGrid.setPreferredSize(AppConfigProject.SNAKE_GRID_SIZE);
-            this.snakeGridCells = new JPanel[snake2DArray.length][snake2DArray.length];
+            this.snakeGridCells = new JPanel[this.modelGameGrid.length][this.modelGameGrid.length];
         }
 
         // Setting up the snake grid
-        this.initializeGrid(snake2DArray);
+        this.initializeGrid();
 
         // Display settings
         this.gbc.gridy = 0;
@@ -50,18 +51,18 @@ public class SnakeSinglePlayerView extends JPanel{
 
     /**
      * Initializes the grid with the current state of the snake.     *
-     * @param snake2DArray  A 2D array representing the current state of the snake grid.
+     * @param modelGameGrid  A 2D array representing the current state of the snake grid.
      */
-    private void initializeGrid(final int[][] snake2DArray) {
+    private void initializeGrid() {
         this.snakeGrid.removeAll();
 
-        for (int i = 0; i < snake2DArray.length; i++) {
-            for (int j = 0; j < snake2DArray.length; j++) {
+        for (int i = 0; i < this.modelGameGrid.length; i++) {
+            for (int j = 0; j < this.modelGameGrid.length; j++) {
                 // Create cells to put in the grid
                 JPanel cell = new JPanel(new BorderLayout());
                 cell.setBorder(BorderFactory.createLineBorder(AppConfigProject.COLOR_DARK_GREY));
 
-                if (snake2DArray[i][j] == 1) {  // Displays the snake in the grid
+                if (this.modelGameGrid[i][j] == 1) {  // Displays the snake in the grid
                     cell.setBackground(AppConfigProject.COLOR_SNAKE_GAME_ACCENT);
                 } else {  // Background
                     cell.setBackground(AppConfigProject.COLOR_DARKER_GREY);
@@ -77,15 +78,21 @@ public class SnakeSinglePlayerView extends JPanel{
 
     /**
      * Updates the game grid with the current state of the snake.
-     * @param gameAssets the 2D array representing the snake.
      */
-    protected void updateGameGrid(final List<Object> gameAssets) {
-        for (int i = 0; i < snake2DArray.length; i++) {
-            for (int j = 0; j < snake2DArray.length; j++) {
+    protected void updateGameGrid() {
+        for (int i = 0; i < this.modelGameGrid.length; i++) {
+            for (int j = 0; j < this.modelGameGrid.length; j++) {
                 this.snakeGridCells[i][j].removeAll();
 
-                if (snake2DArray[i][j] == 1) {  // Displays the snake in the grid
-                    this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_ACCENT);
+                if (this.modelGameGrid[i][j] != 0) {  // Displays the snake in the grid
+                    switch (this.modelGameGrid[i][j]) {  // TODO: need to find a way to bring the colors from the model to here.
+                        case AppConfigProject.COLOR_SNAKE_INT -> {
+                            this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_ACCENT);
+                        } case AppConfigProject.COLOR_APPLE_INT -> {
+                            this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_APPLE);
+                        }
+                    }
+
                 } else {  // Background
                     this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_DARKER_GREY);
                 }
@@ -101,8 +108,17 @@ public class SnakeSinglePlayerView extends JPanel{
         this.gameAssets = gameAssets;
         for (Object asset : this.gameAssets) {
             if (asset instanceof int[][]) {
-                snake2DArray = (int[][]) asset;
+                this.modelGameGrid = (int[][]) asset;
             }
         }
+    }
+
+    /*=========================
+     * Listeners
+     ========================*/
+
+    public void addSnakeKeyListener(SnakeMovementListener snakeKeyListener) {
+        this.snakeGrid.addKeyListener(snakeKeyListener);
+        this.snakeGrid.requestFocusInWindow();
     }
 }

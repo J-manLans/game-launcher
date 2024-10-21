@@ -1,6 +1,7 @@
 package com.dt181g.project.mvccomponents.games.snake.view;
 
 import com.dt181g.project.mvccomponents.games.GameView;
+import com.dt181g.project.mvccomponents.games.listeners.SnakeMovementListener;
 import com.dt181g.project.support.AppConfigProject;
 import com.dt181g.project.support.DebugLogger;
 
@@ -106,8 +107,8 @@ public class SnakeView extends JPanel implements GameView {
      *
      * @param gameAssets the 2D array representing the snake and a String just for fun.
      */
-    public void updateGameGrid(final List<Object> gameAssets) {
-        this.singlePlayer.updateGameGrid(gameAssets);
+    public void updateGameGrid() {
+        this.singlePlayer.updateGameGrid();
     }
 
     /*==============================
@@ -172,6 +173,10 @@ public class SnakeView extends JPanel implements GameView {
      */
     public void addSnakeBackBtnListener(final MouseAdapter controlsBackBtnListener) {
         this.snakeBackBtn.addMouseListener(controlsBackBtnListener);
+    }
+
+    public void addSnakeKeyListener(SnakeMovementListener snakeKeyListener) {
+        this.singlePlayer.addSnakeKeyListener(snakeKeyListener);
     }
 
 

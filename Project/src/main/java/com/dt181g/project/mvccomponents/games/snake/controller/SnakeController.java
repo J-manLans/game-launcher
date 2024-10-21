@@ -5,7 +5,8 @@ import com.dt181g.project.mvccomponents.BaseController;
 import com.dt181g.project.mvccomponents.games.GameController;
 import com.dt181g.project.mvccomponents.games.GameModel;
 import com.dt181g.project.mvccomponents.games.GameView;
-import com.dt181g.project.mvccomponents.games.snake.model.SnakeModel;
+import com.dt181g.project.mvccomponents.games.listeners.SnakeMovementListener;
+import com.dt181g.project.mvccomponents.games.snake.model.SnakeGridModel;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeView;
 import com.dt181g.project.support.AppConfigProject;
 import com.dt181g.project.support.DebugLogger;
@@ -39,7 +40,7 @@ public class SnakeController implements GameController, BaseController {
     DebugLogger logger = DebugLogger.INSTANCE;
 
     private final SnakeView snakeView;
-    private final SnakeModel snakeModel;
+    private final SnakeGridModel snakeGridModel;
     private final String title;
     private Timer gameLoop;
     private boolean restart;
@@ -56,7 +57,7 @@ public class SnakeController implements GameController, BaseController {
     public SnakeController(final String title, final GameView snakeView, final GameModel snakeModel) {
         this.title = title;
         this.snakeView = (SnakeView) snakeView;
-        this.snakeModel = (SnakeModel) snakeModel;
+        this.snakeGridModel = (SnakeGridModel) snakeModel;
 
         this.initializeListeners();
     }
@@ -64,6 +65,7 @@ public class SnakeController implements GameController, BaseController {
 
     @Override
     public void initializeListeners() {
+        // Button listeners
         this.snakeView.addStartBtnListener(
             new MenuButtonListener(
                 this.snakeView.getStartBtn(),
@@ -101,9 +103,11 @@ public class SnakeController implements GameController, BaseController {
         // Shows the start menu
         this.snakeView.ShowStartMenu();
         // Resets the snake models 2D array
-        this.snakeModel.clearSnakeGrid();
+        this.snakeGridModel.clearGameGrid();
         // stops the EDT thread from executing
         this.restart = true;
+        // Set default direction of the snake
+        this.snakeGridModel.getSnakeModel().setDirection(AppConfigProject.RIGHT);
 
         logger.logInfo(title + " has been initiated.\n");
     }
@@ -111,10 +115,15 @@ public class SnakeController implements GameController, BaseController {
     /**
      * Gets attached as a listener for the Start button. It starts the game and manages the game loop.
      */
-    public void startGame() {
+    private void startGame() {
         // Grid initialization.
-        this.snakeModel.initializeSnake();
-        this.snakeView.startGame(this.snakeModel.getGameAssets());
+        this.snakeGridModel.getSnakeModel().initializeSnake();
+        this.snakeGridModel.overlayGameItemsOnGrid(this.snakeGridModel.getSnakeModel().getSnake());
+
+        this.snakeView.startGame(this.snakeGridModel.getGameAssets());
+
+        // Key listener for the game
+        this.snakeView.addSnakeKeyListener(new SnakeMovementListener(this));
 
         // For controlling the loop
         this.restart = false;
@@ -124,8 +133,11 @@ public class SnakeController implements GameController, BaseController {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!restart) {
-                    snakeModel.updateGameGrid();
-                    snakeView.updateGameGrid(snakeModel.getGameAssets());
+                    snakeGridModel.updateGameGrid();
+                    snakeGridModel.getCherryModel().spawnApple();
+                    snakeGridModel.overlayGameItemsOnGrid(snakeGridModel.getSnakeModel().getSnake());
+                    snakeGridModel.overlayGameItemsOnGrid(snakeGridModel.getCherryModel().getCherry());
+                    snakeView.updateGameGrid();
                 } else {
                     gameLoop.stop();
                 }
@@ -175,6 +187,10 @@ public class SnakeController implements GameController, BaseController {
     @Override
     public boolean getIsRunning() {
         return isRunning;
+    }
+
+    public SnakeGridModel getSnakeGridModel() {
+        return snakeGridModel;
     }
 
     @Override

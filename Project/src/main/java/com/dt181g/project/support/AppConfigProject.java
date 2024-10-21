@@ -89,6 +89,15 @@ public final class AppConfigProject {
     /** Accent color for the snake game. */
     public static final Color COLOR_SNAKE_GAME_ACCENT = new Color(255, 184, 77);
 
+    /** Number in snakes body representing the color. */
+    public static final int COLOR_SNAKE_INT = 1;
+
+    /** Color for the apple to the snake game. */
+    public static final Color COLOR_SNAKE_GAME_APPLE = new Color(167, 56, 68);
+
+    /** Number in apples body representing the color. */
+    public static final int COLOR_APPLE_INT = 2;
+
     /* ---------------------------------------
     Borders.
     ------------------------------------------ */
@@ -163,7 +172,7 @@ public final class AppConfigProject {
     public static final int INITIAL_SNAKE_LENGTH = 3;
 
     /** Amounts of content in each body part of the snake (y and x coordinates). */
-    public static final int SNAKE_BODY_PART_CONTENT = 2;
+    public static final int SNAKE_ITEMS_PART_CONTENT = 3;
 
     /** Size of the grid layout for the snake. */
     public static final Dimension SNAKE_GRID_SIZE = new Dimension(760, 760);
@@ -173,6 +182,22 @@ public final class AppConfigProject {
 
     /** Number of cells in the grid. */
     public static final int SNAKE_CELL_COUNT = 38;
+
+/* ---------------------------------------
+    Game assets.
+    ------------------------------------------ */
+    public static final Direction UP = Direction.UP;
+
+    public static final Direction DOWN = Direction.DOWN;
+
+    public static final Direction LEFT = Direction.LEFT;
+
+    public static final Direction RIGHT = Direction.RIGHT;
+
+
+    public static enum Direction {
+        UP, DOWN, LEFT, RIGHT;
+    }
 
     /* ---------------------------------------
     ANSI COLOR CODES for console output.
@@ -204,6 +229,7 @@ public final class AppConfigProject {
 
     /** Magenta color. */
     public static final String ANSI_MAGENTA = DebugColor.MAGENTA.ansiCode;
+
 
     /**
      * An enum representing ANSI color codes for console output.

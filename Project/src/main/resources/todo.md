@@ -6,11 +6,13 @@ Games
 
 **QUALITY OF LIFE IMPLEMENTATIONS:**
 - Nullify objects for controller, view, and model in the close method.
+- refactor view with getters to all its views so i don't need to clutter main view with addlistenermethods
+- refactor to have one addlistener method with switchcases using strings to determine where to add the listener
 
 **BASIC GAME MECHANICS FOR SINGLE-PLAYER SNAKE:**
-- *Listener for controls and direction function.*
 - Collision handling (with itself and the edges).
-- Randomizer to place food.
+- *Randomizer to place food.*
+- *Eat function*
 - Growth function.
 
 **MENUS:**

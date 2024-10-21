@@ -1,86 +1,38 @@
 package com.dt181g.project.mvccomponents.games.snake.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.dt181g.project.mvccomponents.games.GameModel;
 import com.dt181g.project.support.AppConfigProject;
-import com.dt181g.project.support.DebugLogger;
+import com.dt181g.project.support.AppConfigProject.Direction;
 
-/**
- * The SnakeModel class represents the model for the Snake game.
- * It maintains the state of the snake and the game grid.
- *
- * <p>
- * This class implements the GameModel interface and provides
- * methods to initialize the snake, update the game grid, and clear the grid.
- * It also includes getters for game metadata such as title, icon path,
- * and grid size.
- * </p>
- *
- * <p>
- * It's not yet fully implemented, as of now the snake is not controllable
- * and no food is spawning for the player to eat
- * </p>
- *
- * @author Joel Lansgren
- */
-public class SnakeModel implements GameModel {
-    // Remove when game functionality is implemented
-    DebugLogger logger = DebugLogger.INSTANCE;
-
-    private final String title = AppConfigProject.SNAKE_TITLE;
-    private final String iconPath = AppConfigProject.PATH_TO_ICONS + AppConfigProject.SNAKE_ICON;
-    private final int gridSize = AppConfigProject.SNAKE_CELL_COUNT;
-    private final List<Object> gameAssets = new ArrayList<>();
+public class SnakeModel {
     // A snake that has length of the comingSoon string and stores
     // y and x-coordinates in each of its body parts.
-    private final int[][] snake = new int[AppConfigProject.INITIAL_SNAKE_LENGTH][AppConfigProject.SNAKE_BODY_PART_CONTENT];
-    private final int[][] snakeGrid = new int[gridSize][gridSize];
+    private final int[][] snake;
+    private int headIndex;
+    private Boolean allowChangesToDirection = true;
+    private Direction currentDirection;
+    private final int[][] gameGrid;
 
-    /**
+    protected SnakeModel(final int[][] gameGrid, int itemParts) {
+        this.gameGrid = gameGrid;
+        this.snake = new int[AppConfigProject.INITIAL_SNAKE_LENGTH][itemParts];
+        this.headIndex = this.snake.length - 1;
+    }
+
+     /**
      * Initializes the snake's position on the game grid.
      */
     public void initializeSnake() {
         // Set snakes tail position.
-        snake[0][0] = gridSize / 2;  // y-coordinate (row).
-        snake[0][1] = gridSize / 2 - (AppConfigProject.INITIAL_SNAKE_LENGTH / 2);  // x-coordinate (col).
+        this.snake[0][0] = this.gameGrid.length / 2;  // Y-coordinate.
+        this.snake[0][1] = this.gameGrid.length / 2 - (AppConfigProject.INITIAL_SNAKE_LENGTH / 2);  // X-coordinate.
+        this.snake[0][2] = AppConfigProject.COLOR_SNAKE_INT;  // Color.
 
         // Builds body and head
-        for (int i = 1; i < snake.length; i++) {
-            snake[i][0] = snake[0][0];  // same y-coordinate as the tail.
-            snake[i][1] = snake[0][1] + i;  // increase x-coordinate with 1.
+        for (int i = 1; i < this.snake.length; i++) {
+            this.snake[i][0] = this.snake[0][0];  // same y-coordinate as the tail.
+            this.snake[i][1] = this.snake[0][1] + i;  // increase x-coordinate with 1 for each part.
+            this.snake[i][2] = AppConfigProject.COLOR_SNAKE_INT;
         }
-
-        // Overlay the snake on the grid.
-        for (int[] part : snake) {
-            snakeGrid[part[0]][part[1]] = 1;
-        }
-        this.gameAssets.add(snakeGrid);
-    }
-
-    /**
-     * Updates the game grid based on the current state of the snake.
-     *
-     * <p>
-     * This method first updates the position of the snake using
-     * the {@link #updateSnake()} method. It then clears the current
-     * state of the snake grid and redraws the snake in its new position.
-     * </p>
-     */
-    public void updateGameGrid() {
-        // Removes the old grid.
-        this.gameAssets.remove(snakeGrid);
-        this.updateSnake();
-
-        // Clears the grid and then draws the new snake on it.
-        this.clearSnakeGrid();
-        for (int[] part : this.snake) {
-            this.snakeGrid[part[0]][part[1]] = 1;
-        }
-
-        // Adds the updated grid.
-        this.gameAssets.add(snakeGrid);
     }
 
     /**
@@ -95,76 +47,88 @@ public class SnakeModel implements GameModel {
      * refreshing the grid.
      * </p>
      */
-    private void updateSnake() {
-        // TODO: Here the actual movement will be updated (changing directions)
-        for (int i = 0; i < this.snake.length; i++) {
-            // Updates tail and body.
-            if (i < this.snake.length - 1) {
-                this.snake[i][1] = this.snake[i + 1][1];
-            } else {
-                // Updates the head.
-                if (this.snake[i][1] != this.snakeGrid.length - 1) {
-                    this.snake[i][1]++;
-                } else {  // If snake part reach end of the grid it wraps around.
-                    this.snake[i][1] = 0;
-                }
+    protected void updateSnake() {
+        switch (this.currentDirection) {
+            case UP -> {
+                this.moveSnakeBody();
+
+                // Move the head: wraps around if it reaches the beginning of the grid
+                this.snake[headIndex][0] =
+                (this.snake[headIndex][0] - 1 + this.gameGrid.length)
+                % this.gameGrid.length;
+            }
+            case DOWN -> {
+                this.moveSnakeBody();
+
+                // Move the head: wraps around if it reaches the end of the grid
+                this.snake[headIndex][0] =
+                (this.snake[headIndex][0] + 1)
+                % this.gameGrid.length;
+            }
+            case LEFT -> {
+                this.moveSnakeBody();
+
+                // Move the head: wraps around if it reaches the beginning of the grid
+                this.snake[headIndex][1] =
+                (this.snake[headIndex][1] - 1 + this.gameGrid.length)
+                % this.gameGrid.length;
+            }
+            case RIGHT -> {
+                this.moveSnakeBody();
+
+                // Move the head: wraps around if it reaches the end of the grid
+                this.snake[headIndex][1] =
+                (this.snake[headIndex][1] + 1)
+                % this.gameGrid.length;
             }
         }
+    }
 
-        // Move the body segments: each segment follows the one before it
+    /**
+     * Helper method to move the snakes body, it always follows the head.
+     */
+    private void moveSnakeBody() {
         for (int i = 0; i < this.snake.length - 1; i++) {
+            this.snake[i][0] = this.snake[i + 1][0];
             this.snake[i][1] = this.snake[i + 1][1];
         }
-
-        // Move the head: wraps around if it reaches the end of the grid
-        int headIndex = this.snake.length - 1;
-        this.snake[headIndex][1] = (this.snake[headIndex][1] + 1) % this.snakeGrid.length;
     }
 
     /**
-     * Helper method to clear the game grid by setting all values to zero.
+     * Sets the current direction of the snake.
      *
      * <p>
-     * This method is called to reset the grid before drawing
-     * the updated position of the snake.
+     * This method updates the snake's direction only if the new direction
+     * has been set in the snake itself ({@code AllowEntranceToChangeDirection}
+     * makes sure of this) and is not opposite to the current direction
+     * (e.g., UP to DOWN).
      * </p>
+     *
+     * @param direction the new direction for the snake (must not be the opposite
+     * of the current direction).
      */
-    public void clearSnakeGrid() {
-        for (int i = 0; i < this.snakeGrid.length; i++) {
-            for (int j = 0; j < this.snakeGrid[i].length; j++) {
-                this.snakeGrid[i][j] = 0;
-            }
+    public void setDirection(Direction direction) {
+        // Prevent illegal moves.
+        if (
+            this.currentDirection == Direction.UP && direction == Direction.DOWN
+            || this.currentDirection == Direction.DOWN && direction == Direction.UP
+            || this.currentDirection == Direction.LEFT && direction == Direction.RIGHT
+            || this.currentDirection == Direction.RIGHT && direction == Direction.LEFT
+        ) { return; }
+
+        // Makes sure the updates have been reflected in the game grid before allowing changes
+        // in direction again.
+        if (this.allowChangesToDirection) {
+            this.currentDirection = direction;
+            this.allowChangesToDirection = false;
         }
     }
 
-    /*==============================
-     * Getters
-     ==============================*/
-
-    /**
-     * Returns the title of the game.
-     *
-     * @return the title of the snake game.
-     */
-    public String getTitle() {
-        return this.title;
+    public int[][] getSnake() {
+        return snake;
     }
 
-    /**
-     * Returns the game assets used by the view
-     * @return the game assets
-     */
-    public List<Object> getGameAssets() {
-        return gameAssets;
-    }
-
-    /**
-     * Returns the path to the game icon. (not yet implemented)
-     *
-     * @return the icon path as a string.
-     */
-    @Override
-    public String getIconPath() {
-       return iconPath;
+    public void setAllowChangesToDirection(boolean isGridUpdated) {
+        this.allowChangesToDirection = isGridUpdated;
     }
 }

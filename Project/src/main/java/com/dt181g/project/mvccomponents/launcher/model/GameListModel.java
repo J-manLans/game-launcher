@@ -10,7 +10,7 @@ import com.dt181g.project.mvccomponents.games.GameController;
 import com.dt181g.project.mvccomponents.games.GameModel;
 import com.dt181g.project.mvccomponents.games.GameView;
 import com.dt181g.project.mvccomponents.games.snake.controller.SnakeController;
-import com.dt181g.project.mvccomponents.games.snake.model.SnakeModel;
+import com.dt181g.project.mvccomponents.games.snake.model.SnakeGridModel;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeView;
 import com.dt181g.project.mvccomponents.games.tictactoe.controller.FakeTicTacToeCtrl;
 import com.dt181g.project.mvccomponents.games.tictactoe.model.FakeTicTacToeModel;
@@ -54,7 +54,7 @@ public class GameListModel {
     public void startGame(String game) {
         switch (game) {
             case AppConfigProject.SNAKE_TITLE -> {
-                this.instantiateViewAndController(SnakeModel::new, SnakeView::new, SnakeController::new, game);
+                this.instantiateViewAndController(SnakeGridModel::new, SnakeView::new, SnakeController::new, game);
             } case AppConfigProject.TIC_TAC_TOE_TITLE -> {
                 this.instantiateViewAndController(FakeTicTacToeModel::new, FakeTicTacToeView::new, FakeTicTacToeCtrl::new, game);
             }
