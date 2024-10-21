@@ -1,4 +1,4 @@
-package com.dt181g.laboration_3.support;
+package com.dt181g.project.support;
 
 import java.awt.Dimension;
 import java.awt.Insets;
@@ -19,9 +19,9 @@ import javax.swing.border.Border;
  * The class is not meant to be instantiated; all fields and methods are static.
  * </p>
  */
-public final class AppConfigLab3 {
+public final class AppConfigProject {
     // Prevent instantiation
-    private AppConfigLab3() { throw new IllegalStateException("Utility class"); }
+    private AppConfigProject() { throw new IllegalStateException("Utility class"); }
 
     /* ---------------------------------------
     Paths to game assets.
@@ -158,6 +158,12 @@ public final class AppConfigLab3 {
     /* ---------------------------------------
     Snake settings.
     ------------------------------------------ */
+
+    /** Length of the initial snake. */
+    public static final int INITIAL_SNAKE_LENGTH = 3;
+
+    /** Amounts of content in each body part of the snake (y and x coordinates). */
+    public static final int SNAKE_BODY_PART_CONTENT = 2;
 
     /** Size of the grid layout for the snake. */
     public static final Dimension SNAKE_GRID_SIZE = new Dimension(760, 760);

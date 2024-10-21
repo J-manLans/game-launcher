@@ -1,8 +1,10 @@
 package com.dt181g.project;
 
+import com.dt181g.project.issuer.GameLauncherInitializer;
+
 /**
- * The main starting point for Project Assignment.
- * @author Erik Ström
+ * The main starting point for the project.
+ * @author Joel Lansgren
  */
 public final class Project {
     private Project() { // Utility classes should not have a public or default constructor
@@ -10,11 +12,12 @@ public final class Project {
     }
 
     /**
-     * Simple output of the assignment's name. Be sure to replace
-     * this when working with the assignment!
-     * @param args command arguments.
+     * The main method serves as the entry point for the application.
+     * It invokes the singleton instance of the game launcher issuer,
+     * which encapsulates the logic required to start the game launcher.
+     *
+     * @param args command-line arguments (not used).
      */
     public static void main(final String... args) {
-        System.out.println("Project Assignment!");
-    }
+        GameLauncherInitializer.INSTANCE.runLauncher();    }
 }
