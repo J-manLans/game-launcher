@@ -67,9 +67,7 @@ public class SnakeController implements GameController, BaseController {
         this.snakeView.addStartBtnListener(
             new MenuButtonListener(
                 this.snakeView.getStartBtn(),
-                () -> {
-                    this.startGame();
-                }
+                this::startGame
             )
         );
 
@@ -80,14 +78,14 @@ public class SnakeController implements GameController, BaseController {
         this.snakeView.addControlsBtnListener(
             new MenuButtonListener(
                 this.snakeView.getControlsBtn(),
-                () -> { snakeView.showControlsMenu(); }
+                snakeView::showControlsMenu
             )
         );
 
         this.snakeView.addSnakeBackBtnListener(
             new MenuButtonListener(
                 this.snakeView.getSnakeBackBtn(),
-                () -> { this.initiateGame(); }
+                this::initiateGame
             )
         );
     }
@@ -100,8 +98,8 @@ public class SnakeController implements GameController, BaseController {
      */
     @Override
     public void initiateGame() {
-        // Clears and reinitialize the start menu
-        this.snakeView.initializeStartMenu();
+        // Shows the start menu
+        this.snakeView.ShowStartMenu();
         // Resets the snake models 2D array
         this.snakeModel.clearSnakeGrid();
         // stops the EDT thread from executing

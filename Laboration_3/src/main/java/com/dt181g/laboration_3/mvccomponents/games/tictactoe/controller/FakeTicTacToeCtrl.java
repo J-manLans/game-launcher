@@ -56,7 +56,7 @@ public class FakeTicTacToeCtrl implements GameController {
      */
     @Override
     public void initiateGame() {
-        this.ticTacToeView.initializeStartMenu();
+        this.ticTacToeView.ShowStartMenu();
         logger.logInfo(title +
             " has been initiated.\n"
         );

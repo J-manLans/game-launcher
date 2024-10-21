@@ -8,7 +8,6 @@ import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
 
 import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
@@ -122,7 +121,7 @@ public class GameLauncherController{
         this.gameLauncherView.addQuitBtnListener(
             new MenuButtonListener(
                 this.gameLauncherView.getQuitBtn(),
-                () -> { gameLauncherView.exitLauncher(); }
+                 gameLauncherView::exitLauncher
             )
         );
     }

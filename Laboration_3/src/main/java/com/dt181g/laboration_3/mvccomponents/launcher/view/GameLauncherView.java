@@ -19,7 +19,6 @@ import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -57,7 +56,7 @@ public class GameLauncherView extends JFrame implements BaseView {
 
     // Game panel
     private final GridBagConstraints gbc = new GridBagConstraints();
-    CardLayout gamePanelCL = new CardLayout();
+    private final CardLayout gamePanelCL = new CardLayout();
     private final JPanel gamePanel = new JPanel();
     private final BackgroundPanel backgroundPanel = new BackgroundPanel(AppConfigLab3.PATH_TO_IMAGES, AppConfigLab3.LAUNCHER_BACKGROUNDS);
     private final JPanel startScreen = backgroundPanel;
@@ -81,7 +80,7 @@ public class GameLauncherView extends JFrame implements BaseView {
         this.pickAGameLabel.setBorder(AppConfigLab3.BOTTOM_SPACER_30);
         this.gamesPanel.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
         this.gamesPanel.add(pickAGameLabel);
-        this.scrollPane.setBorder(BorderFactory.createLineBorder(AppConfigLab3.COLOR_WHITE));
+        // this.scrollPane.setBorder(BorderFactory.createLineBorder(AppConfigLab3.COLOR_WHITE)); <- not needed?
 
         // ScrollPane (handles size of gamesPanel)
         this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -138,7 +137,6 @@ public class GameLauncherView extends JFrame implements BaseView {
         gameIcon.setBorder(AppConfigLab3.REMOVE_BORDER);
         gameIcon.setContentAreaFilled(false);
         gameIcon.setBorderPainted(false);
-        gameIcon.setPreferredSize(AppConfigLab3.GAME_ICON_SIZE);
         gameIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
         // Fetch  and sets the icon image.
         gameIcon.setIcon(imageIcon);

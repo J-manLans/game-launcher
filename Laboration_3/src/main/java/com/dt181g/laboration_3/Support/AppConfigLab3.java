@@ -34,7 +34,7 @@ public final class AppConfigLab3 {
     public static final String SNAKE_ICON = "snake.jpeg";
 
     /** Extension to tic tac toe image. */
-    public static final String TIC_TAC_TOE_ICON = "tictactoe.jpg";
+    public static final String TIC_TAC_TOE_ICON = "tictactoe.jpeg";
 
     /** Path to images folder */
     public static final String PATH_TO_IMAGES = "/img/";
@@ -104,7 +104,10 @@ public final class AppConfigLab3 {
     public static final Border REMOVE_BORDER = BorderFactory.createEmptyBorder();
 
     /** A little bit thicker border. */
-    public static final Border CONTROLS_BORDER = BorderFactory.createMatteBorder(10, 10, 10, 10, COLOR_SNAKE_GAME_ACCENT);
+    public static final Border CONTROLS_BORDER = BorderFactory.createCompoundBorder(
+        BorderFactory.createEmptyBorder(200, 300, 200, 300),
+        BorderFactory.createMatteBorder(10, 10, 10, 10, COLOR_SNAKE_GAME_ACCENT)
+    );
 
     /** An empty border that's part of a compound border. */
     public static final Border LABEL_BTN_INNER_SPACE = BorderFactory.createEmptyBorder(10, 10, 10, 10);

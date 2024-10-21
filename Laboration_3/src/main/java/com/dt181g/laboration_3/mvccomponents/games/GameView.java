@@ -34,7 +34,7 @@ public interface GameView extends BaseView {
      * This method should clear any previous game data and prepare
      * the view for a new game session.
      */
-    void initializeStartMenu();
+    void ShowStartMenu();
 
     /**
      * Retrieves the title of the game.
@@ -44,7 +44,8 @@ public interface GameView extends BaseView {
     String getTitle();
 
     /**
-     * Sets game panel in the game views.
+     * Sets the game panel that holds the game views.
+     * This panel is used to close the game and exit to the launcher view.
      */
     void setGamePanel(JPanel gamePanel);
 

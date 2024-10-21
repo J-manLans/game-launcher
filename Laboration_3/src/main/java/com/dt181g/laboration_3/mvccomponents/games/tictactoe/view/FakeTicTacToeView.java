@@ -44,7 +44,7 @@ public class FakeTicTacToeView extends JPanel implements GameView {
      * May be properly implemented in the future.
      */
     @Override
-    public void initializeStartMenu() {
+    public void ShowStartMenu() {
         this.removeAll();
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

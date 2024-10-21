@@ -19,6 +19,13 @@ import com.dt181g.laboration_3.mvccomponents.listeners.MenuButtonListener;
 public class GameIconListener implements ActionListener {
     private final GameLauncherView view;
     private final GameListModel model;
+    /**
+     * The temp variable stores the title of the currently selected game icon.
+     * It is static, allowing all instances of GameIconListener to share the
+     * same value. This helps determine if a new game is selected in the
+     * actionPerformed method and triggers the necessary game switching logic.
+     */
+    private static String temp = "";
 
     public GameIconListener(GameLauncherView view, GameListModel model) {
         this.view = view;
@@ -30,17 +37,15 @@ public class GameIconListener implements ActionListener {
         // Get the game title from the clicked button's action command set earlier.
         String selectedGame = e.getActionCommand();
 
-        this.switchToSelectedGame(selectedGame);
+        if (selectedGame != temp || model.getGameController(selectedGame) == null) {
+            this.switchToSelectedGame(selectedGame);
+        }
+        GameIconListener.temp = selectedGame;
     }
 
     /**
-     * Helper method that select each title from the title list and compares it to the one passed into the method.
-     *
-     * <p>
-     * If it's not a match the games controller is used to close the game
-     * and the GameListModel removes it from it's list.
-     *
-     * @param selectedGame The game icon clicked.
+     * Helper method that switches to the specified game, closing the active game and initializes the selected one.
+     * @param selectedGame the name of the game to switch to.
      */
     private void switchToSelectedGame(String selectedGame) {
         // Closes the game that was active.
