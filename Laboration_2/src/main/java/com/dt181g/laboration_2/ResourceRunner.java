@@ -10,9 +10,10 @@ import java.lang.reflect.InvocationTargetException;
  * This class sets up the GUI, initiates background threads through the manager,
  * and uses a timer to periodically refresh the GUI.
  */
-public class ResourceRunner {
-    final Manager manager = Manager.INSTANCE;
-    final ResourceFrame resourceFrame = new ResourceFrame();
+enum ResourceRunner {
+    INSTANCE;
+    private final Manager manager = Manager.INSTANCE;
+    private final ResourceFrame resourceFrame = new ResourceFrame();
 
     /**
      * Initializes the GUI and starts the necessary background processes.
