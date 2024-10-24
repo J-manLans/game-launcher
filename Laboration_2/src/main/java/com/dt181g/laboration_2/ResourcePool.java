@@ -9,7 +9,7 @@ package com.dt181g.laboration_2;
  * that any modifications keep the resources within specified minimum and maximum bounds.
  * </p>
  */
-public enum ResourcePool {
+enum ResourcePool {
     INSTANCE;
     private int resources = AppConfig.STARTING_RESOURCES;
     private int newResources;
@@ -24,7 +24,7 @@ public enum ResourcePool {
      *
      * @param resourceToAdd the amount of resources to add (can be negative to remove resources)
      */
-    public synchronized void modifyResources(final int resourceToAdd) {
+    synchronized void modifyResources(final int resourceToAdd) {
         this.newResources = this.resources + resourceToAdd;
 
         if (this.newResources >= AppConfig.MIN_RESOURCE_BOUND
@@ -38,7 +38,7 @@ public enum ResourcePool {
      *
      * @return the current amount of resources available in the pool.
      */
-    public int pollForResource() {
+    int pollForResource() {
         return this.resources;
     }
 }
