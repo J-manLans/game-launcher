@@ -32,13 +32,11 @@ import com.dt181g.project.support.AppConfigProject;
  * @author Joel Lansgren
  */
 public class FakeTicTacToeView extends JPanel implements GameView {
-    private final JLabel title;
+    private final JLabel title = new JLabel(AppConfigProject.TIC_TAC_TOE_TITLE);
     private final JLabel quitBtn = new JLabel("Quit");
     private JPanel gamePanel;
 
-    public FakeTicTacToeView(final String title) {
-        this.title = new JLabel(title);
-    }
+
 
     /**
      * May be properly implemented in the future.
@@ -98,10 +96,5 @@ public class FakeTicTacToeView extends JPanel implements GameView {
     @Override
     public void setGamePanel(JPanel gamePanel) {
         this.gamePanel = gamePanel;
-    }
-
-    @Override
-    public JLabel getQuitBtn() {
-        return this.quitBtn;
     }
 }

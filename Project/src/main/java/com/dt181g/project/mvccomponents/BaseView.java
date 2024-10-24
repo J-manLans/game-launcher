@@ -8,20 +8,10 @@ import javax.swing.border.Border;
 
 import java.awt.Font;
 import java.awt.Component;
-import java.awt.event.MouseAdapter;
 import java.awt.Color;
 import java.awt.Cursor;
 
 public interface BaseView {
-    /**
-     * Gets the quit button from games so the launcher controller can show the start screen
-     * of the view.
-     * @return the games quit button
-     */
-    JLabel getQuitBtn();
-
-    void addQuitBtnListener(MouseAdapter listener);
-
     /**
      * Styles a label to look like a button with specific color and border.
      *

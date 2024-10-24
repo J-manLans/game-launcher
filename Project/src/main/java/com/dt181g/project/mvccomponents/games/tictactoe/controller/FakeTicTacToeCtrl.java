@@ -1,6 +1,9 @@
 
 package com.dt181g.project.mvccomponents.games.tictactoe.controller;
 
+import java.awt.event.MouseAdapter;
+
+import javax.swing.JLabel;
 import javax.swing.Timer;
 
 import com.dt181g.project.mvccomponents.games.GameController;
@@ -85,5 +88,17 @@ public class FakeTicTacToeCtrl implements GameController {
     @Override
     public Timer getGameLoop() {
         return gameLoop;
+    }
+
+    @Override
+    public JLabel getQuitBtn() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getQuitBtn'");
+    }
+
+    @Override
+    public void addQuitBtnListener(MouseAdapter menuButtonListener) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addQuitBtnListener'");
     }
 }

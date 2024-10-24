@@ -18,8 +18,6 @@ import com.dt181g.project.support.DebugLogger;
  * </p>
  */
 public interface GameView extends BaseView {
-    DebugLogger logger = DebugLogger.INSTANCE;
-
     /**
      * Starts the game with the provided game model and title.
      * @param gameAssets a list of assorted assets from the game model to the view
@@ -57,13 +55,6 @@ public interface GameView extends BaseView {
         SwingUtilities.invokeLater(() -> {
             gamePanel.remove(gameView);
         });
-        logger.logInfo(title + " view has been reset.");
+        DebugLogger.INSTANCE.logInfo(title + " view has been reset.");
     }
-
-    /**
-     * Gets the quit button from games so the launcher controller can show the start screen
-     * of the view.
-     * @return the games quit button
-     */
-    JLabel getQuitBtn();
 }

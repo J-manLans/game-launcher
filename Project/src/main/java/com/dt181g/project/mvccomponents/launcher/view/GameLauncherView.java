@@ -212,7 +212,6 @@ public class GameLauncherView extends JFrame implements BaseView {
      * Adds a mouse listener to the quit button.
      * @param quitBtnListener the {@link MouseAdapter} that listens for events on the quit button.
      */
-    @Override
     public void addQuitBtnListener(final MouseAdapter quitBtnListener) {
         this.quitBtn.addMouseListener(quitBtnListener);
     }

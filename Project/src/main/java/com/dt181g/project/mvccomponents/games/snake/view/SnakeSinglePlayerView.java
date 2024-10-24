@@ -16,13 +16,13 @@ import com.dt181g.project.support.DebugLogger;
 
 public class SnakeSinglePlayerView extends JPanel{
     private final GridBagConstraints gbc = new GridBagConstraints();
-    private final SnakeView snakeView;
+    private final SnakeMainView snakeView;
     private JPanel snakeGrid;
     private JPanel[][] snakeGridCells;
     private List<Object> gameAssets;
     private int[][] modelGameGrid;
 
-    protected SnakeSinglePlayerView(final SnakeView snakeView) {
+    public SnakeSinglePlayerView(final SnakeMainView snakeView) {
         this.setLayout(new GridBagLayout());
         this.snakeView = snakeView;
         this.setBackground(AppConfigProject.COLOR_DARKER_GREY);
@@ -78,7 +78,7 @@ public class SnakeSinglePlayerView extends JPanel{
     /**
      * Updates the game grid with the current state of the snake.
      */
-    protected void updateGameGrid() {
+    public void updateGameGrid() {
         for (int i = 0; i < this.modelGameGrid.length; i++) {
             for (int j = 0; j < this.modelGameGrid.length; j++) {
                 this.snakeGridCells[i][j].removeAll();

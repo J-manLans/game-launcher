@@ -11,7 +11,7 @@ import com.dt181g.project.mvccomponents.games.GameModel;
 import com.dt181g.project.mvccomponents.games.GameView;
 import com.dt181g.project.mvccomponents.games.snake.controller.SnakeController;
 import com.dt181g.project.mvccomponents.games.snake.model.SnakeGridModel;
-import com.dt181g.project.mvccomponents.games.snake.view.SnakeView;
+import com.dt181g.project.mvccomponents.games.snake.view.SnakeMainView;
 import com.dt181g.project.mvccomponents.games.tictactoe.controller.FakeTicTacToeCtrl;
 import com.dt181g.project.mvccomponents.games.tictactoe.model.FakeTicTacToeModel;
 import com.dt181g.project.mvccomponents.games.tictactoe.view.FakeTicTacToeView;
@@ -53,7 +53,7 @@ public class GameListModel {
     public void startGame(final String game) {
         switch (game) {
             case AppConfigProject.SNAKE_TITLE -> {
-                this.instantiateViewAndController(SnakeGridModel::new, SnakeView::new, SnakeController::new, game);
+                this.instantiateViewAndController(SnakeGridModel::new, SnakeMainView::new, SnakeController::new, game);
             } case AppConfigProject.TIC_TAC_TOE_TITLE -> {
                 this.instantiateViewAndController(FakeTicTacToeModel::new, FakeTicTacToeView::new, FakeTicTacToeCtrl::new, game);
             }
@@ -80,7 +80,7 @@ public class GameListModel {
         final String title
     ) {
         this.gameModels.add(gameModelFactory.create());
-        this.gameViews.add(gameViewFactory.create(title));
+        this.gameViews.add(gameViewFactory.create());
         this.gameControllers.add(
             gameControllerFactory.create(title, this.getGameView(title), this.getGameModel(title))
         );

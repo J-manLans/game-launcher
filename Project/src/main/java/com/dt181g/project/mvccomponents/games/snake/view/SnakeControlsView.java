@@ -10,7 +10,7 @@ import com.dt181g.project.support.AppConfigProject;
 
 public class SnakeControlsView extends JPanel{
     private final GridBagConstraints gbc = new GridBagConstraints();
-    private final SnakeView snakeView;
+    private final SnakeMainView snakeView;
     private final JLabel controlsMainLabel = new JLabel("CONTROLS:");
     private final JLabel controlsSubLabel = new JLabel("W,S,A,D or arrow keys to move the snake around");
 
@@ -24,7 +24,7 @@ public class SnakeControlsView extends JPanel{
      * </p>
      * @param snakeView the main snake view
      */
-    protected SnakeControlsView(final SnakeView snakeView) {
+    protected SnakeControlsView(final SnakeMainView snakeView) {
         this.setLayout(new GridBagLayout());
 
         // Initiate components

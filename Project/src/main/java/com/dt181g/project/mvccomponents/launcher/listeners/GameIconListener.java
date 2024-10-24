@@ -90,9 +90,9 @@ public class GameIconListener implements ActionListener {
      * @param game the loaded game
      */
     public void gameExitListener(final String game) {
-        model.getGameView(game).addQuitBtnListener(
+        model.getGameController(game).addQuitBtnListener(
             new MenuButtonListener(
-                model.getGameView(game).getQuitBtn(),
+                model.getGameController(game).getQuitBtn(),
                 () -> {
                     closeGame(game);
                     view.display();

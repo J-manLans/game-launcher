@@ -12,7 +12,7 @@ import com.dt181g.project.support.AppConfigProject;
 
 public class SnakeStartMenuView extends JPanel {
     private final GridBagConstraints gbc = new GridBagConstraints();
-    private final SnakeView snakeView;
+    private final SnakeMainView snakeView;
     private final JLabel startBtn = new JLabel("Start Game");
     private final JLabel multiplayerBtn = new JLabel("Multiplayer");
     private final JLabel settingsBtn = new JLabel("Settings");
@@ -27,7 +27,7 @@ public class SnakeStartMenuView extends JPanel {
      * to allow the user to start the game, access multiplayer, settings, and controls.
      * </p>
      */
-    protected SnakeStartMenuView(SnakeView snakeView) {
+    public SnakeStartMenuView(SnakeMainView snakeView) {
         this.setLayout(new GridBagLayout());
         this.snakeView = snakeView;
 
@@ -74,7 +74,7 @@ public class SnakeStartMenuView extends JPanel {
      * @param startBtnListener The mouse listener to be added to the start button,
      * allowing for interaction when the button is clicked.
      */
-    protected void addStartBtnListener(final MouseAdapter startBtnListener) {
+    public void addStartBtnListener(final MouseAdapter startBtnListener) {
         this.startBtn.addMouseListener(startBtnListener);
     }
 
@@ -104,7 +104,7 @@ public class SnakeStartMenuView extends JPanel {
      * @param controlsBtnListener The mouse listener to be added to the controls button,
      * allowing for interaction when the button is clicked.
      */
-    protected void addControlsBtnListener(final MouseAdapter controlsBtnListener) {
+    public void addControlsBtnListener(final MouseAdapter controlsBtnListener) {
         this.controlsBtn.addMouseListener(controlsBtnListener);
     }
 
@@ -114,7 +114,7 @@ public class SnakeStartMenuView extends JPanel {
      * @param quitBtnListener The mouse listener to be added to the quit button,
      * allowing for interaction when the button is clicked.
      */
-    protected void addQuitBtnListener(final MouseAdapter quitBtnListener) {
+    public void addQuitBtnListener(final MouseAdapter quitBtnListener) {
         this.quitBtn.addMouseListener(quitBtnListener);
     }
 
@@ -129,7 +129,7 @@ public class SnakeStartMenuView extends JPanel {
      * Getters
      ==============================*/
 
-    protected JLabel getStartBtn() {
+    public JLabel getStartBtn() {
         return startBtn;
     }
 
@@ -141,11 +141,11 @@ public class SnakeStartMenuView extends JPanel {
         return settingsBtn;
     }
 
-    protected JLabel getControlsBtn() {
+    public JLabel getControlsBtn() {
         return controlsBtn;
     }
 
-    protected JLabel getQuitBtn() {
+    public JLabel getQuitBtn() {
         return quitBtn;
     }
 }

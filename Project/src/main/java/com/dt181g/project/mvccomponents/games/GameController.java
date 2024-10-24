@@ -1,6 +1,11 @@
 package com.dt181g.project.mvccomponents.games;
 
+import java.awt.event.MouseAdapter;
+
+import javax.swing.JLabel;
 import javax.swing.Timer;
+
+import com.dt181g.project.mvccomponents.listeners.MenuButtonListener;
 
 /**
  * Interface representing the controllers for the game in the game launcher application.
@@ -50,4 +55,8 @@ public interface GameController {
      * @return the game title
      */
     Object getTitle();
+
+    JLabel getQuitBtn();
+
+    void addQuitBtnListener(MouseAdapter menuButtonListener);
 }

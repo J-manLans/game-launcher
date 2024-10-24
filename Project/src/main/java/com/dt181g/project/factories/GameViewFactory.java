@@ -17,5 +17,5 @@ public interface GameViewFactory {
      * @param title the title of the game, used to identify the view.
      * @return A new instance of {@link GameView}.
      */
-    GameView create(String title);
+    GameView create();
 }
