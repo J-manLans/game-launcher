@@ -29,7 +29,6 @@ import com.dt181g.project.support.DebugLogger;
  * @author Joel Lansgren
  */
 public class GameListModel {
-    DebugLogger logger = DebugLogger.INSTANCE;
     private final List<String> iconPaths = new ArrayList<>();
     private final List<String> gameTitles = new ArrayList<>();
     private final List<GameModel> gameModels = new ArrayList<>();
@@ -51,7 +50,7 @@ public class GameListModel {
      * Starts the game clicked in the games list in the launcher.
      * @param game the clicked games title.
      */
-    public void startGame(String game) {
+    public void startGame(final String game) {
         switch (game) {
             case AppConfigProject.SNAKE_TITLE -> {
                 this.instantiateViewAndController(SnakeGridModel::new, SnakeView::new, SnakeController::new, game);
@@ -60,7 +59,7 @@ public class GameListModel {
             }
         }
 
-        logger.logWarning(game + " has been instantiated.");
+        DebugLogger.INSTANCE.logWarning(game + " has been instantiated.");
     }
 
     /**
@@ -75,10 +74,10 @@ public class GameListModel {
      * @param title The title of the game, which is used for initializing both the view and the controller.
      */
     private void instantiateViewAndController(
-        GameModelFactory gameModelFactory,
-        GameViewFactory gameViewFactory,
-        GameControllerFactory gameControllerFactory,
-        String title
+        final GameModelFactory gameModelFactory,
+        final GameViewFactory gameViewFactory,
+        final GameControllerFactory gameControllerFactory,
+        final String title
     ) {
         this.gameModels.add(gameModelFactory.create());
         this.gameViews.add(gameViewFactory.create(title));
@@ -91,12 +90,12 @@ public class GameListModel {
      * Clears each game list since a new one is about to be re-instantiated.
      * @param game the games title.
      */
-    public void removeGame(String game) {
+    public void removeGame(final String game) {
         this.gameModels.clear();
         this.gameViews.clear();
         this.gameControllers.clear();
 
-        logger.logWarning(game + " has been removed\n");
+        DebugLogger.INSTANCE.logWarning(game + " has been removed\n");
     }
 
     /**

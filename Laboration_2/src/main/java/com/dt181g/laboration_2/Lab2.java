@@ -31,6 +31,6 @@ public final class Lab2 {
      * @param args command-line arguments (not used in this application)
      */
     public static void main(final String... args) {
-        new ResourceRunner().runRunner();
+        ResourceRunner.INSTANCE.runRunner();
     }
 }

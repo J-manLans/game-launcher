@@ -27,7 +27,7 @@ public class GameIconListener implements ActionListener {
      */
     private static String temp = "";
 
-    public GameIconListener(GameLauncherView view, GameListModel model) {
+    public GameIconListener(final GameLauncherView view, final GameListModel model) {
         this.view = view;
         this.model = model;
     }
@@ -35,7 +35,7 @@ public class GameIconListener implements ActionListener {
     @Override
     public void actionPerformed(final ActionEvent e) {
         // Get the game title from the clicked button's action command set earlier.
-        String selectedGame = e.getActionCommand();
+        final String selectedGame = e.getActionCommand();
 
         if (selectedGame != temp || model.getGameController(selectedGame) == null) {
             this.switchToSelectedGame(selectedGame);
@@ -47,9 +47,9 @@ public class GameIconListener implements ActionListener {
      * Helper method that switches to the specified game, closing the active game and initializes the selected one.
      * @param selectedGame the name of the game to switch to.
      */
-    private void switchToSelectedGame(String selectedGame) {
+    private void switchToSelectedGame(final String selectedGame) {
         // Closes the game that was active.
-        for (String inactiveGame : model.getTitleList()) {
+        for (final String inactiveGame : model.getTitleList()) {
             if (inactiveGame != selectedGame) {
                 closeGame(inactiveGame);
             }
@@ -74,7 +74,7 @@ public class GameIconListener implements ActionListener {
      *  Helper method to close game.
      * @param game the game to be closed.
      */
-    public void closeGame(String game) {
+    public void closeGame(final String game) {
         // Checks that the game corresponding to the title
         // actually is instantiated. If so, it's deleted.
         // This protects against the first time a game gets started,
@@ -89,7 +89,7 @@ public class GameIconListener implements ActionListener {
      * A listener that closes the game that gets attached to whatever game that is being loaded.
      * @param game the loaded game
      */
-    public void gameExitListener(String game) {
+    public void gameExitListener(final String game) {
         model.getGameView(game).addQuitBtnListener(
             new MenuButtonListener(
                 model.getGameView(game).getQuitBtn(),

@@ -74,12 +74,12 @@ public class GameLauncherView extends JFrame implements BaseView {
         this.gameSelectorPanel.setLayout(new GridBagLayout());
         this.gameSelectorPanel.setPreferredSize(AppConfigProject.GAME_SELECTOR_PANEL_DIMENSIONS);
         this.gameSelectorPanel.setBackground(AppConfigProject.COLOR_DARK_GREY);
-        this.gamesPanel.setLayout(new BoxLayout(gamesPanel, BoxLayout.Y_AXIS));
+        this.gamesPanel.setLayout(new BoxLayout(this.gamesPanel, BoxLayout.Y_AXIS));
         this.gamesPanel.setBackground(AppConfigProject.COLOR_DARK_GREY);
-        labelStyling(pickAGameLabel, AppConfigProject.TEXT_SIZE_NORMAL, false);
+        labelStyling(this.pickAGameLabel, AppConfigProject.TEXT_SIZE_NORMAL, false);
         this.pickAGameLabel.setBorder(AppConfigProject.BOTTOM_SPACER_30);
         this.gamesPanel.add(Box.createRigidArea(AppConfigProject.HIGHT_20));
-        this.gamesPanel.add(pickAGameLabel);
+        this.gamesPanel.add(this.pickAGameLabel);
         // this.scrollPane.setBorder(BorderFactory.createLineBorder(AppConfigLab3.COLOR_WHITE)); <- not needed?
 
         // ScrollPane (handles size of gamesPanel)
@@ -92,18 +92,18 @@ public class GameLauncherView extends JFrame implements BaseView {
         this.gbc.weightx = 1;
         this.gbc.insets = AppConfigProject.INSET_BOTTOM_20;
         this.gbc.fill = GridBagConstraints.BOTH;
-        this.gameSelectorPanel.add(scrollPane, this.gbc);
+        this.gameSelectorPanel.add(this.scrollPane, this.gbc);
 
-        labelBtn(quitBtn, AppConfigProject.COLOR_WHITE);
+        labelBtn(this.quitBtn, AppConfigProject.COLOR_WHITE);
         this.gbc.gridy++;
         this.gbc.weighty = 0;
         this.gbc.fill = GridBagConstraints.NONE;
         this.gbc.insets = AppConfigProject.INSET_BOTTOM_30;
-        this.gameSelectorPanel.add(quitBtn, this.gbc);
+        this.gameSelectorPanel.add(this.quitBtn, this.gbc);
 
         // GamePanel
         this.gamePanel.setLayout(this.gamePanelCL);
-        this.gamePanel.add(startScreen, "Start Screen");
+        this.gamePanel.add(this.startScreen, "Start Screen");
 
         // For when the launcher is complete (cant resize it and troubleshoot with this on)
         // Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -113,8 +113,8 @@ public class GameLauncherView extends JFrame implements BaseView {
         // JFrame
         this.setLayout(new BorderLayout());
         this.setSize(AppConfigProject.GAME_LAUNCHER_DIMENSIONS);
-        this.add(gameSelectorPanel, BorderLayout.WEST);
-        this.add(gamePanel, BorderLayout.CENTER);
+        this.add(this.gameSelectorPanel, BorderLayout.WEST);
+        this.add(this.gamePanel, BorderLayout.CENTER);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -132,7 +132,7 @@ public class GameLauncherView extends JFrame implements BaseView {
      */
     public void addGameIcons(final ImageIcon imageIcon, final String title) {
         // Set up the icon.
-        JButton gameIcon = new JButton();
+        final JButton gameIcon = new JButton();
         gameIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
         gameIcon.setBorder(AppConfigProject.REMOVE_BORDER);
         gameIcon.setContentAreaFilled(false);
@@ -165,7 +165,7 @@ public class GameLauncherView extends JFrame implements BaseView {
     public void displayGame(final GameView gameView) {
         // Adds the panel and show the game view.
         this.gamePanel.add((JPanel) gameView, "Game");
-        this.gamePanelCL.show(gamePanel, "Game");
+        this.gamePanelCL.show(this.gamePanel, "Game");
     }
 
     /**
@@ -173,7 +173,7 @@ public class GameLauncherView extends JFrame implements BaseView {
      * @return the {@link JPanel} representing the game panel.
      */
     public JPanel getGamePanel() {
-        return gamePanel;
+        return this.gamePanel;
     }
 
     /**
@@ -181,7 +181,7 @@ public class GameLauncherView extends JFrame implements BaseView {
      * @return the {@link JPanel} representing the games panel.
      */
     public JPanel getGamesPanel() {
-        return gamesPanel;
+        return this.gamesPanel;
     }
 
     /**
@@ -189,7 +189,7 @@ public class GameLauncherView extends JFrame implements BaseView {
      * @return the {@link JScrollPane} used in the user interface.
      */
     public JScrollPane getScrollPane() {
-        return scrollPane;
+        return this.scrollPane;
     }
 
     /**
@@ -197,7 +197,7 @@ public class GameLauncherView extends JFrame implements BaseView {
      * @return the {@link JLabel} representing the quit button.
      */
     public JLabel getQuitBtn() {
-        return quitBtn;
+        return this.quitBtn;
     }
 
     /**
@@ -213,7 +213,7 @@ public class GameLauncherView extends JFrame implements BaseView {
      * @param quitBtnListener the {@link MouseAdapter} that listens for events on the quit button.
      */
     @Override
-    public void addQuitBtnListener(MouseAdapter quitBtnListener) {
+    public void addQuitBtnListener(final MouseAdapter quitBtnListener) {
         this.quitBtn.addMouseListener(quitBtnListener);
     }
 
@@ -222,7 +222,7 @@ public class GameLauncherView extends JFrame implements BaseView {
      * @param gameIcon the {@link JButton} representing the game icon to which the listener is added.
      * @param gameIconListener the {@link ActionListener} that listens for action events on the game icon button.
      */
-    public void addGameIconListeners(JButton gameIcon, ActionListener gameIconListener) {
+    public void addGameIconListeners(final JButton gameIcon, final ActionListener gameIconListener) {
         gameIcon.addActionListener(gameIconListener);
     }
 
@@ -230,16 +230,16 @@ public class GameLauncherView extends JFrame implements BaseView {
      * Adds a mouse wheel listener to the scroll pane.
      * @param scrollPaneListener the {@link MouseWheelListener} that listens for mouse wheel events on the scroll pane.
      */
-    public void addScrollPaneListener(MouseWheelListener scrollPaneListener) {
-        scrollPane.addMouseWheelListener(scrollPaneListener);
+    public void addScrollPaneListener(final MouseWheelListener scrollPaneListener) {
+        this.scrollPane.addMouseWheelListener(scrollPaneListener);
     }
 
     /**
      * Displays the game panel by toggling the background repaint and showing the start screen.
      */
     public void display() {
-        backgroundPanel.toggleBackgroundRepaint(true);
-        this.gamePanelCL.show(gamePanel, "Start Screen");
+        this.backgroundPanel.toggleBackgroundRepaint(true);
+        this.gamePanelCL.show(this.gamePanel, "Start Screen");
     }
 
     /**

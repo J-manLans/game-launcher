@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-
+import java.awt.event.KeyListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import com.dt181g.project.mvccomponents.games.listeners.SnakeMovementListener;
 import com.dt181g.project.support.AppConfigProject;
+import com.dt181g.project.support.DebugLogger;
 
 public class SnakeSinglePlayerView extends JPanel{
     private final GridBagConstraints gbc = new GridBagConstraints();
@@ -28,25 +29,23 @@ public class SnakeSinglePlayerView extends JPanel{
     }
 
     protected void startGame() {
-        this.removeAll();
-
         if (this.snakeGrid == null) {
             this.snakeGrid = new JPanel(new GridLayout(this.modelGameGrid.length, this.modelGameGrid.length));
             this.snakeGrid.setPreferredSize(AppConfigProject.SNAKE_GRID_SIZE);
             this.snakeGridCells = new JPanel[this.modelGameGrid.length][this.modelGameGrid.length];
+
+            // Display components
+            this.gbc.gridy = 0;
+            this.gbc.insets = AppConfigProject.INSET_BOTTOM_20;
+            this.add(this.snakeGrid, gbc);
+
+            this.gbc.gridy++;
+            this.gbc.insets = AppConfigProject.RESET_INSETS;
+            this.add(this.snakeView.getSnakeBackBtn(), gbc);
         }
 
         // Setting up the snake grid
         this.initializeGrid();
-
-        // Display settings
-        this.gbc.gridy = 0;
-        this.gbc.insets = AppConfigProject.INSET_BOTTOM_20;
-        this.add(this.snakeGrid, gbc);
-
-        this.gbc.gridy++;
-        this.gbc.insets = AppConfigProject.RESET_INSETS;
-        this.add(this.snakeView.getSnakeBackBtn(), gbc);
     }
 
     /**
@@ -85,12 +84,12 @@ public class SnakeSinglePlayerView extends JPanel{
                 this.snakeGridCells[i][j].removeAll();
 
                 if (this.modelGameGrid[i][j] != 0) {  // Displays the snake in the grid
-                    switch (this.modelGameGrid[i][j]) {  // TODO: need to find a way to bring the colors from the model to here.
+                    switch (this.modelGameGrid[i][j]) {
                         case AppConfigProject.COLOR_SNAKE_INT -> {
                             this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_ACCENT);
-                        } case AppConfigProject.COLOR_APPLE_INT -> {
+                        } case AppConfigProject.COLOR_CHERRY_INT -> {
                             this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_APPLE);
-                        }
+                        } default -> DebugLogger.INSTANCE.logInfo("Unimplemented snake booster.");
                     }
 
                 } else {  // Background
@@ -120,5 +119,13 @@ public class SnakeSinglePlayerView extends JPanel{
     public void addSnakeKeyListener(SnakeMovementListener snakeKeyListener) {
         this.snakeGrid.addKeyListener(snakeKeyListener);
         this.snakeGrid.requestFocusInWindow();
+    }
+
+    protected void removeListeners() {
+        if (this.snakeGrid != null) {
+            for (KeyListener listener : this.snakeGrid.getKeyListeners()) {
+                this.snakeGrid.removeKeyListener(listener);
+            }
+        }
     }
 }

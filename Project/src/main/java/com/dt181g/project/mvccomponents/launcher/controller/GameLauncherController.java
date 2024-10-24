@@ -31,7 +31,6 @@ import javax.imageio.ImageIO;
  * @author Joel lansgren
  */
 public class GameLauncherController{
-    DebugLogger logger = DebugLogger.INSTANCE;
     private final GameLauncherView gameLauncherView;
     private final GameListModel gameListModel;
 
@@ -84,18 +83,18 @@ public class GameLauncherController{
             // Load the image from the specified path as an input stream.
             // This is necessary to ensure the image can be included in the JAR file
             // and accessed properly when the application is packaged.
-            BufferedImage originalImage = ImageIO.read((getClass().getResourceAsStream(path)));
+            final BufferedImage originalImage = ImageIO.read((getClass().getResourceAsStream(path)));
 
             // Create a down-scaled version of the image to fit as a game icon.
-            Image scaledImage = originalImage.getScaledInstance(
+            final Image scaledImage = originalImage.getScaledInstance(
                 AppConfigProject.NUM_200,
                 AppConfigProject.NUM_200,
                 Image.SCALE_SMOOTH
             );
 
             return new ImageIcon(scaledImage);
-        } catch (IOException e) {
-            logger.logWarning(e + "\nSomething went wrong while loading the picture to the game icons");
+        } catch (final IOException e) {
+            DebugLogger.INSTANCE.logWarning(e + "\nSomething went wrong while loading the picture to the game icons");
             return null;
         }
     }
@@ -105,14 +104,14 @@ public class GameLauncherController{
      */
     private void initializeListeners() {
         // For game icons so they start the game when clicked
-        for (JButton gameIcon : this.gameLauncherView.getGameIconsList()) {
+        for (final JButton gameIcon : this.gameLauncherView.getGameIconsList()) {
             this.gameLauncherView.addGameIconListeners(gameIcon, new GameIconListener(this.gameLauncherView, this.gameListModel));
         }
 
         // For scroll pane speed
-        this.gameLauncherView.addScrollPaneListener((MouseWheelEvent e) -> {
-            int notches = e.getWheelRotation();  // Gets the direction (1 or -1).
-            JScrollBar vertical = gameLauncherView.getScrollPane().getVerticalScrollBar();
+        this.gameLauncherView.addScrollPaneListener((final MouseWheelEvent e) -> {
+            final int notches = e.getWheelRotation();  // Gets the direction (1 or -1).
+            final JScrollBar vertical = gameLauncherView.getScrollPane().getVerticalScrollBar();
             // Sets the new position either up (-1) or down (1) depending on scroll direction.
             vertical.setValue(vertical.getValue() + (notches * AppConfigProject.SCROLL_SPEED_MULTIPLIER));
         });

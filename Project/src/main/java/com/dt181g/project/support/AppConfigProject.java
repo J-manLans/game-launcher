@@ -96,7 +96,7 @@ public final class AppConfigProject {
     public static final Color COLOR_SNAKE_GAME_APPLE = new Color(167, 56, 68);
 
     /** Number in apples body representing the color. */
-    public static final int COLOR_APPLE_INT = 2;
+    public static final int COLOR_CHERRY_INT = 2;
 
     /* ---------------------------------------
     Borders.
@@ -183,6 +183,13 @@ public final class AppConfigProject {
     /** Number of cells in the grid. */
     public static final int SNAKE_CELL_COUNT = 38;
 
+    /** Upper bounds number of maximum tics before spawning a new item. */
+	public static final int UPPER_SPAWNING_BOUND = 20;
+
+	public static final int SNAKE_TICK_DELAY = 100;
+
+
+
 /* ---------------------------------------
     Game assets.
     ------------------------------------------ */
@@ -229,6 +236,7 @@ public final class AppConfigProject {
 
     /** Magenta color. */
     public static final String ANSI_MAGENTA = DebugColor.MAGENTA.ansiCode;
+
 
 
     /**

@@ -117,9 +117,9 @@ public class SnakeController implements GameController, BaseController {
      */
     private void startGame() {
         // Grid initialization.
-        this.snakeGridModel.getSnakeModel().initializeSnake();
+        this.snakeGridModel.getSnakeModel().initializeSnake(AppConfigProject.SNAKE_ITEMS_PART_CONTENT);
+        this.snakeGridModel.getCherryModel().initializeCherry();
         this.snakeGridModel.overlayGameItemsOnGrid(this.snakeGridModel.getSnakeModel().getSnake());
-
         this.snakeView.startGame(this.snakeGridModel.getGameAssets());
 
         // Key listener for the game
@@ -129,14 +129,11 @@ public class SnakeController implements GameController, BaseController {
         this.restart = false;
 
         // Game loop.
-        this.gameLoop = new Timer(AppConfigProject.NUM_200, new ActionListener() {
+        this.gameLoop = new Timer(AppConfigProject.SNAKE_TICK_DELAY, new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!restart) {
                     snakeGridModel.updateGameGrid();
-                    snakeGridModel.getCherryModel().spawnApple();
-                    snakeGridModel.overlayGameItemsOnGrid(snakeGridModel.getSnakeModel().getSnake());
-                    snakeGridModel.overlayGameItemsOnGrid(snakeGridModel.getCherryModel().getCherry());
                     snakeView.updateGameGrid();
                 } else {
                     gameLoop.stop();
@@ -151,11 +148,8 @@ public class SnakeController implements GameController, BaseController {
     @Override
     public void closeGame() {
         this.stopGameLoop();
-
         this.removeListeners();
-
         this.snakeView.closeGameView();
-
         this.isRunning = false;
     }
 

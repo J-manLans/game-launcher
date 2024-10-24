@@ -34,7 +34,7 @@ public interface BaseView {
         labelToBtn.setBackground(borderAndHoverBackgroundClr); // Used for hovering effect.
         labelToBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        Border matteBorder = BorderFactory.createMatteBorder(
+        final Border matteBorder = BorderFactory.createMatteBorder(
             AppConfigProject.LABEL_BTN_OUTER_BORDER_WIDTH,
             AppConfigProject.LABEL_BTN_OUTER_BORDER_WIDTH,
             AppConfigProject.LABEL_BTN_OUTER_BORDER_WIDTH,
@@ -50,7 +50,7 @@ public interface BaseView {
      *
      * @param label the JLabel to style
      */
-    default void labelStyling(final JLabel label, int textSize, boolean snakeText) {
+    default void labelStyling(final JLabel label, final int textSize, final boolean snakeText) {
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         label.setFont(new Font("Monospace", Font.BOLD, textSize));
         label.setForeground(AppConfigProject.COLOR_WHITE);

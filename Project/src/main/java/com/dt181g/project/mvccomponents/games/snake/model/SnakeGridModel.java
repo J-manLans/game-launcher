@@ -35,13 +35,13 @@ public class SnakeGridModel implements GameModel {
     private final List<Object> gameAssets = new ArrayList<>();
     private final int[][] gameGrid = new int[gridSize][gridSize];
 
-    // Entities that resides in the grid.
+    // Entities that resides in the gameGrid.
     private final SnakeModel snake;
     private final CherryModel cherry;
 
     public SnakeGridModel() {
-        this.snake = new SnakeModel(gameGrid, AppConfigProject.SNAKE_ITEMS_PART_CONTENT);
         this.cherry = new CherryModel(gameGrid, AppConfigProject.SNAKE_ITEMS_PART_CONTENT);
+        this.snake = new SnakeModel(gameGrid, this.cherry);
     }
 
     /**
@@ -54,25 +54,31 @@ public class SnakeGridModel implements GameModel {
      * </p>
      */
     public void updateGameGrid() {
+        // Make taking input from keyboard possible again
         this.snake.setAllowChangesToDirection(true);
-        // Removes the old grid.
-        this.gameAssets.remove(gameGrid);
+
+        // Clears the grid and then draws the new items on it.
         this.snake.updateSnake();
-        // Clears the grid and then draws the new snake on it.
         this.clearGameGrid();
+        this.overlayGameItemsOnGrid(this.getSnakeModel().getSnake());
+        this.cherry.spawnCherry();
+        this.overlayGameItemsOnGrid(this.getCherryModel().getCherry());
     }
 
     /**
      * Helper method to overlay the snake and items on the grid.
      */
     public void overlayGameItemsOnGrid(int[][] gameItem) {
+        // Removes the old grid.
+        this.gameAssets.remove(gameGrid);
         switch (gameItem[0][2]) {
             case AppConfigProject.COLOR_SNAKE_INT -> {
                 placeItems(gameItem, AppConfigProject.COLOR_SNAKE_INT);
-            } case AppConfigProject.COLOR_APPLE_INT -> {
-                placeItems(gameItem, AppConfigProject.COLOR_APPLE_INT);
+            } case AppConfigProject.COLOR_CHERRY_INT -> {
+                placeItems(gameItem, AppConfigProject.COLOR_CHERRY_INT);
             }
         }
+        // Adds the updated grid.
         this.gameAssets.add(gameGrid);
     }
 

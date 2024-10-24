@@ -187,6 +187,7 @@ public class SnakeView extends JPanel implements GameView {
      */
     public void removeListeners() {
         this.startMenu.removeListeners();
+        this.singlePlayer.removeListeners();
         removeAllListenersFromButton(this.snakeBackBtn);
     }
 

@@ -17,17 +17,8 @@ import java.util.Random;
  *
  * @author Joel Lansgren
  */
-public class Producer implements Runnable {
-    private final ResourcePool resourcePool;
-
-    /**
-     * Constructs a Producer with the specified resource pool.
-     *
-     * @param resourcePool the {@link ResourcePool} singleton to which this producer will add resources.
-     */
-    Producer(final ResourcePool resourcePool) {
-        this.resourcePool = resourcePool;
-    }
+class Producer implements Runnable {
+    private final ResourcePool resourcePool = ResourcePool.INSTANCE;
 
     /**
      * The main execution method for the producer.
@@ -39,20 +30,20 @@ public class Producer implements Runnable {
      */
     @Override
     public void run() {
-        Random randomizer = new Random();
+        final Random randomizer = new Random();
 
         while (true) {
-            int resource = randomizer.nextInt(AppConfig.CONSUMER_MAX_ADD) + AppConfig.CLIENT_MIN_ADD;
-            resourcePool.modifyResources(resource);
+            final int resource = randomizer.nextInt(AppConfig.CONSUMER_MAX_ADD) + AppConfig.CLIENT_MIN_ADD;
+            this.resourcePool.modifyResources(resource);
 
             try {
                 Thread.sleep(randomizer.nextLong(AppConfig.CLIENTS_MAX_SLEEP) + AppConfig.CLIENTS_MIN_SLEEP);
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
                 synchronized (Thread.currentThread()) {  // Enters here when interrupt() is called
                     while (true) {  // Protects from spurious wakeup
                         try {
                             Thread.currentThread().wait();
-                        } catch (InterruptedException e1) {
+                        } catch (final InterruptedException e1) {
                             break;  // Breaks out when interrupt() is called
                         }
                     }
