@@ -16,7 +16,7 @@ import java.util.ArrayDeque;
  *
  * @author Joel Lansgren
  */
-public enum Manager {
+enum Manager {
     INSTANCE;
 
     // Thread lists
@@ -25,15 +25,15 @@ public enum Manager {
     private final ArrayDeque<Thread> waitingProducers = new ArrayDeque<>();
     private final ArrayDeque<Thread> waitingConsumers = new ArrayDeque<>();
 
-    private int producers = AppConfig.STARTING_PRODUCERS;  // These are the initial clients for the setup
-    private int consumers = AppConfig.STARTING_CONSUMERS;  // They will be modified continuously to update the GUI
-    final int largerQuantity = Math.max(producers, consumers);
     private final ResourcePool resourcePool = ResourcePool.INSTANCE;
     private final int startingPoolSize = resourcePool.pollForResource();
+    private int producers = AppConfig.STARTING_PRODUCERS;  // These are the initial number of clients for the setup
+    private int consumers = AppConfig.STARTING_CONSUMERS;  // They will be modified continuously to update the GUI
+    private final int largerQuantity = Math.max(producers, consumers);
     private int tempPoolSize = startingPoolSize;
     private int currentPoolSize;
-    private final Runnable producer = new Producer(resourcePool);
-    private final Runnable consumer = new Consumer(resourcePool);
+    private final Runnable producer = new Producer();
+    private final Runnable consumer = new Consumer();
 
      /**
      * Starts all threads that are managing the producers and consumers.
@@ -59,7 +59,7 @@ public enum Manager {
      * of the resource pool. It checks if the resource pool size has changed,
      * and if so, updates the clients and redraws the GUI components accordingly.
      */
-    void refreshGUI(ResourceFrame resourceFrame) {
+    void refreshGUI(final ResourceFrame resourceFrame) {
         this.currentPoolSize = resourcePool.pollForResource();
         if (this.currentPoolSize != this.tempPoolSize) {
             this.modifyClients();
@@ -160,7 +160,7 @@ public enum Manager {
      * counts of producers, consumers, and the current resource pool size, as well as
      * the circle representing the size of the resources.
      */
-    private void reDrawGUI(ResourceFrame resourceFrame) {
-        resourceFrame.refreshGUI(producers, currentPoolSize, consumers);
+    private void reDrawGUI(final ResourceFrame resourceFrame) {
+        resourceFrame.refreshGUI(this.producers, this.currentPoolSize, this.consumers);
     }
 }
