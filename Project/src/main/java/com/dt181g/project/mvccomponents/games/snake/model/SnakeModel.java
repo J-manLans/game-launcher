@@ -12,7 +12,7 @@ public class SnakeModel {
     private Boolean allowChangesToDirection = true;
     private Direction currentDirection;
     private final int[][] gameGrid;
-    private CherryModel cherry;
+    private final CherryModel cherry;
 
     protected SnakeModel(final int[][] gameGrid, final CherryModel cherry) {
         this.gameGrid = gameGrid;
@@ -86,7 +86,7 @@ public class SnakeModel {
      *
      * @param yOrX The index indicating if the movement is in the Y (0) or X (1) direction.
      */
-    private void moveSnakeHeadPosDirection(int yOrX) {
+    private void moveSnakeHeadPosDirection(final int yOrX) {
         // Move the head: wraps around if it reaches the end of the grid
         this.snake[headIndex][yOrX] =
         (this.snake[headIndex][yOrX] + 1)
@@ -99,7 +99,7 @@ public class SnakeModel {
      *
      * @param yOrX The index indicating if the movement is in the Y (0) or X (1) direction.
      */
-    private void moveSnakeHeadNegDirection(int yOrX) {
+    private void moveSnakeHeadNegDirection(final int yOrX) {
         // Move the head: wraps around if it reaches the beginning of the grid
         this.snake[headIndex][yOrX] =
         (this.snake[headIndex][yOrX] - 1 + this.gameGrid.length)
@@ -115,7 +115,7 @@ public class SnakeModel {
      * @param oldTailY The Y-coordinate of the previous tail position, used if the snake grows.
      * @param oldTailX The X-coordinate of the previous tail position, used if the snake grows.
      */
-    private void checkHeadCell(int y, int x, int oldTailY, int oldTailX) {
+    private void checkHeadCell(final int y, final int x, final int oldTailY, final int oldTailX) {
         switch (gameGrid[y][x]) {
             case AppConfigProject.COLOR_SNAKE_INT -> {
 
@@ -134,7 +134,7 @@ public class SnakeModel {
      * @param oldTailY The Y-coordinate of the previous tail position to be restored.
      * @param oldTailX The X-coordinate of the previous tail position to be restored.
      */
-    private void grow(int oldTailY, int oldTailX) {
+    private void grow(final int oldTailY, final int oldTailX) {
         expandedSnake = new int[snake.length + 1][AppConfigProject.SNAKE_ITEMS_PART_CONTENT];
 
         // Copies the snake array into the snakeTemp array
@@ -162,13 +162,16 @@ public class SnakeModel {
      * @param direction the new direction for the snake (must not be the opposite
      * of the current direction).
      */
-    public void setDirection(Direction direction) {
+    public void setDirection(final Direction direction, final boolean restart) {
         // Prevent illegal moves.
         if (
-            this.currentDirection == Direction.UP && direction == Direction.DOWN
-            || this.currentDirection == Direction.DOWN && direction == Direction.UP
-            || this.currentDirection == Direction.LEFT && direction == Direction.RIGHT
-            || this.currentDirection == Direction.RIGHT && direction == Direction.LEFT
+            (
+                this.currentDirection == Direction.UP && direction == Direction.DOWN
+                || this.currentDirection == Direction.DOWN && direction == Direction.UP
+                || this.currentDirection == Direction.LEFT && direction == Direction.RIGHT
+                || this.currentDirection == Direction.RIGHT && direction == Direction.LEFT
+            )
+            && !restart
         ) { return; }
 
         // Makes sure the updates have been reflected in the game grid before allowing changes
@@ -198,7 +201,7 @@ public class SnakeModel {
      * @param isGridUpdated A boolean indicating if the grid has been updated,
      *                      allowing or preventing direction changes.
      */
-    public void setAllowChangesToDirection(boolean isGridUpdated) {
+    public void setAllowChangesToDirection(final boolean isGridUpdated) {
         this.allowChangesToDirection = isGridUpdated;
     }
 }

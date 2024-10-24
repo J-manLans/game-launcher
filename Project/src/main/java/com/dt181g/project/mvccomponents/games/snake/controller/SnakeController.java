@@ -62,7 +62,6 @@ public class SnakeController implements GameController, BaseController {
         this.initializeListeners();
     }
 
-
     @Override
     public void initializeListeners() {
         // Button listeners
@@ -107,7 +106,7 @@ public class SnakeController implements GameController, BaseController {
         // stops the EDT thread from executing
         this.restart = true;
         // Set default direction of the snake
-        this.snakeGridModel.getSnakeModel().setDirection(AppConfigProject.RIGHT);
+        this.snakeGridModel.getSnakeModel().setDirection(AppConfigProject.RIGHT, restart);
 
         logger.logInfo(title + " has been initiated.\n");
     }
@@ -153,10 +152,6 @@ public class SnakeController implements GameController, BaseController {
         this.isRunning = false;
     }
 
-    private void removeListeners() {
-        this.snakeView.removeListeners();
-    }
-
     private void stopGameLoop() {
         if (gameLoop != null) {
             this.gameLoop.stop();
@@ -171,6 +166,10 @@ public class SnakeController implements GameController, BaseController {
     @Override
     public Timer getGameLoop() {
         return gameLoop;
+    }
+
+    private void removeListeners() {
+        this.snakeView.removeListeners();
     }
 
     @Override
