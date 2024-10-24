@@ -19,7 +19,7 @@ import java.awt.*;
  * ensuring that the display remains current with the latest producer, consumer, and resource pool information.
  * </p>
  */
-public class ResourceFrame extends JFrame{
+class ResourceFrame extends JFrame{
     // Left panel
     private final JPanel leftPanel = new JPanel();
     private final JLabel producerLabel = new JLabel();
@@ -132,7 +132,7 @@ public class ResourceFrame extends JFrame{
      * counts of producers, consumers, and the current resource pool size, as well as
      * the circle representing the size of the resources.
      */
-    void refreshGUI(int producers, int currentPoolSize, int consumers) {
+    void refreshGUI(final int producers, final int currentPoolSize, final int consumers) {
         this.producerCount.setText(Integer.toString(producers));
         this.resourceLabel.setText(Integer.toString(currentPoolSize));
         centerPanel.drawCircle(currentPoolSize);
@@ -193,8 +193,8 @@ public class ResourceFrame extends JFrame{
         @Override
         protected void paintComponent(final Graphics g) {
             super.paintComponent(g);
-            int x = (getWidth() / 2) - (this.circleDiameter / 2);
-            int y = (getHeight() / 2) - (this.circleDiameter / 2);
+            final int x = (getWidth() / 2) - (this.circleDiameter / 2);
+            final int y = (getHeight() / 2) - (this.circleDiameter / 2);
             g.setColor(circleColor);
             g.fillOval(x, y, this.circleDiameter, this.circleDiameter);
         }
