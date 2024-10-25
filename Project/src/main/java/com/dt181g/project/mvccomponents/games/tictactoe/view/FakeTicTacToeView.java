@@ -1,7 +1,6 @@
 package com.dt181g.project.mvccomponents.games.tictactoe.view;
 
 import java.awt.event.MouseAdapter;
-import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;

@@ -1,7 +1,5 @@
 package com.dt181g.project.mvccomponents.games;
 
-import java.util.List;
-
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 

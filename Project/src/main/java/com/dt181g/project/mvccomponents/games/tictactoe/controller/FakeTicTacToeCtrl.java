@@ -92,13 +92,11 @@ public class FakeTicTacToeCtrl implements GameController {
 
     @Override
     public JLabel getQuitBtn() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getQuitBtn'");
     }
 
     @Override
     public void addQuitBtnListener(MouseAdapter menuButtonListener) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'addQuitBtnListener'");
     }
 }

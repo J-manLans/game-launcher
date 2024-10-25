@@ -1,7 +1,5 @@
 package com.dt181g.project.mvccomponents.games.snake.model;
 
-import java.util.Arrays;
-
 import com.dt181g.project.support.AppConfigProject;
 import com.dt181g.project.support.AppConfigProject.Direction;
 
@@ -39,8 +37,8 @@ public class SnakeModel extends SnakeGridModel {
      * This method triggers the movement of the snake by calling the {@code moveSnake()} method.
      * Called during each game update to advance the snake's position.
      */
-    protected void updateSnake(SnakeBoostersModel booster) {
-        moveSnake(booster);
+    protected void updateSnake(int[][] gameGrid, SnakeBoostersModel booster) {
+        moveSnake(gameGrid, booster);
     }
 
     /**
@@ -48,7 +46,7 @@ public class SnakeModel extends SnakeGridModel {
      * Adjusts the body first and then moves the head according to the direction.
      * After moving, it checks the cell the head has moved into for its content.
      */
-    private void moveSnake(SnakeBoostersModel booster) {
+    private void moveSnake(int[][] gameGrid, SnakeBoostersModel booster) {
         this.moveSnakeBody();
 
         switch (this.currentDirection) {
@@ -58,7 +56,7 @@ public class SnakeModel extends SnakeGridModel {
             case RIGHT -> { this.moveSnakeHeadPosDirection(1); }
         }
 
-        checkHeadCell(this.snake[headIndex][0], this.snake[headIndex][1], snake[0][0], snake[0][1], booster);
+        checkHeadCell(this.snake[headIndex][0], this.snake[headIndex][1], snake[0][0], snake[0][1], gameGrid, booster);
     }
 
     /**
@@ -110,9 +108,8 @@ public class SnakeModel extends SnakeGridModel {
      * @param oldTailY The Y-coordinate of the previous tail position, used if the snake grows.
      * @param oldTailX The X-coordinate of the previous tail position, used if the snake grows.
      */
-    private void checkHeadCell(final int headY, final int headX, final int oldTailY, final int oldTailX, SnakeBoostersModel booster) {
-        System.out.println("GameGrid: " + Arrays.deepToString(super.gameGrid));
-        switch (super.gameGrid[headY][headX]) {
+    private void checkHeadCell(final int headY, final int headX, final int oldTailY, final int oldTailX, int[][] gameGrid, SnakeBoostersModel booster) {
+        switch (gameGrid[headY][headX]) {
             case AppConfigProject.COLOR_SNAKE_INT -> {
 
             }

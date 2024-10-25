@@ -1,7 +1,6 @@
 package com.dt181g.project.mvccomponents.games.snake.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.dt181g.project.mvccomponents.games.GameModel;
@@ -54,11 +53,11 @@ public class SnakeGridModel implements GameModel {
         snakeModel.setAllowChangesToDirection(true);
 
         // Clears the grid and then draws the new items on it.
+        snakeModel.updateSnake(gameGrid, cherryModel);
         this.clearGameGrid();
+        this.overlayGameItemsOnGrid(snakeModel.getSnake());
         cherryModel.spawnCherry();
         this.overlayGameItemsOnGrid(cherryModel.getCherry());
-        snakeModel.updateSnake(cherryModel);
-        this.overlayGameItemsOnGrid(snakeModel.getSnake());
     }
 
     /**
@@ -131,5 +130,9 @@ public class SnakeGridModel implements GameModel {
     @Override
     public String getIconPath() {
        return iconPath;
+    }
+
+    public int[][] getGameGrid() {
+        return gameGrid;
     }
 }

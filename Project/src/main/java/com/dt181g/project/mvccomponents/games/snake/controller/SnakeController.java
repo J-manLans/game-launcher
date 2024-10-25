@@ -126,7 +126,7 @@ public class SnakeController implements GameController {
         this.singlePlayerView.addSnakeBackBtnListener(
             new MenuButtonListener(
                 this.singlePlayerView.getSnakeBackBtn(),
-                this.snakeMainView::showStartMenu
+                this::initiateGame
             )
         );
 
