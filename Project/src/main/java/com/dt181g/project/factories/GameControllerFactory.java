@@ -21,5 +21,5 @@ public interface GameControllerFactory {
      * @param gameModel the {@link GameModel} instance associated with this controller.
      * @return a new instance of {@link GameController} configured with the provided parameters.
      */
-    GameController create(String title, GameView gameView, GameModel gameModel);
+    GameController create(GameView gameView, GameModel gameModel);
 }

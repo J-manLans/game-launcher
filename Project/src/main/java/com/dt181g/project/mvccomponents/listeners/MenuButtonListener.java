@@ -12,6 +12,7 @@ public class MenuButtonListener extends MouseAdapter {
     private final Runnable action;
 
     public MenuButtonListener(final JLabel button, final Runnable action) {
+        System.err.println("listener attached to " + button.getText());
         this.button = button;
         this.action = action;
     }
@@ -23,26 +24,26 @@ public class MenuButtonListener extends MouseAdapter {
      * @param isHovered true if the button is hovered, false otherwise
      */
     public void updateButtonAppearance(final boolean isHovered) {
-        button.setOpaque(isHovered);
-        button.setForeground(isHovered ? AppConfigProject.COLOR_DARKER_GREY : AppConfigProject.COLOR_WHITE);
+        this.button.setOpaque(isHovered);
+        this.button.setForeground(isHovered ? AppConfigProject.COLOR_DARKER_GREY : AppConfigProject.COLOR_WHITE);
     }
 
     @Override
     public void mousePressed(final MouseEvent e) {
         // Makes sure the label button is transparent and has
         // the right text color on the next startup.
-        button.setOpaque(false);
-        button.setForeground(AppConfigProject.COLOR_WHITE);
-        action.run();
+        this.button.setOpaque(false);
+        this.button.setForeground(AppConfigProject.COLOR_WHITE);
+        this.action.run();
     }
 
     @Override
     public void mouseEntered(final MouseEvent e) {
-        updateButtonAppearance(true);
+        this.updateButtonAppearance(true);
     }
 
     @Override
     public void mouseExited(final MouseEvent e) {
-        updateButtonAppearance(false);
+        this.updateButtonAppearance(false);
     }
 }

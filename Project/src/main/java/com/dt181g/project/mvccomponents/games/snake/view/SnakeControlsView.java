@@ -2,17 +2,18 @@ package com.dt181g.project.mvccomponents.games.snake.view;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import com.dt181g.project.support.AppConfigProject;
 
-public class SnakeControlsView extends JPanel{
+public class SnakeControlsView extends SnakeMainView {
     private final GridBagConstraints gbc = new GridBagConstraints();
-    private final SnakeMainView snakeView;
     private final JLabel controlsMainLabel = new JLabel("CONTROLS:");
     private final JLabel controlsSubLabel = new JLabel("W,S,A,D or arrow keys to move the snake around");
+    private final JLabel snakeBackBtn = new JLabel("Back");
+
 
     /**
      * Displays the controls menu for the game.
@@ -24,14 +25,12 @@ public class SnakeControlsView extends JPanel{
      * </p>
      * @param snakeView the main snake view
      */
-    protected SnakeControlsView(final SnakeMainView snakeView) {
+    public SnakeControlsView() {
         this.setLayout(new GridBagLayout());
 
-        // Initiate components
-        this.snakeView = snakeView;
-
-        this.snakeView.labelStyling(controlsMainLabel, AppConfigProject.TEXT_HEADING_2, false);
-        this.snakeView.labelStyling(controlsSubLabel, AppConfigProject.TEXT_SIZE_NORMAL, false);
+        labelStyling(controlsMainLabel, AppConfigProject.TEXT_HEADING_2, false);
+        labelStyling(controlsSubLabel, AppConfigProject.TEXT_SIZE_NORMAL, false);
+        labelBtn(this.snakeBackBtn, AppConfigProject.COLOR_WHITE);
 
         this.gbc.insets = AppConfigProject.INSET_BOTTOM_20;
 
@@ -40,6 +39,10 @@ public class SnakeControlsView extends JPanel{
 
         this.gbc.gridy++;
         this.add(controlsSubLabel, gbc);
+
+        this.gbc.gridy++;
+        this.add(this.snakeBackBtn, gbc);
+        this.gbc.insets = AppConfigProject.RESET_INSETS;
 
         this.setBackground(AppConfigProject.COLOR_DARKER_GREY);
         this.setBorder(AppConfigProject.CONTROLS_BORDER);
@@ -51,8 +54,34 @@ public class SnakeControlsView extends JPanel{
      * the button appears in the correct position.
      */
     protected void setBackBtn() {
-        this.gbc.gridy++;
-        this.add(snakeView.getSnakeBackBtn(), gbc);
-        this.gbc.insets = AppConfigProject.RESET_INSETS;
+        System.err.println("adds button to controls" + snakeBackBtn.toString());
+    }
+
+    /**
+     * Adds a mouse listener to the back button in the controls menu.
+     *
+     * @param controlsBackBtnListener The mouse listener to be added to the back button,
+     * allowing for interaction when the button is clicked.
+     */
+    public void addSnakeBackBtnListener(final MouseAdapter controlsBackBtnListener) {
+        this.snakeBackBtn.addMouseListener(controlsBackBtnListener);
+    }
+
+    /**
+     * Removes all mouse listeners from the game control buttons.
+     * This method iterates through each button and removes any attached mouse listeners,
+     * ensuring that no event handlers remain active on these buttons.
+     */
+    public void removeListeners() {
+        super.removeAllListenersFromButton(this.snakeBackBtn);
+    }
+
+    /**
+     * Returns the back button in the controls menu.
+     *
+     * @return The JLabel representing the back button.
+     */
+    public JLabel getSnakeBackBtn() {
+        return this.snakeBackBtn;
     }
 }

@@ -17,10 +17,10 @@ public class SnakeMovementListener extends KeyAdapter {
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_W -> this.controller.getSnakeGridModel().getSnakeModel().setDirection(AppConfigProject.UP, restart);
-            case KeyEvent.VK_S -> this.controller.getSnakeGridModel().getSnakeModel().setDirection(AppConfigProject.DOWN, restart);
-            case KeyEvent.VK_A -> this.controller.getSnakeGridModel().getSnakeModel().setDirection(AppConfigProject.LEFT, restart);
-            case KeyEvent.VK_D -> this.controller.getSnakeGridModel().getSnakeModel().setDirection(AppConfigProject.RIGHT, restart);
+            case KeyEvent.VK_W -> this.controller.getSnakeModel().setDirection(AppConfigProject.UP, restart);
+            case KeyEvent.VK_S -> this.controller.getSnakeModel().setDirection(AppConfigProject.DOWN, restart);
+            case KeyEvent.VK_A -> this.controller.getSnakeModel().setDirection(AppConfigProject.LEFT, restart);
+            case KeyEvent.VK_D -> this.controller.getSnakeModel().setDirection(AppConfigProject.RIGHT, restart);
         }
     }
 }

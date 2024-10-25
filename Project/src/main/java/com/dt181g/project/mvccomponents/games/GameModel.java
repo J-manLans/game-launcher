@@ -21,5 +21,5 @@ public interface GameModel {
      *
      * @return A {@code String} containing the title of the game.
      */
-   String getTitle();
+   String getGameTitle();
 }

@@ -10,23 +10,11 @@ import com.dt181g.project.support.AppConfigProject;
  * It manages the spawning, position, and state of the cherry.
  * @author Joel Lansgren
  */
-public class CherryModel {
-    private final int[][] cherry;
+public class CherryModel extends SnakeBoostersModel {
+    private final int[][] cherry = new int[1][AppConfigProject.SNAKE_ITEMS_PART_CONTENT];
     private final Random randomizer = new Random();
     private int spawnCountDown;
     private boolean isCherry;
-    private int[][] gameGrid;
-
-    /**
-     * Constructs a CherryModel object.
-     *
-     * @param gameGrid The 2D array representing the game grid.
-     * @param itemParts The number of parts for the cherry (e.g., coordinates, color).
-     */
-    protected CherryModel(final int[][] gameGrid, int itemParts) {
-        this.gameGrid = gameGrid;
-        this.cherry = new int[1][itemParts];
-    }
 
     /**
      * Initializes the cherry on startup.
@@ -59,7 +47,8 @@ public class CherryModel {
     /**
      * Utilizes the initiate method to simulate eating.
      */
-    protected void eatCherry() {
+    @Override
+    protected void eatBooster() {
         this.initializeCherry();
     }
 

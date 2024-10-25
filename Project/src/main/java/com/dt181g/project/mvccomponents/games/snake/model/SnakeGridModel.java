@@ -1,6 +1,7 @@
 package com.dt181g.project.mvccomponents.games.snake.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.dt181g.project.mvccomponents.games.GameModel;
@@ -29,19 +30,14 @@ public class SnakeGridModel implements GameModel {
     // Remove when game functionality is implemented
     DebugLogger logger = DebugLogger.INSTANCE;
 
-    private final String title = AppConfigProject.SNAKE_TITLE;
+    private final String gameTitle = AppConfigProject.SNAKE_TITLE;
     private final String iconPath = AppConfigProject.PATH_TO_ICONS + AppConfigProject.SNAKE_ICON;
     private final int gridSize = AppConfigProject.SNAKE_CELL_COUNT;
     private final List<Object> gameAssets = new ArrayList<>();
-    private final int[][] gameGrid = new int[gridSize][gridSize];
-
-    // Entities that resides in the gameGrid.
-    private final SnakeModel snake;
-    private final CherryModel cherry;
+    final int[][] gameGrid = new int[gridSize][gridSize];
 
     public SnakeGridModel() {
-        this.cherry = new CherryModel(gameGrid, AppConfigProject.SNAKE_ITEMS_PART_CONTENT);
-        this.snake = new SnakeModel(gameGrid, this.cherry);
+        this.gameAssets.add(gameGrid);
     }
 
     /**
@@ -53,16 +49,16 @@ public class SnakeGridModel implements GameModel {
      * state of the snake grid and redraws the snake in its new position.
      * </p>
      */
-    public void updateGameGrid() {
+    public void updateGameGrid(SnakeModel snakeModel, CherryModel cherryModel) {
         // Make taking input from keyboard possible again
-        this.snake.setAllowChangesToDirection(true);
+        snakeModel.setAllowChangesToDirection(true);
 
         // Clears the grid and then draws the new items on it.
-        this.snake.updateSnake();
         this.clearGameGrid();
-        this.overlayGameItemsOnGrid(this.getSnakeModel().getSnake());
-        this.cherry.spawnCherry();
-        this.overlayGameItemsOnGrid(this.getCherryModel().getCherry());
+        cherryModel.spawnCherry();
+        this.overlayGameItemsOnGrid(cherryModel.getCherry());
+        snakeModel.updateSnake(cherryModel);
+        this.overlayGameItemsOnGrid(snakeModel.getSnake());
     }
 
     /**
@@ -70,24 +66,24 @@ public class SnakeGridModel implements GameModel {
      */
     public void overlayGameItemsOnGrid(int[][] gameItem) {
         // Removes the old grid.
-        this.gameAssets.remove(gameGrid);
+        this.gameAssets.remove(this.gameGrid);
         switch (gameItem[0][2]) {
             case AppConfigProject.COLOR_SNAKE_INT -> {
-                placeItems(gameItem, AppConfigProject.COLOR_SNAKE_INT);
+                placeItems(gameItem);
             } case AppConfigProject.COLOR_CHERRY_INT -> {
-                placeItems(gameItem, AppConfigProject.COLOR_CHERRY_INT);
+                placeItems(gameItem);
             }
         }
         // Adds the updated grid.
-        this.gameAssets.add(gameGrid);
+        this.gameAssets.add(this.gameGrid);
     }
 
     /**
      * Helper method to place items on the grid.
      */
-    private void placeItems(int[][] gameItem, int color) {
+    private void placeItems(int[][] gameItem) {
         for (int[] part : gameItem) {
-            this.gameGrid[part[0]][part[1]] = color;
+            this.gameGrid[part[0]][part[1]] = part[2];
         }
     }
 
@@ -116,8 +112,8 @@ public class SnakeGridModel implements GameModel {
      *
      * @return the title of the snake game.
      */
-    public String getTitle() {
-        return this.title;
+    public String getGameTitle() {
+        return this.gameTitle;
     }
 
     /**
@@ -126,14 +122,6 @@ public class SnakeGridModel implements GameModel {
      */
     public List<Object> getGameAssets() {
         return gameAssets;
-    }
-
-    public SnakeModel getSnakeModel() {
-        return snake;
-    }
-
-    public CherryModel getCherryModel() {
-        return cherry;
     }
 
     /**

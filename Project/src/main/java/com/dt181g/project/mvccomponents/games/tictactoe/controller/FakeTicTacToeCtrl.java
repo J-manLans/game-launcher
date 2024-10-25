@@ -11,6 +11,7 @@ import com.dt181g.project.mvccomponents.games.GameModel;
 import com.dt181g.project.mvccomponents.games.GameView;
 import com.dt181g.project.mvccomponents.games.tictactoe.model.FakeTicTacToeModel;
 import com.dt181g.project.mvccomponents.games.tictactoe.view.FakeTicTacToeView;
+import com.dt181g.project.support.AppConfigProject;
 import com.dt181g.project.support.DebugLogger;
 
 /**
@@ -28,7 +29,7 @@ public class FakeTicTacToeCtrl implements GameController {
     DebugLogger logger = DebugLogger.INSTANCE;
     private final FakeTicTacToeView ticTacToeView;
     private final FakeTicTacToeModel ticTacToeModel;
-    private final String title;
+    private final String gameTitle = AppConfigProject.TIC_TAC_TOE_TITLE;
     private Timer gameLoop = new Timer(0, null);
     private boolean isRunning = true;
 
@@ -39,10 +40,9 @@ public class FakeTicTacToeCtrl implements GameController {
      * @param ticTacToePanelView the view representing the Tic Tac Toe game
      * @param ticTacToeModel the model representing the game's state
      */
-    public FakeTicTacToeCtrl(final String title, final GameView ticTacToeView, final GameModel ticTacToeModel) {
+    public FakeTicTacToeCtrl(final GameView ticTacToeView, final GameModel ticTacToeModel) {
         this.ticTacToeView = (FakeTicTacToeView) ticTacToeView;
         this.ticTacToeModel = (FakeTicTacToeModel) ticTacToeModel;
-        this.title = title;
 
         this.initializeListeners();
     }
@@ -59,15 +59,15 @@ public class FakeTicTacToeCtrl implements GameController {
      */
     @Override
     public void initiateGame() {
-        this.ticTacToeView.ShowStartMenu();
-        logger.logInfo(title +
+        this.ticTacToeView.showStartMenu();
+        logger.logInfo(gameTitle +
             " has been initiated.\n"
         );
     }
 
     @Override
-    public String getTitle() {
-        return title;
+    public String getGameTitle() {
+        return gameTitle;
     }
 
     @Override

@@ -5,14 +5,11 @@ import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import com.dt181g.project.support.AppConfigProject;
 
-
-public class SnakeStartMenuView extends JPanel {
+public class SnakeStartMenuView extends SnakeMainView {
     private final GridBagConstraints gbc = new GridBagConstraints();
-    private final SnakeMainView snakeView;
     private final JLabel startBtn = new JLabel("Start Game");
     private final JLabel multiplayerBtn = new JLabel("Multiplayer");
     private final JLabel settingsBtn = new JLabel("Settings");
@@ -27,15 +24,14 @@ public class SnakeStartMenuView extends JPanel {
      * to allow the user to start the game, access multiplayer, settings, and controls.
      * </p>
      */
-    public SnakeStartMenuView(SnakeMainView snakeView) {
+    public SnakeStartMenuView() {
         this.setLayout(new GridBagLayout());
-        this.snakeView = snakeView;
 
-        this.snakeView.labelBtn(startBtn, AppConfigProject.COLOR_WHITE);
-        this.snakeView.labelBtn(multiplayerBtn, AppConfigProject.COLOR_DARK_GREY);
-        this.snakeView.labelBtn(settingsBtn, AppConfigProject.COLOR_DARK_GREY);
-        this.snakeView.labelBtn(controlsBtn, AppConfigProject.COLOR_WHITE);
-        this.snakeView.labelBtn(quitBtn, AppConfigProject.COLOR_WHITE);
+        super.labelBtn(startBtn, AppConfigProject.COLOR_WHITE);
+        super.labelBtn(multiplayerBtn, AppConfigProject.COLOR_DARK_GREY);
+        super.labelBtn(settingsBtn, AppConfigProject.COLOR_DARK_GREY);
+        super.labelBtn(controlsBtn, AppConfigProject.COLOR_WHITE);
+        super.labelBtn(quitBtn, AppConfigProject.COLOR_WHITE);
 
         // Adds and place the components on the grid.
         this.gbc.gridy = 1;
@@ -118,11 +114,11 @@ public class SnakeStartMenuView extends JPanel {
         this.quitBtn.addMouseListener(quitBtnListener);
     }
 
-    protected void removeListeners() {
-        this.snakeView.removeAllListenersFromButton(this.startBtn);
-        this.snakeView.removeAllListenersFromButton(this.multiplayerBtn);
-        this.snakeView.removeAllListenersFromButton(this.settingsBtn);
-        this.snakeView.removeAllListenersFromButton(this.quitBtn);
+    public void removeListeners() {
+        super.removeAllListenersFromButton(this.startBtn);
+        super.removeAllListenersFromButton(this.multiplayerBtn);
+        super.removeAllListenersFromButton(this.settingsBtn);
+        super.removeAllListenersFromButton(this.quitBtn);
     }
 
     /*==============================

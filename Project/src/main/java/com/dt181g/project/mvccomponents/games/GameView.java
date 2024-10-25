@@ -3,7 +3,6 @@ package com.dt181g.project.mvccomponents.games;
 import java.util.List;
 
 import javax.swing.JPanel;
-import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
 import com.dt181g.project.mvccomponents.BaseView;
@@ -22,20 +21,20 @@ public interface GameView extends BaseView {
      * Starts the game with the provided game model and title.
      * @param gameAssets a list of assorted assets from the game model to the view
      */
-    void startGame(List<Object> gameAssets);
+    void showGame();
 
     /**
      * Resets the game view to its initial state.
      * This method should clear any previous game data and prepare
      * the view for a new game session.
      */
-    void ShowStartMenu();
+    void showStartMenu();
 
     /**
-     * Retrieves the title of the game.     *
+     * Retrieves the title of the game.
      * @return A String representing the title of the game.
      */
-    String getTitle();
+    String getGameTitle();
 
     /**
      * Sets the game panel that holds the game views.

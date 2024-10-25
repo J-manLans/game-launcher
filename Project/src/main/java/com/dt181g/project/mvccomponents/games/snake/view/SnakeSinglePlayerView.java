@@ -5,30 +5,32 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.dt181g.project.mvccomponents.games.listeners.SnakeMovementListener;
 import com.dt181g.project.support.AppConfigProject;
 import com.dt181g.project.support.DebugLogger;
 
-public class SnakeSinglePlayerView extends JPanel{
+public class SnakeSinglePlayerView extends SnakeMainView {
     private final GridBagConstraints gbc = new GridBagConstraints();
-    private final SnakeMainView snakeView;
     private JPanel snakeGrid;
     private JPanel[][] snakeGridCells;
-    private List<Object> gameAssets;
     private int[][] modelGameGrid;
+    private final JLabel snakeBackBtn = new JLabel("Back");
 
-    public SnakeSinglePlayerView(final SnakeMainView snakeView) {
+
+    public SnakeSinglePlayerView() {
         this.setLayout(new GridBagLayout());
-        this.snakeView = snakeView;
         this.setBackground(AppConfigProject.COLOR_DARKER_GREY);
+        labelBtn(this.snakeBackBtn, AppConfigProject.COLOR_WHITE);
     }
 
-    protected void startGame() {
+    public void startGame() {
         if (this.snakeGrid == null) {
             this.snakeGrid = new JPanel(new GridLayout(this.modelGameGrid.length, this.modelGameGrid.length));
             this.snakeGrid.setPreferredSize(AppConfigProject.SNAKE_GRID_SIZE);
@@ -41,7 +43,8 @@ public class SnakeSinglePlayerView extends JPanel{
 
             this.gbc.gridy++;
             this.gbc.insets = AppConfigProject.RESET_INSETS;
-            this.add(this.snakeView.getSnakeBackBtn(), gbc);
+            this.add(this.snakeBackBtn, gbc);
+
         }
 
         // Setting up the snake grid
@@ -103,9 +106,8 @@ public class SnakeSinglePlayerView extends JPanel{
      * Sets the list with the snakes current position in the grid.
      * @param gameAssets a list containing a 2D int array representing the snakes position in the grid
      */
-    protected void setGameAssets(List<Object> gameAssets) {
-        this.gameAssets = gameAssets;
-        for (Object asset : this.gameAssets) {
+    public void setGameAssets(List<Object> gameAssets) {
+        for (Object asset : gameAssets) {
             if (asset instanceof int[][]) {
                 this.modelGameGrid = (int[][]) asset;
             }
@@ -116,16 +118,35 @@ public class SnakeSinglePlayerView extends JPanel{
      * Listeners
      ========================*/
 
+    /**
+     * Adds a mouse listener to the back button in the controls menu.
+     *
+     * @param controlsBackBtnListener The mouse listener to be added to the back button,
+     * allowing for interaction when the button is clicked.
+     */
+    public void addSnakeBackBtnListener(final MouseAdapter controlsBackBtnListener) {
+        this.snakeBackBtn.addMouseListener(controlsBackBtnListener);
+    }
+
     public void addSnakeKeyListener(SnakeMovementListener snakeKeyListener) {
         this.snakeGrid.addKeyListener(snakeKeyListener);
         this.snakeGrid.requestFocusInWindow();
     }
 
-    protected void removeListeners() {
+    public void removeListeners() {
         if (this.snakeGrid != null) {
             for (KeyListener listener : this.snakeGrid.getKeyListeners()) {
                 this.snakeGrid.removeKeyListener(listener);
             }
         }
+    }
+
+    /**
+     * Returns the back button in the controls menu.
+     *
+     * @return The JLabel representing the back button.
+     */
+    public JLabel getSnakeBackBtn() {
+        return this.snakeBackBtn;
     }
 }

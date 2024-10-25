@@ -48,18 +48,18 @@ public class GameListModel {
 
     /**
      * Starts the game clicked in the games list in the launcher.
-     * @param game the clicked games title.
+     * @param gameTitle the clicked games title.
      */
-    public void startGame(final String game) {
-        switch (game) {
+    public void startGame(final String gameTitle) {
+        switch (gameTitle) {
             case AppConfigProject.SNAKE_TITLE -> {
-                this.instantiateViewAndController(SnakeGridModel::new, SnakeMainView::new, SnakeController::new, game);
+                this.instantiateGame(SnakeGridModel::new, SnakeMainView::new, SnakeController::new, gameTitle);
             } case AppConfigProject.TIC_TAC_TOE_TITLE -> {
-                this.instantiateViewAndController(FakeTicTacToeModel::new, FakeTicTacToeView::new, FakeTicTacToeCtrl::new, game);
+                this.instantiateGame(FakeTicTacToeModel::new, FakeTicTacToeView::new, FakeTicTacToeCtrl::new, gameTitle);
             }
         }
 
-        DebugLogger.INSTANCE.logWarning(game + " has been instantiated.");
+        DebugLogger.INSTANCE.logWarning(gameTitle + " has been instantiated.");
     }
 
     /**
@@ -71,31 +71,31 @@ public class GameListModel {
      * In this case it's a method reference to a game views constructor.
      * @param gameControllerFactory A functional interface used to create the game controller.
      * In this case it's a method reference to a game controllers constructor.
-     * @param title The title of the game, which is used for initializing both the view and the controller.
+     * @param gameTitle The title of the game, which is used for initializing both the view and the controller.
      */
-    private void instantiateViewAndController(
+    private void instantiateGame(
         final GameModelFactory gameModelFactory,
         final GameViewFactory gameViewFactory,
         final GameControllerFactory gameControllerFactory,
-        final String title
+        final String gameTitle
     ) {
         this.gameModels.add(gameModelFactory.create());
         this.gameViews.add(gameViewFactory.create());
         this.gameControllers.add(
-            gameControllerFactory.create(title, this.getGameView(title), this.getGameModel(title))
+            gameControllerFactory.create(this.getGameView(gameTitle), this.getGameModel(gameTitle))
         );
     }
 
     /**
      * Clears each game list since a new one is about to be re-instantiated.
-     * @param game the games title.
+     * @param gameTitle the games title.
      */
-    public void removeGame(final String game) {
+    public void removeGame(final String gameTitle) {
         this.gameModels.clear();
         this.gameViews.clear();
         this.gameControllers.clear();
 
-        DebugLogger.INSTANCE.logWarning(game + " has been removed\n");
+        DebugLogger.INSTANCE.logWarning(gameTitle + " has been removed\n");
     }
 
     /**
@@ -128,16 +128,16 @@ public class GameListModel {
      * <p>
      * If the title isn't present null is returned.
      * </p>
-     * @param title the title of the game to retrieve the model for.
+     * @param gameTitle the title of the game to retrieve the model for.
      * @return the GameModel associated with the title, or null if not found.
      */
-    public GameModel getGameModel(final String title) {
+    public GameModel getGameModel(final String gameTitle) {
         // As of now the list always contain only one element.
         // But for the project this will change since I will
         // initiate all games in this class constructor so I can
         // fetch the images and icons from them.
         return gameModels.stream()
-        .filter(gameModel -> gameModel.getTitle().equals(title))
+        .filter(gameModel -> gameModel.getGameTitle().equals(gameTitle))
         .findFirst()
         .orElse(null);
     }
@@ -150,16 +150,16 @@ public class GameListModel {
      * the provided title. If a matching game view is found, it is returned; otherwise,
      * this method returns null.
      * </p>
-     * @param title the title of the game to retrieve the view for.
+     * @param gameTitle the title of the game to retrieve the view for.
      * @return the view associated with the title, or null if not found.
      */
-    public GameView getGameView(final String title) {
+    public GameView getGameView(final String gameTitle) {
         // As of now the list always contain only one element.
         // But for the project this will change since I will
         // initiate all games in this class constructor so I can
         // fetch the images and icons from them.
         return gameViews.stream()
-        .filter(gameView -> gameView.getTitle().equals(title))
+        .filter(gameView -> gameView.getGameTitle().equals(gameTitle))
         .findFirst()
         .orElse(null);
     }
@@ -172,16 +172,16 @@ public class GameListModel {
      * the provided title. If a matching game controller is found, it is returned; otherwise,
      * this method returns null.
      * </p>
-     * @param title the title of the game to retrieve the view for.
+     * @param gameTitle the title of the game to retrieve the view for.
      * @return the controller associated with the title, or null if not found.
      */
-    public GameController getGameController(final String title) {
+    public GameController getGameController(final String gameTitle) {
         // As of now the list always contain only one element.
         // But for the project this will change since I will
         // initiate all games in this class constructor so I can
         // fetch the images and icons from them.
         return gameControllers.stream()
-        .filter(gameController -> gameController.getTitle().equals(title))
+        .filter(gameController -> gameController.getGameTitle().equals(gameTitle))
         .findFirst()
         .orElse(null);
     }

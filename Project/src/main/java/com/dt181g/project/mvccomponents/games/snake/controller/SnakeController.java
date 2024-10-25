@@ -1,13 +1,19 @@
 package com.dt181g.project.mvccomponents.games.snake.controller;
 
 import com.dt181g.project.mvccomponents.listeners.MenuButtonListener;
-import com.dt181g.project.mvccomponents.BaseController;
+import com.dt181g.project.factories.GameModelFactory;
+import com.dt181g.project.factories.GameViewFactory;
 import com.dt181g.project.mvccomponents.games.GameController;
 import com.dt181g.project.mvccomponents.games.GameModel;
 import com.dt181g.project.mvccomponents.games.GameView;
 import com.dt181g.project.mvccomponents.games.listeners.SnakeMovementListener;
+import com.dt181g.project.mvccomponents.games.snake.model.CherryModel;
 import com.dt181g.project.mvccomponents.games.snake.model.SnakeGridModel;
+import com.dt181g.project.mvccomponents.games.snake.model.SnakeModel;
+import com.dt181g.project.mvccomponents.games.snake.view.SnakeControlsView;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeMainView;
+import com.dt181g.project.mvccomponents.games.snake.view.SnakeMultiplayerView;
+import com.dt181g.project.mvccomponents.games.snake.view.SnakeSettingsView;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeSinglePlayerView;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeStartMenuView;
 import com.dt181g.project.support.AppConfigProject;
@@ -40,34 +46,64 @@ import javax.swing.Timer;
  *
  * @author Joel Lansgren
  */
-public class SnakeController implements GameController, BaseController {
-    DebugLogger logger = DebugLogger.INSTANCE;
+public class SnakeController implements GameController {
 
-    private final SnakeMainView snakeView;
+    private final String gameTitle = AppConfigProject.SNAKE_TITLE;
+
+    private final SnakeMainView snakeMainView;
+    private SnakeStartMenuView startMenuView;
+    private SnakeSinglePlayerView singlePlayerView;
+    private SnakeMultiplayerView multiplayerView;
+    private SnakeSettingsView settingsView;
+    private SnakeControlsView controlsView;
     private final SnakeGridModel snakeGridModel;
-    private final SnakeStartMenuView startMenuView;
-    private final SnakeSinglePlayerView singlePlayerView;
-    private final String title;
+    private SnakeModel snakeModel;
+    private CherryModel cherryModel;
+
     private Timer gameLoop;
     private boolean restart;
     private boolean isRunning = true;
+
 
     /**
      * Constructs a SnakeCtrl with the specified game title, SnakeView and SnakeModel.
      * It also initialize the listeners.
      *
-     * @param title the snake game title
-     * @param snakeView the view associated with the Snake game
+     * @param snakeMainView the view associated with the Snake game
      * @param snakeModel the model representing the game's logic
      */
-    public SnakeController(final String title, final GameView snakeView, final GameModel snakeModel) {
-        this.title = title;
-        this.snakeView = (SnakeMainView) snakeView;
+    public SnakeController(final GameView snakeMainView, final GameModel snakeModel) {
+        this.snakeMainView = (SnakeMainView) snakeMainView;
         this.snakeGridModel = (SnakeGridModel) snakeModel;
-        this.startMenuView = new SnakeStartMenuView(this.snakeView);
-        this.singlePlayerView = new SnakeSinglePlayerView(this.snakeView);
-
+        this.instantiateViewsAndModels(
+            SnakeStartMenuView::new,
+            SnakeSinglePlayerView::new,
+            SnakeMultiplayerView::new,
+            SnakeSettingsView::new,
+            SnakeControlsView::new,
+            SnakeModel::new,
+            CherryModel::new
+        );
+        this.snakeMainView.setViews(this.startMenuView, this.singlePlayerView, this.multiplayerView, this.settingsView, this.controlsView);
         this.initializeListeners();
+    }
+
+    public void instantiateViewsAndModels(
+        final GameViewFactory startMenuView,
+        final GameViewFactory singlePlayerView,
+        final GameViewFactory multiplayerView,
+        final GameViewFactory settingsView,
+        final GameViewFactory controlsView,
+        final GameModelFactory snakeModel,
+        final GameModelFactory cherryModel
+    ) {
+        this.startMenuView = (SnakeStartMenuView) startMenuView.create();
+        this.singlePlayerView = (SnakeSinglePlayerView) singlePlayerView.create();
+        this.multiplayerView = (SnakeMultiplayerView) multiplayerView.create();
+        this.settingsView = (SnakeSettingsView) settingsView.create();
+        this.controlsView = (SnakeControlsView) controlsView.create();
+        this.snakeModel = (SnakeModel) snakeModel.create();
+        this.cherryModel = (CherryModel) cherryModel.create();
     }
 
     @Override
@@ -80,21 +116,24 @@ public class SnakeController implements GameController, BaseController {
             )
         );
 
-        // this.snakeView.addMultiplayerBtnListener(this.multiplayerBtnListener);
-
-        // this.snakeView.addSettingsBtnListener(this.settingsBtnListener);
-
         this.startMenuView.addControlsBtnListener(
             new MenuButtonListener(
                 this.startMenuView.getControlsBtn(),
-                snakeView::showControlsMenu
+                this.snakeMainView::showControlsMenu
             )
         );
 
-        this.snakeView.addSnakeBackBtnListener(
+        this.singlePlayerView.addSnakeBackBtnListener(
             new MenuButtonListener(
-                this.snakeView.getSnakeBackBtn(),
-                this::initiateGame
+                this.singlePlayerView.getSnakeBackBtn(),
+                this.snakeMainView::showStartMenu
+            )
+        );
+
+        this.controlsView.addSnakeBackBtnListener(
+            new MenuButtonListener(
+                this.controlsView.getSnakeBackBtn(),
+                this.snakeMainView::showStartMenu
             )
         );
     }
@@ -113,15 +152,15 @@ public class SnakeController implements GameController, BaseController {
     @Override
     public void initiateGame() {
         // Shows the start menu
-        this.snakeView.ShowStartMenu();
+        this.snakeMainView.showStartMenu();
         // Resets the snake models 2D array
         this.snakeGridModel.clearGameGrid();
         // stops the EDT thread from executing
         this.restart = true;
         // Set default direction of the snake
-        this.snakeGridModel.getSnakeModel().setDirection(AppConfigProject.RIGHT, restart);
+        this.snakeModel.setDirection(AppConfigProject.RIGHT, restart);
 
-        logger.logInfo(title + " has been initiated.\n");
+        DebugLogger.INSTANCE.logInfo(gameTitle + " has been initiated.\n");
     }
 
     /**
@@ -129,10 +168,12 @@ public class SnakeController implements GameController, BaseController {
      */
     private void startGame() {
         // Grid initialization.
-        this.snakeGridModel.getSnakeModel().initializeSnake(AppConfigProject.SNAKE_ITEMS_PART_CONTENT);
-        this.snakeGridModel.getCherryModel().initializeCherry();
-        this.snakeGridModel.overlayGameItemsOnGrid(this.snakeGridModel.getSnakeModel().getSnake());
-        this.snakeView.startGame(this.snakeGridModel.getGameAssets());
+        this.snakeModel.initializeSnake(AppConfigProject.SNAKE_ITEMS_PART_CONTENT);
+        this.cherryModel.initializeCherry();
+        this.snakeGridModel.overlayGameItemsOnGrid(this.snakeModel.getSnake());
+        this.snakeMainView.showGame();
+        this.singlePlayerView.setGameAssets(this.snakeGridModel.getGameAssets());
+        this.singlePlayerView.startGame();
 
         // Key listener for the game
         this.singlePlayerView.addSnakeKeyListener(new SnakeMovementListener(this));
@@ -145,7 +186,7 @@ public class SnakeController implements GameController, BaseController {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!restart) {
-                    snakeGridModel.updateGameGrid();
+                    snakeGridModel.updateGameGrid(snakeModel, cherryModel);
                     singlePlayerView.updateGameGrid();
                 } else {
                     gameLoop.stop();
@@ -161,7 +202,7 @@ public class SnakeController implements GameController, BaseController {
     public void closeGame() {
         this.stopGameLoop();
         this.removeListeners();
-        this.snakeView.closeGameView();
+        this.snakeMainView.closeGameView();
         this.isRunning = false;
     }
 
@@ -182,12 +223,14 @@ public class SnakeController implements GameController, BaseController {
     }
 
     private void removeListeners() {
-        this.snakeView.removeListeners();
+        this.singlePlayerView.removeListeners();
+        this.startMenuView.removeListeners();
+        this.controlsView.removeListeners();
     }
 
     @Override
-    public String getTitle() {
-        return title;
+    public String getGameTitle() {
+        return gameTitle;
     }
 
     @Override
@@ -195,8 +238,8 @@ public class SnakeController implements GameController, BaseController {
         return isRunning;
     }
 
-    public SnakeGridModel getSnakeGridModel() {
-        return snakeGridModel;
+    public SnakeModel getSnakeModel() {
+        return snakeModel;
     }
 
     @Override
@@ -207,5 +250,4 @@ public class SnakeController implements GameController, BaseController {
     public JLabel getQuitBtn() {
         return this.startMenuView.getQuitBtn();
     }
-
 }

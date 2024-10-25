@@ -1,24 +1,18 @@
 package com.dt181g.project.mvccomponents.games.snake.model;
 
+import java.util.Arrays;
+
 import com.dt181g.project.support.AppConfigProject;
 import com.dt181g.project.support.AppConfigProject.Direction;
 
-public class SnakeModel {
+public class SnakeModel extends SnakeGridModel {
     // A snake that has length of the comingSoon string and stores
     // y and x-coordinates in each of its body parts.
     private int[][] snake;
     private int[][] expandedSnake;
-    private int headIndex;
+    private int headIndex = AppConfigProject.INITIAL_SNAKE_LENGTH - 1;
     private Boolean allowChangesToDirection = true;
     private Direction currentDirection;
-    private final int[][] gameGrid;
-    private final CherryModel cherry;
-
-    protected SnakeModel(final int[][] gameGrid, final CherryModel cherry) {
-        this.gameGrid = gameGrid;
-        this.headIndex = AppConfigProject.INITIAL_SNAKE_LENGTH - 1;
-        this.cherry = cherry;
-    }
 
      /**
      * Initializes the snake's position on the game grid.
@@ -28,14 +22,15 @@ public class SnakeModel {
         this.snake = new int[AppConfigProject.INITIAL_SNAKE_LENGTH][itemParts];
         this.headIndex = AppConfigProject.INITIAL_SNAKE_LENGTH - 1;
         // Set snakes tail position.
-        this.snake[0][0] = this.gameGrid.length / 2;  // Y-coordinate.
-        this.snake[0][1] = this.gameGrid.length / 2 - (AppConfigProject.INITIAL_SNAKE_LENGTH / 2);  // X-coordinate.
+        this.snake[0][0] = super.gameGrid.length / 2;  // Y-coordinate.
+        this.snake[0][1] = super.gameGrid.length / 2 - (AppConfigProject.INITIAL_SNAKE_LENGTH / 2);  // X-coordinate.
         this.snake[0][2] = AppConfigProject.COLOR_SNAKE_INT;  // Color.
 
         // Builds body and head
         for (int i = 1; i < this.snake.length; i++) {
             this.snake[i][0] = this.snake[0][0];  // same y-coordinate as the tail.
             this.snake[i][1] = this.snake[0][1] + i;  // increase x-coordinate with 1 for each part.
+            this.snake[i][2] = AppConfigProject.COLOR_SNAKE_INT;  // Color.
         }
     }
 
@@ -44,8 +39,8 @@ public class SnakeModel {
      * This method triggers the movement of the snake by calling the {@code moveSnake()} method.
      * Called during each game update to advance the snake's position.
      */
-    protected void updateSnake() {
-        moveSnake();
+    protected void updateSnake(SnakeBoostersModel booster) {
+        moveSnake(booster);
     }
 
     /**
@@ -53,7 +48,7 @@ public class SnakeModel {
      * Adjusts the body first and then moves the head according to the direction.
      * After moving, it checks the cell the head has moved into for its content.
      */
-    private void moveSnake() {
+    private void moveSnake(SnakeBoostersModel booster) {
         this.moveSnakeBody();
 
         switch (this.currentDirection) {
@@ -63,7 +58,7 @@ public class SnakeModel {
             case RIGHT -> { this.moveSnakeHeadPosDirection(1); }
         }
 
-        checkHeadCell(this.snake[headIndex][0], this.snake[headIndex][1], snake[0][0], snake[0][1]);
+        checkHeadCell(this.snake[headIndex][0], this.snake[headIndex][1], snake[0][0], snake[0][1], booster);
     }
 
     /**
@@ -90,7 +85,7 @@ public class SnakeModel {
         // Move the head: wraps around if it reaches the end of the grid
         this.snake[headIndex][yOrX] =
         (this.snake[headIndex][yOrX] + 1)
-        % this.gameGrid.length;
+        % super.gameGrid.length;
     }
 
     /**
@@ -102,8 +97,8 @@ public class SnakeModel {
     private void moveSnakeHeadNegDirection(final int yOrX) {
         // Move the head: wraps around if it reaches the beginning of the grid
         this.snake[headIndex][yOrX] =
-        (this.snake[headIndex][yOrX] - 1 + this.gameGrid.length)
-        % this.gameGrid.length;
+        (this.snake[headIndex][yOrX] - 1 + super.gameGrid.length)
+        % super.gameGrid.length;
     }
 
     /**
@@ -115,13 +110,14 @@ public class SnakeModel {
      * @param oldTailY The Y-coordinate of the previous tail position, used if the snake grows.
      * @param oldTailX The X-coordinate of the previous tail position, used if the snake grows.
      */
-    private void checkHeadCell(final int y, final int x, final int oldTailY, final int oldTailX) {
-        switch (gameGrid[y][x]) {
+    private void checkHeadCell(final int headY, final int headX, final int oldTailY, final int oldTailX, SnakeBoostersModel booster) {
+        System.out.println("GameGrid: " + Arrays.deepToString(super.gameGrid));
+        switch (super.gameGrid[headY][headX]) {
             case AppConfigProject.COLOR_SNAKE_INT -> {
 
             }
             case AppConfigProject.COLOR_CHERRY_INT -> {
-                cherry.eatCherry();
+                booster.eatBooster();
                 this.grow(oldTailY, oldTailX);
             }
         }

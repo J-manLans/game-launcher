@@ -13,14 +13,14 @@ import com.dt181g.project.support.AppConfigProject;
  */
 public class FakeTicTacToeModel implements GameModel {
     private final String iconPath = AppConfigProject.PATH_TO_ICONS + AppConfigProject.TIC_TAC_TOE_ICON;
-    private final String title = AppConfigProject.TIC_TAC_TOE_TITLE;
+    private final String gameTitle = AppConfigProject.TIC_TAC_TOE_TITLE;
 
     /**
      * May be implemented in the future.
      */
     @Override
-    public String getTitle() {
-        return title;
+    public String getGameTitle() {
+        return gameTitle;
     }
 
     /**

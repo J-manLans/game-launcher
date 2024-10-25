@@ -32,17 +32,15 @@ import com.dt181g.project.support.AppConfigProject;
  * @author Joel Lansgren
  */
 public class FakeTicTacToeView extends JPanel implements GameView {
-    private final JLabel title = new JLabel(AppConfigProject.TIC_TAC_TOE_TITLE);
+    private final JLabel gameTitle = new JLabel(AppConfigProject.TIC_TAC_TOE_TITLE);
     private final JLabel quitBtn = new JLabel("Quit");
     private JPanel gamePanel;
-
-
 
     /**
      * May be properly implemented in the future.
      */
     @Override
-    public void ShowStartMenu() {
+    public void showStartMenu() {
         this.removeAll();
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -76,21 +74,21 @@ public class FakeTicTacToeView extends JPanel implements GameView {
      * May be implemented in the future.
      */
     @Override
-    public String getTitle() {
-       return title.getText();
+    public String getGameTitle() {
+       return gameTitle.getText();
     }
 
     /**
      * May be implemented in the future.
      */
     @Override
-    public void startGame(final List<Object> gameAssets) {
+    public void showGame() {
         throw new UnsupportedOperationException("Unimplemented method 'startGame'");
     }
 
     @Override
     public void closeGameView() {
-        clearGameView(this.gamePanel, this, title.getText());
+        clearGameView(this.gamePanel, this, gameTitle.getText());
     }
 
     @Override

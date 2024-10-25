@@ -1,5 +1,6 @@
 package com.dt181g.project.mvccomponents.games.snake.view;
 
-public class SnakeMultiplayerView {
+
+public class SnakeMultiplayerView extends SnakeMainView {
 
 }
