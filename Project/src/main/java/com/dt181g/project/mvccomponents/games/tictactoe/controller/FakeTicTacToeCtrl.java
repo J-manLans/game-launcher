@@ -26,7 +26,6 @@ import com.dt181g.project.support.DebugLogger;
  * </p>
  */
 public class FakeTicTacToeCtrl implements GameController {
-    DebugLogger logger = DebugLogger.INSTANCE;
     private final FakeTicTacToeView ticTacToeView;
     private final FakeTicTacToeModel ticTacToeModel;
     private final String gameTitle = AppConfigProject.TIC_TAC_TOE_TITLE;
@@ -43,7 +42,9 @@ public class FakeTicTacToeCtrl implements GameController {
     public FakeTicTacToeCtrl(final GameView ticTacToeView, final GameModel ticTacToeModel) {
         this.ticTacToeView = (FakeTicTacToeView) ticTacToeView;
         this.ticTacToeModel = (FakeTicTacToeModel) ticTacToeModel;
+    }
 
+    public void initialize() {
         this.initializeListeners();
     }
 
@@ -60,7 +61,7 @@ public class FakeTicTacToeCtrl implements GameController {
     @Override
     public void initiateGame() {
         this.ticTacToeView.showStartMenu();
-        logger.logInfo(gameTitle +
+        DebugLogger.INSTANCE.logInfo(gameTitle +
             " has been initiated.\n"
         );
     }
@@ -92,11 +93,11 @@ public class FakeTicTacToeCtrl implements GameController {
 
     @Override
     public JLabel getQuitBtn() {
-        throw new UnsupportedOperationException("Unimplemented method 'getQuitBtn'");
+        return this.ticTacToeView.getQuitBtn();
     }
 
     @Override
-    public void addQuitBtnListener(MouseAdapter menuButtonListener) {
-        throw new UnsupportedOperationException("Unimplemented method 'addQuitBtnListener'");
+    public void addQuitBtnListener(final MouseAdapter quitBtnListener) {
+        this.ticTacToeView.addQuitBtnListener(quitBtnListener);
     }
 }

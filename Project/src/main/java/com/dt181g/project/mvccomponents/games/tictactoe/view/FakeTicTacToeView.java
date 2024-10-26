@@ -87,11 +87,16 @@ public class FakeTicTacToeView extends JPanel implements GameView {
 
     @Override
     public void closeGameView() {
+        removeAllListenersFromButton(this.quitBtn);
         clearGameView(this.gamePanel, this, gameTitle.getText());
     }
 
     @Override
     public void setGamePanel(JPanel gamePanel) {
         this.gamePanel = gamePanel;
+    }
+
+    public JLabel getQuitBtn() {
+        return this.quitBtn;
     }
 }

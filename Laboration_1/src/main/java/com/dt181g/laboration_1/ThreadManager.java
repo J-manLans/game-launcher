@@ -66,7 +66,7 @@ public enum ThreadManager {
             }
 
             this.threadUtilizations += 1;
-            workerThread = this.workerThreads.getFirst();
+            workerThread = this.workerThreads.get(0);
 
             if (workerThread.getPrime()) {
                 queuePreference = workerThread.getClientsNum() % 5;

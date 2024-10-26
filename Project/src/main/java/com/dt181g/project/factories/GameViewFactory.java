@@ -1,5 +1,6 @@
 package com.dt181g.project.factories;
 
+import com.dt181g.project.mvccomponents.BaseView;
 import com.dt181g.project.mvccomponents.games.GameView;
 
 /**
@@ -10,12 +11,12 @@ import com.dt181g.project.mvccomponents.games.GameView;
  * </p>
  */
 @FunctionalInterface
-public interface GameViewFactory {
+public interface GameViewFactory <T extends BaseView>{
     /**
      * Creates a new instance of {@link GameView} with the specified title.
      *
      * @param title the title of the game, used to identify the view.
      * @return A new instance of {@link GameView}.
      */
-    GameView create();
+    T create();
 }

@@ -12,7 +12,6 @@ public class MenuButtonListener extends MouseAdapter {
     private final Runnable action;
 
     public MenuButtonListener(final JLabel button, final Runnable action) {
-        System.err.println("listener attached to " + button.getText());
         this.button = button;
         this.action = action;
     }

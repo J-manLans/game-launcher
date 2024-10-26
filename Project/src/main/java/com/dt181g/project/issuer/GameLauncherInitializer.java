@@ -1,5 +1,11 @@
 package com.dt181g.project.issuer;
 
+import com.dt181g.project.factories.GameControllerFactory;
+import com.dt181g.project.factories.GameModelFactory;
+import com.dt181g.project.factories.GameViewFactory;
+import com.dt181g.project.mvccomponents.BaseController;
+import com.dt181g.project.mvccomponents.BaseModel;
+import com.dt181g.project.mvccomponents.BaseView;
 import com.dt181g.project.mvccomponents.launcher.controller.GameLauncherController;
 import com.dt181g.project.mvccomponents.launcher.model.GameListModel;
 import com.dt181g.project.mvccomponents.launcher.view.GameLauncherView;
@@ -34,8 +40,17 @@ public enum GameLauncherInitializer {
      */
     public void runLauncher() {
         if (gameLauncherController == null) {
-            this.gameLauncherController = new GameLauncherController(new GameLauncherView(), new GameListModel());
+            this.instantiateLauncher(GameListModel::new, GameLauncherView::new, GameLauncherController::new);
             this.gameLauncherController.initialize();
         }
+    }
+
+    private void instantiateLauncher(
+        final GameModelFactory<BaseModel> gameModelFactory,
+        final GameViewFactory<BaseView> gameViewFactory,
+        final GameControllerFactory<BaseController, BaseView, BaseModel> gameControllerFactory
+    ) {
+
+        gameControllerFactory.create(gameViewFactory.create(), gameModelFactory.create()).initialize();
     }
 }

@@ -1,5 +1,8 @@
 package com.dt181g.project.factories;
 
+import com.dt181g.project.mvccomponents.BaseController;
+import com.dt181g.project.mvccomponents.BaseModel;
+import com.dt181g.project.mvccomponents.BaseView;
 import com.dt181g.project.mvccomponents.games.GameController;
 import com.dt181g.project.mvccomponents.games.GameModel;
 import com.dt181g.project.mvccomponents.games.GameView;
@@ -12,7 +15,7 @@ import com.dt181g.project.mvccomponents.games.GameView;
  * </p>
  */
 @FunctionalInterface
-public interface GameControllerFactory {
+public interface GameControllerFactory <T extends BaseController, V extends BaseView, M extends BaseModel>{
     /**
      * Creates a new instance of {@link GameController}.
      *
@@ -21,5 +24,5 @@ public interface GameControllerFactory {
      * @param gameModel the {@link GameModel} instance associated with this controller.
      * @return a new instance of {@link GameController} configured with the provided parameters.
      */
-    GameController create(GameView gameView, GameModel gameModel);
+    T create(V gameView, M gameModel);
 }

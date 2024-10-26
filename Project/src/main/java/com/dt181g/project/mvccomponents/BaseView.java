@@ -7,6 +7,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 import java.awt.Font;
+import java.awt.event.MouseListener;
 import java.awt.Component;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -47,6 +48,17 @@ public interface BaseView {
         if (snakeText) {
             label.setHorizontalAlignment(SwingConstants.CENTER);
             label.setVerticalAlignment(SwingConstants.CENTER);
+        }
+    }
+
+    /**
+     * Helper method that removes all mouse listeners from the specified button.
+     *
+     * @param button the JButton from which to remove all mouse listeners.
+     */
+    default void removeAllListenersFromButton(final JLabel button) {
+        for (final MouseListener listener : button.getMouseListeners()) {
+            button.removeMouseListener(listener);
         }
     }
 }

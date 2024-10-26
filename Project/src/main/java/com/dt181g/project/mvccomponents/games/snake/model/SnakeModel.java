@@ -1,14 +1,16 @@
 package com.dt181g.project.mvccomponents.games.snake.model;
 
+import com.dt181g.project.mvccomponents.BaseModel;
 import com.dt181g.project.support.AppConfigProject;
 import com.dt181g.project.support.AppConfigProject.Direction;
 
-public class SnakeModel extends SnakeGridModel {
+public class SnakeModel implements BaseModel {
     // A snake that has length of the comingSoon string and stores
     // y and x-coordinates in each of its body parts.
     private int[][] snake;
     private int[][] expandedSnake;
     private int headIndex = AppConfigProject.INITIAL_SNAKE_LENGTH - 1;
+    private int[][] gameGrid;
     private Boolean allowChangesToDirection = true;
     private Direction currentDirection;
 
@@ -20,8 +22,8 @@ public class SnakeModel extends SnakeGridModel {
         this.snake = new int[AppConfigProject.INITIAL_SNAKE_LENGTH][itemParts];
         this.headIndex = AppConfigProject.INITIAL_SNAKE_LENGTH - 1;
         // Set snakes tail position.
-        this.snake[0][0] = super.gameGrid.length / 2;  // Y-coordinate.
-        this.snake[0][1] = super.gameGrid.length / 2 - (AppConfigProject.INITIAL_SNAKE_LENGTH / 2);  // X-coordinate.
+        this.snake[0][0] = this.gameGrid.length / 2;  // Y-coordinate.
+        this.snake[0][1] = this.gameGrid.length / 2 - (AppConfigProject.INITIAL_SNAKE_LENGTH / 2);  // X-coordinate.
         this.snake[0][2] = AppConfigProject.COLOR_SNAKE_INT;  // Color.
 
         // Builds body and head
@@ -83,7 +85,7 @@ public class SnakeModel extends SnakeGridModel {
         // Move the head: wraps around if it reaches the end of the grid
         this.snake[headIndex][yOrX] =
         (this.snake[headIndex][yOrX] + 1)
-        % super.gameGrid.length;
+        % this.gameGrid.length;
     }
 
     /**
@@ -95,8 +97,8 @@ public class SnakeModel extends SnakeGridModel {
     private void moveSnakeHeadNegDirection(final int yOrX) {
         // Move the head: wraps around if it reaches the beginning of the grid
         this.snake[headIndex][yOrX] =
-        (this.snake[headIndex][yOrX] - 1 + super.gameGrid.length)
-        % super.gameGrid.length;
+        (this.snake[headIndex][yOrX] - 1 + this.gameGrid.length)
+        % this.gameGrid.length;
     }
 
     /**
@@ -196,5 +198,9 @@ public class SnakeModel extends SnakeGridModel {
      */
     public void setAllowChangesToDirection(final boolean isGridUpdated) {
         this.allowChangesToDirection = isGridUpdated;
+    }
+
+    public void setGameGrid(int[][] gameGrid) {
+        this.gameGrid = gameGrid;
     }
 }

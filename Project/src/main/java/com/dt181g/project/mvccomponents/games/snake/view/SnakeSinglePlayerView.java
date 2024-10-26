@@ -12,11 +12,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.dt181g.project.mvccomponents.BaseView;
 import com.dt181g.project.mvccomponents.games.listeners.SnakeMovementListener;
 import com.dt181g.project.support.AppConfigProject;
 import com.dt181g.project.support.DebugLogger;
 
-public class SnakeSinglePlayerView extends SnakeMainView {
+public class SnakeSinglePlayerView extends JPanel implements BaseView {
     private final GridBagConstraints gbc = new GridBagConstraints();
     private JPanel snakeGrid;
     private JPanel[][] snakeGridCells;

@@ -5,10 +5,12 @@ import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
+import com.dt181g.project.mvccomponents.BaseView;
 import com.dt181g.project.support.AppConfigProject;
 
-public class SnakeStartMenuView extends SnakeMainView {
+public class SnakeStartMenuView extends JPanel implements BaseView {
     private final GridBagConstraints gbc = new GridBagConstraints();
     private final JLabel startBtn = new JLabel("Start Game");
     private final JLabel multiplayerBtn = new JLabel("Multiplayer");
@@ -27,11 +29,11 @@ public class SnakeStartMenuView extends SnakeMainView {
     public SnakeStartMenuView() {
         this.setLayout(new GridBagLayout());
 
-        super.labelBtn(startBtn, AppConfigProject.COLOR_WHITE);
-        super.labelBtn(multiplayerBtn, AppConfigProject.COLOR_DARK_GREY);
-        super.labelBtn(settingsBtn, AppConfigProject.COLOR_DARK_GREY);
-        super.labelBtn(controlsBtn, AppConfigProject.COLOR_WHITE);
-        super.labelBtn(quitBtn, AppConfigProject.COLOR_WHITE);
+        labelBtn(startBtn, AppConfigProject.COLOR_WHITE);
+        labelBtn(multiplayerBtn, AppConfigProject.COLOR_DARK_GREY);
+        labelBtn(settingsBtn, AppConfigProject.COLOR_DARK_GREY);
+        labelBtn(controlsBtn, AppConfigProject.COLOR_WHITE);
+        labelBtn(quitBtn, AppConfigProject.COLOR_WHITE);
 
         // Adds and place the components on the grid.
         this.gbc.gridy = 1;
@@ -115,10 +117,10 @@ public class SnakeStartMenuView extends SnakeMainView {
     }
 
     public void removeListeners() {
-        super.removeAllListenersFromButton(this.startBtn);
-        super.removeAllListenersFromButton(this.multiplayerBtn);
-        super.removeAllListenersFromButton(this.settingsBtn);
-        super.removeAllListenersFromButton(this.quitBtn);
+        removeAllListenersFromButton(this.startBtn);
+        removeAllListenersFromButton(this.multiplayerBtn);
+        removeAllListenersFromButton(this.settingsBtn);
+        removeAllListenersFromButton(this.quitBtn);
     }
 
     /*==============================

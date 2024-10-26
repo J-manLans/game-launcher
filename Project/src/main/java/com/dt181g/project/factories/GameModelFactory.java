@@ -1,5 +1,6 @@
 package com.dt181g.project.factories;
 
+import com.dt181g.project.mvccomponents.BaseModel;
 import com.dt181g.project.mvccomponents.games.GameModel;
 
 /**
@@ -8,11 +9,11 @@ import com.dt181g.project.mvccomponents.games.GameModel;
  * @author Joel Lansgren
  */
 @FunctionalInterface
-public  interface GameModelFactory {
+public  interface GameModelFactory <T extends BaseModel>{
     /**
      * Creates a new instance of {@link GameModel}.
      *
      * @return A new instance of {@link GameModel}.
      */
-    GameModel create();
+    T create();
 }

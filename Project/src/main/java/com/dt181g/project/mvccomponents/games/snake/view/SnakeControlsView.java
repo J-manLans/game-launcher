@@ -4,11 +4,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 
+import javax.swing.JPanel;
 import javax.swing.JLabel;
 
+import com.dt181g.project.mvccomponents.BaseView;
 import com.dt181g.project.support.AppConfigProject;
 
-public class SnakeControlsView extends SnakeMainView {
+public class SnakeControlsView extends JPanel implements BaseView {
     private final GridBagConstraints gbc = new GridBagConstraints();
     private final JLabel controlsMainLabel = new JLabel("CONTROLS:");
     private final JLabel controlsSubLabel = new JLabel("W,S,A,D or arrow keys to move the snake around");
@@ -73,7 +75,7 @@ public class SnakeControlsView extends SnakeMainView {
      * ensuring that no event handlers remain active on these buttons.
      */
     public void removeListeners() {
-        super.removeAllListenersFromButton(this.snakeBackBtn);
+        removeAllListenersFromButton(this.snakeBackBtn);
     }
 
     /**

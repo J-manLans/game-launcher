@@ -3,6 +3,8 @@ package com.dt181g.project.mvccomponents.games.snake.controller;
 import com.dt181g.project.mvccomponents.listeners.MenuButtonListener;
 import com.dt181g.project.factories.GameModelFactory;
 import com.dt181g.project.factories.GameViewFactory;
+import com.dt181g.project.mvccomponents.BaseModel;
+import com.dt181g.project.mvccomponents.BaseView;
 import com.dt181g.project.mvccomponents.games.GameController;
 import com.dt181g.project.mvccomponents.games.GameModel;
 import com.dt181g.project.mvccomponents.games.GameView;
@@ -12,8 +14,6 @@ import com.dt181g.project.mvccomponents.games.snake.model.SnakeGridModel;
 import com.dt181g.project.mvccomponents.games.snake.model.SnakeModel;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeControlsView;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeMainView;
-import com.dt181g.project.mvccomponents.games.snake.view.SnakeMultiplayerView;
-import com.dt181g.project.mvccomponents.games.snake.view.SnakeSettingsView;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeSinglePlayerView;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeStartMenuView;
 import com.dt181g.project.support.AppConfigProject;
@@ -53,8 +53,6 @@ public class SnakeController implements GameController {
     private final SnakeMainView snakeMainView;
     private SnakeStartMenuView startMenuView;
     private SnakeSinglePlayerView singlePlayerView;
-    private SnakeMultiplayerView multiplayerView;
-    private SnakeSettingsView settingsView;
     private SnakeControlsView controlsView;
     private final SnakeGridModel snakeGridModel;
     private SnakeModel snakeModel;
@@ -75,32 +73,30 @@ public class SnakeController implements GameController {
     public SnakeController(final GameView snakeMainView, final GameModel snakeModel) {
         this.snakeMainView = (SnakeMainView) snakeMainView;
         this.snakeGridModel = (SnakeGridModel) snakeModel;
+
+    }
+
+    public void initialize() {
         this.instantiateViewsAndModels(
             SnakeStartMenuView::new,
             SnakeSinglePlayerView::new,
-            SnakeMultiplayerView::new,
-            SnakeSettingsView::new,
             SnakeControlsView::new,
             SnakeModel::new,
             CherryModel::new
         );
-        this.snakeMainView.setViews(this.startMenuView, this.singlePlayerView, this.multiplayerView, this.settingsView, this.controlsView);
+        this.snakeMainView.setViews(this.startMenuView, this.singlePlayerView, this.controlsView);
         this.initializeListeners();
     }
 
     public void instantiateViewsAndModels(
-        final GameViewFactory startMenuView,
-        final GameViewFactory singlePlayerView,
-        final GameViewFactory multiplayerView,
-        final GameViewFactory settingsView,
-        final GameViewFactory controlsView,
-        final GameModelFactory snakeModel,
-        final GameModelFactory cherryModel
+        final GameViewFactory<BaseView> startMenuView,
+        final GameViewFactory<BaseView> singlePlayerView,
+        final GameViewFactory<BaseView> controlsView,
+        final GameModelFactory<BaseModel> snakeModel,
+        final GameModelFactory<BaseModel> cherryModel
     ) {
         this.startMenuView = (SnakeStartMenuView) startMenuView.create();
         this.singlePlayerView = (SnakeSinglePlayerView) singlePlayerView.create();
-        this.multiplayerView = (SnakeMultiplayerView) multiplayerView.create();
-        this.settingsView = (SnakeSettingsView) settingsView.create();
         this.controlsView = (SnakeControlsView) controlsView.create();
         this.snakeModel = (SnakeModel) snakeModel.create();
         this.cherryModel = (CherryModel) cherryModel.create();
@@ -168,7 +164,9 @@ public class SnakeController implements GameController {
      */
     private void startGame() {
         // Grid initialization.
+        this.snakeModel.setGameGrid(this.snakeGridModel.getGameGrid());
         this.snakeModel.initializeSnake(AppConfigProject.SNAKE_ITEMS_PART_CONTENT);
+        this.cherryModel.setGameGrid(this.snakeGridModel.getGameGrid());
         this.cherryModel.initializeCherry();
         this.snakeGridModel.overlayGameItemsOnGrid(this.snakeModel.getSnake());
         this.snakeMainView.showGame();

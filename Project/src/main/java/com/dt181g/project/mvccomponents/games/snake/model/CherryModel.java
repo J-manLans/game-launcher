@@ -15,6 +15,7 @@ public class CherryModel extends SnakeBoostersModel {
     private final Random randomizer = new Random();
     private int spawnCountDown;
     private boolean isCherry;
+    private int[][] gameGrid;
 
     /**
      * Initializes the cherry on startup.
@@ -59,5 +60,9 @@ public class CherryModel extends SnakeBoostersModel {
      */
     public int[][] getCherry() {
         return cherry;
+    }
+
+    public void setGameGrid(int[][] gameGrid) {
+        this.gameGrid = gameGrid;
     }
 }

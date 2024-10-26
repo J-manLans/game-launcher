@@ -6,12 +6,11 @@
 
 ## QUALITY OF LIFE IMPLEMENTATIONS:
 - Nullify objects for controller, view, and model in the close method.
-- *refactor view with getters to all its views so i don't need to clutter main view with addlistenermethods*
-- *Or, let snake controller hold all views and models*
 - refactor to have one addlistener method with switchcases using strings to determine where to add the listener
+- *Figure out how to work with boosters*
 
 ## BASIC GAME MECHANICS FOR SINGLE-PLAYER SNAKE:
-*- Collision handling (with itself and **possibly** the edges).*
+- *Collision handling (with itself and **possibly** the edges).*
 
 ## MENUS:
 - Settings, choose snake color.

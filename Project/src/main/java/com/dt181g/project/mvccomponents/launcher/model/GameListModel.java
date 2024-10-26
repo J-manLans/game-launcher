@@ -6,6 +6,7 @@ import java.util.List;
 import com.dt181g.project.factories.GameControllerFactory;
 import com.dt181g.project.factories.GameModelFactory;
 import com.dt181g.project.factories.GameViewFactory;
+import com.dt181g.project.mvccomponents.BaseModel;
 import com.dt181g.project.mvccomponents.games.GameController;
 import com.dt181g.project.mvccomponents.games.GameModel;
 import com.dt181g.project.mvccomponents.games.GameView;
@@ -28,7 +29,7 @@ import com.dt181g.project.support.DebugLogger;
  *
  * @author Joel Lansgren
  */
-public class GameListModel {
+public class GameListModel implements BaseModel {
     private final List<String> iconPaths = new ArrayList<>();
     private final List<String> gameTitles = new ArrayList<>();
     private final List<GameModel> gameModels = new ArrayList<>();
@@ -74,9 +75,9 @@ public class GameListModel {
      * @param gameTitle The title of the game, which is used for initializing both the view and the controller.
      */
     private void instantiateGame(
-        final GameModelFactory gameModelFactory,
-        final GameViewFactory gameViewFactory,
-        final GameControllerFactory gameControllerFactory,
+        final GameModelFactory<GameModel> gameModelFactory,
+        final GameViewFactory<GameView> gameViewFactory,
+        final GameControllerFactory<GameController, GameView, GameModel> gameControllerFactory,
         final String gameTitle
     ) {
         this.gameModels.add(gameModelFactory.create());
@@ -84,6 +85,7 @@ public class GameListModel {
         this.gameControllers.add(
             gameControllerFactory.create(this.getGameView(gameTitle), this.getGameModel(gameTitle))
         );
+        this.getGameController(gameTitle).initialize();
     }
 
     /**
@@ -112,14 +114,6 @@ public class GameListModel {
      */
     public List<String> getTitleList() {
         return this.gameTitles;
-    }
-
-    /**
-     * Returns the title of the games.
-     * @return a list of game titles.
-     */
-    public List<GameController> gameControllers() {
-        return this.gameControllers;
     }
 
     /**

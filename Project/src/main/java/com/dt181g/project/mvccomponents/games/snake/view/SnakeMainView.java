@@ -3,10 +3,8 @@ package com.dt181g.project.mvccomponents.games.snake.view;
 import com.dt181g.project.mvccomponents.games.GameView;
 import com.dt181g.project.support.AppConfigProject;
 
-import java.awt.event.MouseListener;
 import java.awt.CardLayout;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -41,14 +39,10 @@ public class SnakeMainView extends JPanel implements GameView {
     public void setViews(
         final SnakeStartMenuView startMenuView,
         final SnakeSinglePlayerView singlePlayerView,
-        final SnakeMultiplayerView multiplayerView,
-        final SnakeSettingsView settingsView,
         final SnakeControlsView controlsView
     ) {
         this.add(startMenuView, "Start Menu");
         this.add(singlePlayerView, "Single Player Game On");
-        this.add(multiplayerView, "Multiplayer Game On");
-        this.add(settingsView, "Settings Menu");
         this.add(controlsView, "Controls Menu");
     }
 
@@ -82,27 +76,6 @@ public class SnakeMainView extends JPanel implements GameView {
     public void showGame() {
         this.cardLayout.show(this, "Single Player Game On");
     }
-
-    /*==============================
-     * Listener methods
-     ==============================*/
-
-    /**
-     * Helper method that removes all mouse listeners from the specified button.
-     *
-     * @param button the JButton from which to remove all mouse listeners.
-     */
-    void removeAllListenersFromButton(final JLabel button) {
-        for (final MouseListener listener : button.getMouseListeners()) {
-            button.removeMouseListener(listener);
-        }
-    }
-
-    /*==============================
-    * Getters
-    ==============================*/
-
-
 
     /*=========================================
     * Override methods (not Override getters)
