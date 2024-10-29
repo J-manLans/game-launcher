@@ -10,6 +10,9 @@ import com.dt181g.project.support.AppConfigProject;
  */
 public class CherryBoosterModel extends SnakeBoostersModel {
     private int[][] cherry = new int[1][AppConfigProject.SNAKE_ITEMS_PART_CONTENT];
+    public CherryBoosterModel() {
+        super.setBooster(this);
+    }
 
     /**
      * Applies the cherry's effect to the snake model. The effect includes
@@ -19,7 +22,7 @@ public class CherryBoosterModel extends SnakeBoostersModel {
      * @param snakeModel The snake model to which the effect is applied.
      */
     @Override
-    protected void applyEffect(SnakeModel snakeModel) {
+    protected void eatBooster(SnakeModel snakeModel) {
         super.initializeBooster(this.cherry);
         super.addSpeed(snakeModel, (int) (snakeModel.getSpeed() * AppConfigProject.SNAKE_SPEED_MULTIPLIER));
         this.grow(snakeModel);

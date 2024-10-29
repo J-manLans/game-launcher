@@ -1,5 +1,7 @@
 package com.dt181g.project.mvccomponents.games.snake.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.dt181g.project.mvccomponents.BaseModel;
@@ -10,6 +12,7 @@ public abstract class SnakeBoostersModel implements BaseModel {
     private final Random randomizer = new Random();
     private boolean isBoosterOnGrid;
     private int spawnCountDown;
+    private final List<SnakeBoostersModel> boosters = new ArrayList<>();
 
     /**
      * Initializes the booster on startup and concurrent initializations.
@@ -42,9 +45,11 @@ public abstract class SnakeBoostersModel implements BaseModel {
     }
 
     private int[][] randomizeBoosterLocation(final int[][] booster) {
-        booster[0][0] = this.randomizer.nextInt(gameGrid.length);
-        booster[0][1] = this.randomizer.nextInt(gameGrid.length);
-        booster[0][2] = AppConfigProject.COLOR_CHERRY_INT;  // Color
+        booster[0] = new int[]{
+            this.randomizer.nextInt(gameGrid.length),
+            this.randomizer.nextInt(gameGrid.length),
+            AppConfigProject.COLOR_CHERRY_INT
+        };
 
         return booster;
     }
@@ -66,8 +71,10 @@ public abstract class SnakeBoostersModel implements BaseModel {
         this.gameGrid = gameGrid;
     }
 
+    public void setBooster(SnakeBoostersModel booster) {
+        this.boosters.add(booster);
+    }
 
-
-    protected abstract void applyEffect(SnakeModel snake);
+    protected abstract void eatBooster(SnakeModel snakeModel);
     public abstract int[][] getBooster();
 }

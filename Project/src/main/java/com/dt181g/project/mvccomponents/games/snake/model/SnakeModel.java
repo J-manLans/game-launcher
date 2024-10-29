@@ -110,7 +110,7 @@ public class SnakeModel implements BaseModel {
                 this.allowChangesToDirection = false;
             }
             case AppConfigProject.COLOR_CHERRY_INT -> {
-                booster.applyEffect(this);
+                booster.eatBooster(this);
             }
         }
     }
