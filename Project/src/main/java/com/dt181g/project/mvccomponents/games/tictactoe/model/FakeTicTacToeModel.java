@@ -1,6 +1,6 @@
 package com.dt181g.project.mvccomponents.games.tictactoe.model;
 
-import com.dt181g.project.mvccomponents.games.GameModel;
+import com.dt181g.project.mvccomponents.games.GameMainModel;
 import com.dt181g.project.support.AppConfigProject;
 
 /**
@@ -11,7 +11,7 @@ import com.dt181g.project.support.AppConfigProject;
  * and icon path, which are necessary for the game launcher to display relevant details.
  * </p>
  */
-public class FakeTicTacToeModel implements GameModel {
+public class FakeTicTacToeModel implements GameMainModel {
     private final String iconPath = AppConfigProject.PATH_TO_ICONS + AppConfigProject.TIC_TAC_TOE_ICON;
     private final String gameTitle = AppConfigProject.TIC_TAC_TOE_TITLE;
 

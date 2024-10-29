@@ -5,11 +5,12 @@ import com.dt181g.project.factories.GameModelFactory;
 import com.dt181g.project.factories.GameViewFactory;
 import com.dt181g.project.mvccomponents.BaseModel;
 import com.dt181g.project.mvccomponents.BaseView;
-import com.dt181g.project.mvccomponents.games.GameController;
-import com.dt181g.project.mvccomponents.games.GameModel;
-import com.dt181g.project.mvccomponents.games.GameView;
+import com.dt181g.project.mvccomponents.games.GameMainController;
+import com.dt181g.project.mvccomponents.games.GameMainModel;
+import com.dt181g.project.mvccomponents.games.GameMainView;
 import com.dt181g.project.mvccomponents.games.listeners.SnakeMovementListener;
-import com.dt181g.project.mvccomponents.games.snake.model.CherryModel;
+import com.dt181g.project.mvccomponents.games.snake.model.CherryBoosterModel;
+import com.dt181g.project.mvccomponents.games.snake.model.SnakeBoostersModel;
 import com.dt181g.project.mvccomponents.games.snake.model.SnakeGridModel;
 import com.dt181g.project.mvccomponents.games.snake.model.SnakeModel;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeControlsView;
@@ -17,7 +18,6 @@ import com.dt181g.project.mvccomponents.games.snake.view.SnakeMainView;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeSinglePlayerView;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeStartMenuView;
 import com.dt181g.project.support.AppConfigProject;
-import com.dt181g.project.support.DebugLogger;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -46,7 +46,7 @@ import javax.swing.Timer;
  *
  * @author Joel Lansgren
  */
-public class SnakeController implements GameController {
+public class SnakeController implements GameMainController {
 
     private final String gameTitle = AppConfigProject.SNAKE_TITLE;
 
@@ -56,7 +56,7 @@ public class SnakeController implements GameController {
     private SnakeControlsView controlsView;
     private final SnakeGridModel snakeGridModel;
     private SnakeModel snakeModel;
-    private CherryModel cherryModel;
+    private SnakeBoostersModel cherryModel;
 
     private Timer gameLoop;
     private boolean restart;
@@ -70,7 +70,7 @@ public class SnakeController implements GameController {
      * @param snakeMainView the view associated with the Snake game
      * @param snakeModel the model representing the game's logic
      */
-    public SnakeController(final GameView snakeMainView, final GameModel snakeModel) {
+    public SnakeController(final GameMainView snakeMainView, final GameMainModel snakeModel) {
         this.snakeMainView = (SnakeMainView) snakeMainView;
         this.snakeGridModel = (SnakeGridModel) snakeModel;
 
@@ -82,7 +82,7 @@ public class SnakeController implements GameController {
             SnakeSinglePlayerView::new,
             SnakeControlsView::new,
             SnakeModel::new,
-            CherryModel::new
+            CherryBoosterModel::new
         );
         this.snakeMainView.setViews(this.startMenuView, this.singlePlayerView, this.controlsView);
         this.initializeListeners();
@@ -99,7 +99,7 @@ public class SnakeController implements GameController {
         this.singlePlayerView = (SnakeSinglePlayerView) singlePlayerView.create();
         this.controlsView = (SnakeControlsView) controlsView.create();
         this.snakeModel = (SnakeModel) snakeModel.create();
-        this.cherryModel = (CherryModel) cherryModel.create();
+        this.cherryModel = (SnakeBoostersModel) cherryModel.create();
     }
 
     @Override
@@ -151,12 +151,16 @@ public class SnakeController implements GameController {
         this.snakeMainView.showStartMenu();
         // Resets the snake models 2D array
         this.snakeGridModel.clearGameGrid();
+        // initialize default state for game over variables.
+        this.snakeModel.setGameOver(false);
+        this.singlePlayerView.hideGameOver();
+        // Resets the speed
+        this.snakeModel.setSpeed(AppConfigProject.SNAKE_TICK_DELAY);
         // stops the EDT thread from executing
         this.restart = true;
+        this.snakeModel.setAllowChangesToDirection(true);
         // Set default direction of the snake
         this.snakeModel.setDirection(AppConfigProject.RIGHT, restart);
-
-        DebugLogger.INSTANCE.logInfo(gameTitle + " has been initiated.\n");
     }
 
     /**
@@ -167,11 +171,12 @@ public class SnakeController implements GameController {
         this.snakeModel.setGameGrid(this.snakeGridModel.getGameGrid());
         this.snakeModel.initializeSnake(AppConfigProject.SNAKE_ITEMS_PART_CONTENT);
         this.cherryModel.setGameGrid(this.snakeGridModel.getGameGrid());
-        this.cherryModel.initializeCherry();
+        this.cherryModel.initializeBooster(this.cherryModel.getBooster());
         this.snakeGridModel.overlayGameItemsOnGrid(this.snakeModel.getSnake());
         this.snakeMainView.showGame();
         this.singlePlayerView.setGameAssets(this.snakeGridModel.getGameAssets());
         this.singlePlayerView.startGame();
+        this.singlePlayerView.updateGameGrid();
 
         // Key listener for the game
         this.singlePlayerView.addSnakeKeyListener(new SnakeMovementListener(this));
@@ -185,7 +190,17 @@ public class SnakeController implements GameController {
             public void actionPerformed(final ActionEvent e) {
                 if (!restart) {
                     snakeGridModel.updateGameGrid(snakeModel, cherryModel);
-                    singlePlayerView.updateGameGrid();
+
+                    if (snakeModel.isGameOver()) {
+                        gameLoop.stop();
+                        singlePlayerView.updateGameGrid();
+                        singlePlayerView.showGameOver("Your snake was " + snakeModel.getSnake().length + " body parts long.");
+                    } else {
+                        // Speeding up the snake by reducing the delay
+                        gameLoop.setDelay(Math.max(0, snakeModel.getSpeed())); // Minimum delay of 0ms
+                        singlePlayerView.updateGameGrid();
+                    }
+
                 } else {
                     gameLoop.stop();
                 }

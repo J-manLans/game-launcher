@@ -3,7 +3,7 @@ package com.dt181g.project.mvccomponents.games.snake.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dt181g.project.mvccomponents.games.GameModel;
+import com.dt181g.project.mvccomponents.games.GameMainModel;
 import com.dt181g.project.support.AppConfigProject;
 import com.dt181g.project.support.DebugLogger;
 
@@ -25,7 +25,7 @@ import com.dt181g.project.support.DebugLogger;
  *
  * @author Joel Lansgren
  */
-public class SnakeGridModel implements GameModel {
+public class SnakeGridModel implements GameMainModel {
     // Remove when game functionality is implemented
     DebugLogger logger = DebugLogger.INSTANCE;
 
@@ -36,7 +36,7 @@ public class SnakeGridModel implements GameModel {
     final int[][] gameGrid = new int[gridSize][gridSize];
 
     public SnakeGridModel() {
-        this.gameAssets.add(gameGrid);
+        this.gameAssets.add(this.gameGrid);
     }
 
     /**
@@ -48,16 +48,17 @@ public class SnakeGridModel implements GameModel {
      * state of the snake grid and redraws the snake in its new position.
      * </p>
      */
-    public void updateGameGrid(SnakeModel snakeModel, CherryModel cherryModel) {
+    public void updateGameGrid(SnakeModel snakeModel, SnakeBoostersModel cherryModel) {
         // Make taking input from keyboard possible again
         snakeModel.setAllowChangesToDirection(true);
 
         // Clears the grid and then draws the new items on it.
-        snakeModel.updateSnake(gameGrid, cherryModel);
+        snakeModel.setGameGrid(this.gameGrid);
+        snakeModel.moveSnake(cherryModel);
         this.clearGameGrid();
         this.overlayGameItemsOnGrid(snakeModel.getSnake());
-        cherryModel.spawnCherry();
-        this.overlayGameItemsOnGrid(cherryModel.getCherry());
+        cherryModel.spawnBooster(snakeModel.getSnake(), cherryModel.getBooster());
+        this.overlayGameItemsOnGrid(cherryModel.getBooster());
     }
 
     /**

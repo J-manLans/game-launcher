@@ -6,11 +6,11 @@
 
 ## QUALITY OF LIFE IMPLEMENTATIONS:
 - Nullify objects for controller, view, and model in the close method.
-- refactor to have one addlistener method with switchcases using strings to determine where to add the listener
+- refactor to have one addListener method with switch cases using strings to determine where to add the listener
 - *Figure out how to work with boosters*
+- Set back button to BaseView as a shared variable. (maybe not, quite handy to have different listeners for controls and singleplayer)
 
 ## BASIC GAME MECHANICS FOR SINGLE-PLAYER SNAKE:
-- *Collision handling (with itself and **possibly** the edges).*
 
 ## MENUS:
 - Settings, choose snake color.

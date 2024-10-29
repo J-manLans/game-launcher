@@ -74,8 +74,9 @@ public final class AppConfigProject {
     Colors.
     ------------------------------------------ */
 
+
     /** Transparent color. */
-    public static final Color COLOR_TRANSPARENT = new Color(0, 0, 0, 0);
+    public static final Color COLOR_TRANSPARENT = new Color(0, 0, 0, 150);
 
     /** Dark grey color. */
     public static final Color COLOR_DARK_GREY = new Color(40, 40, 40);
@@ -89,7 +90,7 @@ public final class AppConfigProject {
     /** Accent color for the snake game. */
     public static final Color COLOR_SNAKE_GAME_ACCENT = new Color(255, 184, 77);
 
-    /** Number in snakes body representing the color. */
+    /** Number in snakes body representing the accent color. */
     public static final int COLOR_SNAKE_INT = 1;
 
     /** Color for the apple to the snake game. */
@@ -98,15 +99,18 @@ public final class AppConfigProject {
     /** Number in apples body representing the color. */
     public static final int COLOR_CHERRY_INT = 2;
 
+    /** Snakes head color when in collision to mark its position. */
+    public static final Color COLOR_SNAKE_GAME_DEAD = new Color(84,24,24);
+
+    /** Number in snakes body representing the death color. */
+    public static final int COLOR_SNAKE_DEAD_INT = 3;
+
     /* ---------------------------------------
     Borders.
     ------------------------------------------ */
 
     /** Creates space underneath the element. */
     public static final Border BOTTOM_SPACER_30 = BorderFactory.createEmptyBorder(0, 0, 30, 0);
-
-    /** Creates space to the right and beneath the element. */
-    public static final Border RIGHT_BOTTOM_CORNER_SPACER_30 = BorderFactory.createEmptyBorder(0, 0, 30, 30);
 
     /** Removes borders. */
     public static final Border REMOVE_BORDER = BorderFactory.createEmptyBorder();
@@ -169,16 +173,13 @@ public final class AppConfigProject {
     ------------------------------------------ */
 
     /** Length of the initial snake. */
-    public static final int INITIAL_SNAKE_LENGTH = 3;
+    public static final int INITIAL_SNAKE_LENGTH = 10;
 
-    /** Amounts of content in each body part of the snake (y and x coordinates). */
+    /** Amounts of content in each body part of the snake (y and x coordinates and color). */
     public static final int SNAKE_ITEMS_PART_CONTENT = 3;
 
     /** Size of the grid layout for the snake. */
     public static final Dimension SNAKE_GRID_SIZE = new Dimension(760, 760);
-
-    /** Size of the controls panel. */
-    public static final Dimension SNAKE_CONTROLS_SIZE = new Dimension(400, 400);
 
     /** Number of cells in the grid. */
     public static final int SNAKE_CELL_COUNT = 38;
@@ -186,13 +187,14 @@ public final class AppConfigProject {
     /** Upper bounds number of maximum tics before spawning a new item. */
 	public static final int UPPER_SPAWNING_BOUND = 20;
 
-	public static final int SNAKE_TICK_DELAY = 100;
+	public static int SNAKE_TICK_DELAY = 100;
 
+    public static double SNAKE_SPEED_MULTIPLIER = 0.9;
 
-
-/* ---------------------------------------
-    Game assets.
+    /* ---------------------------------------
+    Steering.
     ------------------------------------------ */
+
     public static final Direction UP = Direction.UP;
 
     public static final Direction DOWN = Direction.DOWN;

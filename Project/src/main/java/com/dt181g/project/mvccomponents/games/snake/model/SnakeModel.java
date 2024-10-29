@@ -8,11 +8,12 @@ public class SnakeModel implements BaseModel {
     // A snake that has length of the comingSoon string and stores
     // y and x-coordinates in each of its body parts.
     private int[][] snake;
-    private int[][] expandedSnake;
     private int headIndex = AppConfigProject.INITIAL_SNAKE_LENGTH - 1;
     private int[][] gameGrid;
     private Boolean allowChangesToDirection = true;
     private Direction currentDirection;
+    private boolean isGameOver;
+    private int speed = AppConfigProject.SNAKE_TICK_DELAY;
 
      /**
      * Initializes the snake's position on the game grid.
@@ -35,20 +36,11 @@ public class SnakeModel implements BaseModel {
     }
 
     /**
-     * Updates the snake's position based on its current direction.
-     * This method triggers the movement of the snake by calling the {@code moveSnake()} method.
-     * Called during each game update to advance the snake's position.
-     */
-    protected void updateSnake(int[][] gameGrid, SnakeBoostersModel booster) {
-        moveSnake(gameGrid, booster);
-    }
-
-    /**
      * Moves the snake based on the current direction.
      * Adjusts the body first and then moves the head according to the direction.
      * After moving, it checks the cell the head has moved into for its content.
      */
-    private void moveSnake(int[][] gameGrid, SnakeBoostersModel booster) {
+    protected void moveSnake(SnakeBoostersModel booster) {
         this.moveSnakeBody();
 
         switch (this.currentDirection) {
@@ -58,7 +50,7 @@ public class SnakeModel implements BaseModel {
             case RIGHT -> { this.moveSnakeHeadPosDirection(1); }
         }
 
-        checkHeadCell(this.snake[headIndex][0], this.snake[headIndex][1], snake[0][0], snake[0][1], gameGrid, booster);
+        checkHeadCell(booster);
     }
 
     /**
@@ -110,39 +102,56 @@ public class SnakeModel implements BaseModel {
      * @param oldTailY The Y-coordinate of the previous tail position, used if the snake grows.
      * @param oldTailX The X-coordinate of the previous tail position, used if the snake grows.
      */
-    private void checkHeadCell(final int headY, final int headX, final int oldTailY, final int oldTailX, int[][] gameGrid, SnakeBoostersModel booster) {
-        switch (gameGrid[headY][headX]) {
+    private void checkHeadCell(SnakeBoostersModel booster) {
+        switch (this.gameGrid[this.snake[headIndex][0]][this.snake[headIndex][1]]) {
             case AppConfigProject.COLOR_SNAKE_INT -> {
-
+                this.isGameOver = true;
+                this.snake[snake.length - 1][2] = 3;  // Colors the head at its collision coordinates.
+                this.allowChangesToDirection = false;
             }
             case AppConfigProject.COLOR_CHERRY_INT -> {
-                booster.eatBooster();
-                this.grow(oldTailY, oldTailX);
+                booster.applyEffect(this);
             }
         }
     }
 
-     /**
-     * Grows the snake by adding a new segment at the specified position.
-     * Uses the old tail's coordinates to re-add the tail segment when the snake grows.
+    /**
+     * Returns the current state of the snake as a 2D array.
+     * Each element represents a segment of the snake, containing
+     * its position coordinates and color.
      *
-     * @param oldTailY The Y-coordinate of the previous tail position to be restored.
-     * @param oldTailX The X-coordinate of the previous tail position to be restored.
+     * @return A 2D integer array representing the snake's segments.
      */
-    private void grow(final int oldTailY, final int oldTailX) {
-        expandedSnake = new int[snake.length + 1][AppConfigProject.SNAKE_ITEMS_PART_CONTENT];
+    public int[][] getSnake() {
+        return this.snake;
+    }
 
-        // Copies the snake array into the snakeTemp array
-        System.arraycopy(snake, 0, expandedSnake, 1, snake.length);
-
-        // The tail is re-added here
-        expandedSnake[0][0] = oldTailY;
-        expandedSnake[0][1] = oldTailX;
-        expandedSnake[0][2] = AppConfigProject.COLOR_SNAKE_INT;
-
-        // Updates the snake with the new copy and headIndex is updated
+    protected void setSnake(int[][] expandedSnake) {
         this.snake = expandedSnake;
-        this.headIndex = this.snake.length - 1;
+    }
+
+    protected void setHeadIndex(int headIndex) {
+        this.headIndex = headIndex;
+    }
+
+    public boolean isGameOver() {
+        return this.isGameOver;
+    }
+
+    public void setGameOver(boolean isGameOver) {
+        this.isGameOver = isGameOver;
+    }
+
+    /**
+     * Sets whether changes to the snake's direction are allowed.
+     * Typically used to control if the snake can change direction
+     * based on user input.
+     *
+     * @param isGridUpdated A boolean indicating if the grid has been updated,
+     *                      allowing or preventing direction changes.
+     */
+    public void setAllowChangesToDirection(final boolean isGridUpdated) {
+        this.allowChangesToDirection = isGridUpdated;
     }
 
     /**
@@ -177,30 +186,15 @@ public class SnakeModel implements BaseModel {
         }
     }
 
-    /**
-     * Returns the current state of the snake as a 2D array.
-     * Each element represents a segment of the snake, containing
-     * its position coordinates and the tail also holds it color.
-     *
-     * @return A 2D integer array representing the snake's segments.
-     */
-    public int[][] getSnake() {
-        return snake;
-    }
-
-    /**
-     * Sets whether changes to the snake's direction are allowed.
-     * Typically used to control if the snake can change direction
-     * based on user input.
-     *
-     * @param isGridUpdated A boolean indicating if the grid has been updated,
-     *                      allowing or preventing direction changes.
-     */
-    public void setAllowChangesToDirection(final boolean isGridUpdated) {
-        this.allowChangesToDirection = isGridUpdated;
-    }
-
     public void setGameGrid(int[][] gameGrid) {
         this.gameGrid = gameGrid;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 }

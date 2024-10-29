@@ -41,7 +41,6 @@ public enum GameLauncherInitializer {
     public void runLauncher() {
         if (gameLauncherController == null) {
             this.instantiateLauncher(GameListModel::new, GameLauncherView::new, GameLauncherController::new);
-            this.gameLauncherController.initialize();
         }
     }
 

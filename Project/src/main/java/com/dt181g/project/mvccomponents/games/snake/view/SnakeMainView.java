@@ -1,6 +1,6 @@
 package com.dt181g.project.mvccomponents.games.snake.view;
 
-import com.dt181g.project.mvccomponents.games.GameView;
+import com.dt181g.project.mvccomponents.games.GameMainView;
 import com.dt181g.project.support.AppConfigProject;
 
 import java.awt.CardLayout;
@@ -12,7 +12,7 @@ import javax.swing.JPanel;
  * the game interface, including the start menu, game grid, and control menu.
  *
  * <p>
- * This class extends {@link JPanel} and implements {@link GameView}.
+ * This class extends {@link JPanel} and implements {@link GameMainView}.
  * It uses a grid layout to display the snake's position on the board and
  * provides methods for interacting with game controls.
  * </p>
@@ -23,7 +23,7 @@ import javax.swing.JPanel;
  *
  * @author Joel Lansgren
  */
-public class SnakeMainView extends JPanel implements GameView {
+public class SnakeMainView extends JPanel implements GameMainView {
     private String gameTitle = AppConfigProject.SNAKE_TITLE;
     private final CardLayout cardLayout = new CardLayout();
 

@@ -1,6 +1,6 @@
 package com.dt181g.project.mvccomponents.launcher.view;
 import com.dt181g.project.mvccomponents.BaseView;
-import com.dt181g.project.mvccomponents.games.GameView;
+import com.dt181g.project.mvccomponents.games.GameMainView;
 import com.dt181g.project.support.AppConfigProject;
 import com.dt181g.project.support.BackgroundPanel;
 
@@ -76,7 +76,7 @@ public class GameLauncherView extends JFrame implements BaseView {
         this.gameSelectorPanel.setBackground(AppConfigProject.COLOR_DARK_GREY);
         this.gamesPanel.setLayout(new BoxLayout(this.gamesPanel, BoxLayout.Y_AXIS));
         this.gamesPanel.setBackground(AppConfigProject.COLOR_DARK_GREY);
-        labelStyling(this.pickAGameLabel, AppConfigProject.TEXT_SIZE_NORMAL, false);
+        labelStyling(this.pickAGameLabel, AppConfigProject.TEXT_SIZE_NORMAL);
         this.pickAGameLabel.setBorder(AppConfigProject.BOTTOM_SPACER_30);
         this.gamesPanel.add(Box.createRigidArea(AppConfigProject.HIGHT_20));
         this.gamesPanel.add(this.pickAGameLabel);
@@ -160,9 +160,9 @@ public class GameLauncherView extends JFrame implements BaseView {
      * It adds the new game's view to the card layout panel. It then shows the view.
      * </p>
      *
-     * @param gameView the {@link GameView} to be displayed in the panel
+     * @param gameView the {@link GameMainView} to be displayed in the panel
      */
-    public void displayGame(final GameView gameView) {
+    public void displayGame(final GameMainView gameView) {
         // Adds the panel and show the game view.
         this.gamePanel.add((JPanel) gameView, "Game");
         this.gamePanelCL.show(this.gamePanel, "Game");

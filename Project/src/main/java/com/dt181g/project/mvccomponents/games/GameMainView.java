@@ -14,7 +14,7 @@ import com.dt181g.project.support.DebugLogger;
  * and retrieving information from a game view.
  * </p>
  */
-public interface GameView extends BaseView {
+public interface GameMainView extends BaseView {
     /**
      * Starts the game with the provided game model and title.
      * @param gameAssets a list of assorted assets from the game model to the view

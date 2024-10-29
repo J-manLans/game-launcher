@@ -3,7 +3,6 @@ import com.dt181g.project.support.AppConfigProject;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 import java.awt.Font;
@@ -41,14 +40,10 @@ public interface BaseView {
      *
      * @param label the JLabel to style
      */
-    default void labelStyling(final JLabel label, final int textSize, final boolean snakeText) {
+    default void labelStyling(final JLabel label, final int textSize) {
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         label.setFont(new Font("Monospace", Font.BOLD, textSize));
         label.setForeground(AppConfigProject.COLOR_WHITE);
-        if (snakeText) {
-            label.setHorizontalAlignment(SwingConstants.CENTER);
-            label.setVerticalAlignment(SwingConstants.CENTER);
-        }
     }
 
     /**

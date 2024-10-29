@@ -30,8 +30,8 @@ public class SnakeControlsView extends JPanel implements BaseView {
     public SnakeControlsView() {
         this.setLayout(new GridBagLayout());
 
-        labelStyling(controlsMainLabel, AppConfigProject.TEXT_HEADING_2, false);
-        labelStyling(controlsSubLabel, AppConfigProject.TEXT_SIZE_NORMAL, false);
+        labelStyling(controlsMainLabel, AppConfigProject.TEXT_HEADING_2);
+        labelStyling(controlsSubLabel, AppConfigProject.TEXT_SIZE_NORMAL);
         labelBtn(this.snakeBackBtn, AppConfigProject.COLOR_WHITE);
 
         this.gbc.insets = AppConfigProject.INSET_BOTTOM_20;

@@ -7,9 +7,9 @@ import com.dt181g.project.factories.GameControllerFactory;
 import com.dt181g.project.factories.GameModelFactory;
 import com.dt181g.project.factories.GameViewFactory;
 import com.dt181g.project.mvccomponents.BaseModel;
-import com.dt181g.project.mvccomponents.games.GameController;
-import com.dt181g.project.mvccomponents.games.GameModel;
-import com.dt181g.project.mvccomponents.games.GameView;
+import com.dt181g.project.mvccomponents.games.GameMainController;
+import com.dt181g.project.mvccomponents.games.GameMainModel;
+import com.dt181g.project.mvccomponents.games.GameMainView;
 import com.dt181g.project.mvccomponents.games.snake.controller.SnakeController;
 import com.dt181g.project.mvccomponents.games.snake.model.SnakeGridModel;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeMainView;
@@ -32,9 +32,9 @@ import com.dt181g.project.support.DebugLogger;
 public class GameListModel implements BaseModel {
     private final List<String> iconPaths = new ArrayList<>();
     private final List<String> gameTitles = new ArrayList<>();
-    private final List<GameModel> gameModels = new ArrayList<>();
-    private final List<GameView> gameViews = new ArrayList<>();
-    private final List<GameController> gameControllers = new ArrayList<>();
+    private final List<GameMainModel> gameModels = new ArrayList<>();
+    private final List<GameMainView> gameViews = new ArrayList<>();
+    private final List<GameMainController> gameControllers = new ArrayList<>();
 
     /**
      * Constructs a GameListModel and initializes the game icons and titles.
@@ -75,9 +75,9 @@ public class GameListModel implements BaseModel {
      * @param gameTitle The title of the game, which is used for initializing both the view and the controller.
      */
     private void instantiateGame(
-        final GameModelFactory<GameModel> gameModelFactory,
-        final GameViewFactory<GameView> gameViewFactory,
-        final GameControllerFactory<GameController, GameView, GameModel> gameControllerFactory,
+        final GameModelFactory<GameMainModel> gameModelFactory,
+        final GameViewFactory<GameMainView> gameViewFactory,
+        final GameControllerFactory<GameMainController, GameMainView, GameMainModel> gameControllerFactory,
         final String gameTitle
     ) {
         this.gameModels.add(gameModelFactory.create());
@@ -125,7 +125,7 @@ public class GameListModel implements BaseModel {
      * @param gameTitle the title of the game to retrieve the model for.
      * @return the GameModel associated with the title, or null if not found.
      */
-    public GameModel getGameModel(final String gameTitle) {
+    public GameMainModel getGameModel(final String gameTitle) {
         // As of now the list always contain only one element.
         // But for the project this will change since I will
         // initiate all games in this class constructor so I can
@@ -147,7 +147,7 @@ public class GameListModel implements BaseModel {
      * @param gameTitle the title of the game to retrieve the view for.
      * @return the view associated with the title, or null if not found.
      */
-    public GameView getGameView(final String gameTitle) {
+    public GameMainView getGameView(final String gameTitle) {
         // As of now the list always contain only one element.
         // But for the project this will change since I will
         // initiate all games in this class constructor so I can
@@ -169,7 +169,7 @@ public class GameListModel implements BaseModel {
      * @param gameTitle the title of the game to retrieve the view for.
      * @return the controller associated with the title, or null if not found.
      */
-    public GameController getGameController(final String gameTitle) {
+    public GameMainController getGameController(final String gameTitle) {
         // As of now the list always contain only one element.
         // But for the project this will change since I will
         // initiate all games in this class constructor so I can

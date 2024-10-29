@@ -1,6 +1,7 @@
 package com.dt181g.project.mvccomponents.games.snake.view;
 
 import java.awt.BorderLayout;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -9,7 +10,10 @@ import java.awt.event.MouseAdapter;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import com.dt181g.project.mvccomponents.BaseView;
@@ -19,46 +23,85 @@ import com.dt181g.project.support.DebugLogger;
 
 public class SnakeSinglePlayerView extends JPanel implements BaseView {
     private final GridBagConstraints gbc = new GridBagConstraints();
+    private final JLayeredPane layeredPane = new JLayeredPane();
     private JPanel snakeGrid;
     private JPanel[][] snakeGridCells;
+    // The paintComponent method is overridden to create a transparent overlay effect,
+    // for some reason the setBackground method doesn't apply the alpha channel as one would wish.
+    private final JPanel gameOverPanel = new JPanel() {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.setColor(AppConfigProject.COLOR_TRANSPARENT);
+            g.fillRect(0, 0, getWidth(), getHeight());
+        }
+    };
+    JLabel gameOver = new JLabel("GAME OVER");
+    private final JLabel snakeLengthLabel = new JLabel();
     private int[][] modelGameGrid;
     private final JLabel snakeBackBtn = new JLabel("Back");
-
 
     public SnakeSinglePlayerView() {
         this.setLayout(new GridBagLayout());
         this.setBackground(AppConfigProject.COLOR_DARKER_GREY);
         labelBtn(this.snakeBackBtn, AppConfigProject.COLOR_WHITE);
+        labelStyling(this.gameOver, AppConfigProject.TEXT_HEADING_2);
+        labelStyling(this.snakeLengthLabel, AppConfigProject.TEXT_SIZE_NORMAL);
     }
 
     public void startGame() {
         if (this.snakeGrid == null) {
             this.snakeGrid = new JPanel(new GridLayout(this.modelGameGrid.length, this.modelGameGrid.length));
-            this.snakeGrid.setPreferredSize(AppConfigProject.SNAKE_GRID_SIZE);
+            this.snakeGrid.setBounds(0, 0, AppConfigProject.SNAKE_GRID_SIZE.width, AppConfigProject.SNAKE_GRID_SIZE.height);
             this.snakeGridCells = new JPanel[this.modelGameGrid.length][this.modelGameGrid.length];
+
+            this.layeredPane.setPreferredSize(AppConfigProject.SNAKE_GRID_SIZE);
+            this.layeredPane.add(this.snakeGrid, JLayeredPane.DEFAULT_LAYER);
+            this.setupGameOverPanel();
 
             // Display components
             this.gbc.gridy = 0;
             this.gbc.insets = AppConfigProject.INSET_BOTTOM_20;
-            this.add(this.snakeGrid, gbc);
+            this.add(this.layeredPane, gbc);
 
             this.gbc.gridy++;
             this.gbc.insets = AppConfigProject.RESET_INSETS;
             this.add(this.snakeBackBtn, gbc);
 
+            // Sets up the initial snake grid
+            this.initializeGrid();
         }
+    }
 
-        // Setting up the snake grid
-        this.initializeGrid();
+    private void setupGameOverPanel() {
+        this.gameOverPanel.setLayout(new BoxLayout(this.gameOverPanel, BoxLayout.Y_AXIS));
+        this.gameOverPanel.setBounds(0, 0, AppConfigProject.SNAKE_GRID_SIZE.width, AppConfigProject.SNAKE_GRID_SIZE.height);
+        this.gameOverPanel.setOpaque(false);
+
+        this.gameOverPanel.add(Box.createVerticalGlue());
+        this.gameOverPanel.add(this.gameOver);
+        this.gameOverPanel.add(this.snakeLengthLabel);
+        this.gameOverPanel.add(Box.createVerticalGlue());
+
+    }
+
+    public void showGameOver(String snakeLength) {
+        if (!this.layeredPane.isAncestorOf(gameOverPanel)) {
+            this.layeredPane.add(this.gameOverPanel, JLayeredPane.POPUP_LAYER);
+        }
+        this.snakeLengthLabel.setText(snakeLength);
+        this.gameOverPanel.setVisible(true);
+    }
+
+    public void hideGameOver() {
+        this.gameOverPanel.setVisible(false);
     }
 
     /**
-     * Initializes the grid with the current state of the snake.     *
+     * Initializes the grid with the current state of the snake.
      * @param modelGameGrid  A 2D array representing the current state of the snake grid.
      */
     private void initializeGrid() {
-        this.snakeGrid.removeAll();
-
         for (int i = 0; i < this.modelGameGrid.length; i++) {
             for (int j = 0; j < this.modelGameGrid.length; j++) {
                 // Create cells to put in the grid
@@ -87,12 +130,14 @@ public class SnakeSinglePlayerView extends JPanel implements BaseView {
             for (int j = 0; j < this.modelGameGrid.length; j++) {
                 this.snakeGridCells[i][j].removeAll();
 
-                if (this.modelGameGrid[i][j] != 0) {  // Displays the snake in the grid
+                if (this.modelGameGrid[i][j] != 0) {  // Displays the snake and items in the grid
                     switch (this.modelGameGrid[i][j]) {
                         case AppConfigProject.COLOR_SNAKE_INT -> {
                             this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_ACCENT);
                         } case AppConfigProject.COLOR_CHERRY_INT -> {
                             this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_APPLE);
+                        } case AppConfigProject.COLOR_SNAKE_DEAD_INT -> {
+                            this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_DEAD);
                         } default -> DebugLogger.INSTANCE.logInfo("Unimplemented snake booster.");
                     }
 
