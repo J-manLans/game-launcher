@@ -10,8 +10,10 @@ import com.dt181g.project.support.AppConfigProject;
  */
 public class CherryBoosterModel extends SnakeBoostersModel {
     private int[][] cherry = new int[1][AppConfigProject.SNAKE_ITEMS_PART_CONTENT];
+    private final int boosterColor = AppConfigProject.COLOR_CHERRY_INT;
+
     public CherryBoosterModel() {
-        super.setBooster(this);
+        BoosterManager.INSTANCE.addBoosters(this);
     }
 
     /**
@@ -23,7 +25,7 @@ public class CherryBoosterModel extends SnakeBoostersModel {
      */
     @Override
     protected void eatBooster(SnakeModel snakeModel) {
-        super.initializeBooster(this.cherry);
+        BoosterManager.INSTANCE.initializeBooster(this);
         super.addSpeed(snakeModel, (int) (snakeModel.getSpeed() * AppConfigProject.SNAKE_SPEED_MULTIPLIER));
         this.grow(snakeModel);
     }
@@ -58,5 +60,9 @@ public class CherryBoosterModel extends SnakeBoostersModel {
      */
     public int[][] getBooster() {
         return cherry;
+    }
+
+    protected int getBoosterColor() {
+        return boosterColor;
     }
 }

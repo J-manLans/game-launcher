@@ -93,11 +93,17 @@ public final class AppConfigProject {
     /** Number in snakes body representing the accent color. */
     public static final int COLOR_SNAKE_INT = 1;
 
-    /** Color for the apple to the snake game. */
-    public static final Color COLOR_SNAKE_GAME_APPLE = new Color(167, 56, 68);
+    /** Color for the cherry to the snake game. */
+    public static final Color COLOR_SNAKE_GAME_CHERRY = new Color(167, 56, 68);
 
-    /** Number in apples body representing the color. */
+    /** Number in cherry's body representing the color. */
     public static final int COLOR_CHERRY_INT = 2;
+
+    /** Color for the speed booster to the snake game. */
+    public static final Color COLOR_SNAKE_GAME_SPEED = Color.YELLOW;
+
+    /** Number in speed boosters body representing the color. */
+    public static final int COLOR_SPEED_INT = 4;
 
     /** Snakes head color when in collision to mark its position. */
     public static final Color COLOR_SNAKE_GAME_DEAD = new Color(84,24,24);

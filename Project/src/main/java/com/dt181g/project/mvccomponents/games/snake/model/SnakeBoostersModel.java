@@ -1,7 +1,5 @@
 package com.dt181g.project.mvccomponents.games.snake.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import com.dt181g.project.mvccomponents.BaseModel;
@@ -10,9 +8,8 @@ import com.dt181g.project.support.AppConfigProject;
 public abstract class SnakeBoostersModel implements BaseModel {
     private int[][] gameGrid;
     private final Random randomizer = new Random();
-    private boolean isBoosterOnGrid;
+    private boolean isBoosterEaten = true;
     private int spawnCountDown;
-    private final List<SnakeBoostersModel> boosters = new ArrayList<>();
 
     /**
      * Initializes the booster on startup and concurrent initializations.
@@ -21,7 +18,7 @@ public abstract class SnakeBoostersModel implements BaseModel {
         // Sets the color of the booster to background color
         booster[0][2] = 0;
         // Allows the booster to be spawned on a different cell
-        this.isBoosterOnGrid = false;
+        this.isBoosterEaten = true;
         // Sets the countdown for allowing the new booster to be spawned
         this.spawnCountDown = randomizer.nextInt(AppConfigProject.UPPER_SPAWNING_BOUND);
     }
@@ -32,13 +29,13 @@ public abstract class SnakeBoostersModel implements BaseModel {
      * Resets the countdown when a booster is spawned.
      */
     protected void spawnBooster(int[][] snake, int[][] booster) {
-        if (!this.isBoosterOnGrid && this.spawnCountDown == 0) {
+        if (this.isBoosterEaten && this.spawnCountDown == 0) {
             booster = randomizeBoosterLocation(booster);
             while (boosterSpawnedOnSnake(snake, booster)) {
                 booster = randomizeBoosterLocation(booster);
             }
 
-            this.isBoosterOnGrid = true;
+            this.isBoosterEaten = false;
         }
 
         if (this.spawnCountDown > 0) { this.spawnCountDown--; }
@@ -71,10 +68,7 @@ public abstract class SnakeBoostersModel implements BaseModel {
         this.gameGrid = gameGrid;
     }
 
-    public void setBooster(SnakeBoostersModel booster) {
-        this.boosters.add(booster);
-    }
-
     protected abstract void eatBooster(SnakeModel snakeModel);
     public abstract int[][] getBooster();
+    protected abstract int getBoosterColor();
 }
