@@ -73,7 +73,6 @@ public class SnakeController implements GameMainController {
     public SnakeController(final GameMainView snakeMainView, final GameMainModel snakeModel) {
         this.snakeMainView = (SnakeMainView) snakeMainView;
         this.snakeGridModel = (SnakeGridModel) snakeModel;
-
     }
 
     public void initialize() {

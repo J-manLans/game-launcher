@@ -135,7 +135,7 @@ public class SnakeSinglePlayerView extends JPanel implements BaseView {
                         case AppConfigProject.COLOR_SNAKE_INT -> {
                             this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_ACCENT);
                         } case AppConfigProject.COLOR_CHERRY_INT -> {
-                            this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_APPLE);
+                            this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_CHERRY);
                         } case AppConfigProject.COLOR_SNAKE_DEAD_INT -> {
                             this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_DEAD);
                         } default -> DebugLogger.INSTANCE.logInfo("Unimplemented snake booster.");
