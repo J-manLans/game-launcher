@@ -31,7 +31,17 @@ public enum BoosterManager {
         this.spawnCountDown = randomizer.nextInt(AppConfigProject.UPPER_SPAWNING_BOUND);
     }
 
-    public void spawnRandomBooster(int[][] snake) {
+    public void spawnRandomBooster(SnakeModel snakeModel) {
+        // TODO: debug this and see how it works when a speedBooster is active
+        for (SnakeBoostersModel boosterModel : boosters) {
+            if (boosterModel.isActive()) {
+                ((BoosterEffect) boosterModel).setSpeedBoosterEffectTimeout(1);
+                if (((BoosterEffect) boosterModel).getSpeedBoosterEffectTimeout() == 0) {
+                    ((BoosterEffect) boosterModel).reset(snakeModel);
+                }
+            }
+        }
+
         if (this.isBoostersAvailable && this.spawnCountDown == 0) {
             do {
                 this.currentBoosterModelIndex = randomizer.nextInt(boosters.size());
@@ -40,7 +50,7 @@ public enum BoosterManager {
 
             do {
                 randomizeBoosterLocation();
-            } while (boosterSpawnedOnSnake(snake));
+            } while (boosterSpawnedOnSnake(snakeModel.getSnake()));
 
             this.isBoostersAvailable = false;
         }

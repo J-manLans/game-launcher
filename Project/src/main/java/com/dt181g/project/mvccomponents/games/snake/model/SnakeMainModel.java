@@ -58,7 +58,7 @@ public class SnakeMainModel implements GameMainModel {
         this.overlayGameItemsOnGrid(snakeModel.getSnake());
         // This can be done after the grid is cleared but must also be after the snake is laid
         // on the grid, otherwise boosters can spawn on the snake
-        BoosterManager.INSTANCE.spawnRandomBooster(snakeModel.getSnake());
+        BoosterManager.INSTANCE.spawnRandomBooster(snakeModel);
         // Outputs possible boosters
         if (BoosterManager.INSTANCE.getCurrentBooster() != null) {
             this.overlayGameItemsOnGrid(BoosterManager.INSTANCE.getCurrentBooster());
