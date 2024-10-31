@@ -28,13 +28,13 @@ enum ResourceRunner {
     void runRunner() {
         try {
             SwingUtilities.invokeAndWait(() -> {
-                resourceFrame.setupAndStartGUI();
+                this.resourceFrame.setupAndStartGUI();
             });
         } catch (InvocationTargetException | InterruptedException e) {
             e.printStackTrace();
         }
 
-        manager.initiateAndStartThreads();
+        this.manager.initiateAndStartThreads();
 
         Timer resourceCheckTimer = new Timer(AppConfig.EDT_REFRESH_DELAY, new ActionListener() {
             @Override

@@ -41,14 +41,14 @@ enum Manager {
      * and consumers to operate concurrently.
      */
     void initiateAndStartThreads() {
-        for (int i = 1; i <= largerQuantity; i++) {
-            if (i <= producers) {
-                this.activeProducers.add(new Thread(producer, AppConfig.PRODUCER));
+        for (int i = 1; i <= this.largerQuantity; i++) {
+            if (i <= this.producers) {
+                this.activeProducers.add(new Thread(this.producer, AppConfig.PRODUCER));
                 this.activeProducers.peekLast().start();
             }
 
-            if (i <= consumers) {
-                this.activeConsumers.add(new Thread(consumer, AppConfig.CONSUMER));
+            if (i <= this.consumers) {
+                this.activeConsumers.add(new Thread(this.consumer, AppConfig.CONSUMER));
                 this.activeConsumers.peekLast().start();
             }
         }
@@ -60,7 +60,7 @@ enum Manager {
      * and if so, updates the clients and redraws the GUI components accordingly.
      */
     void refreshGUI(final ResourceFrame resourceFrame) {
-        this.currentPoolSize = resourcePool.pollForResource();
+        this.currentPoolSize = this.resourcePool.pollForResource();
         if (this.currentPoolSize != this.tempPoolSize) {
             this.modifyClients();
             this.updateClientCount();

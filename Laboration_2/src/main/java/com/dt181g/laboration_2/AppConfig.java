@@ -15,8 +15,6 @@ public final class AppConfig {
     // make sure the class cannot be instantiated.
     private AppConfig() { throw new IllegalStateException("Utility class"); }
 
-    public static volatile AtomicInteger ACTIVE = new AtomicInteger(11);
-
     /*=================================
      * Resource Pool Settings
     =================================*/
