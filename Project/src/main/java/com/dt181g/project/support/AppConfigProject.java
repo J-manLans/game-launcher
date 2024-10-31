@@ -197,6 +197,8 @@ public final class AppConfigProject {
 
     public static double SNAKE_SPEED_MULTIPLIER = 0.9;
 
+    public static final int CHERRY_INDEX = 0;
+
     /* ---------------------------------------
     Steering.
     ------------------------------------------ */
@@ -244,8 +246,6 @@ public final class AppConfigProject {
 
     /** Magenta color. */
     public static final String ANSI_MAGENTA = DebugColor.MAGENTA.ansiCode;
-
-
 
     /**
      * An enum representing ANSI color codes for console output.

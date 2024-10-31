@@ -26,7 +26,10 @@ public class CherryBoosterModel extends SnakeBoostersModel {
     @Override
     protected void eatBooster(SnakeModel snakeModel) {
         BoosterManager.INSTANCE.initializeBooster(this);
-        super.addSpeed(snakeModel, (int) (snakeModel.getSpeed() * AppConfigProject.SNAKE_SPEED_MULTIPLIER));
+        BoosterManager.INSTANCE.addSpeed(
+            snakeModel,
+            (int) (snakeModel.getSpeed() * AppConfigProject.SNAKE_SPEED_MULTIPLIER)
+        );
         this.grow(snakeModel);
     }
 
@@ -64,5 +67,10 @@ public class CherryBoosterModel extends SnakeBoostersModel {
 
     protected int getBoosterColor() {
         return boosterColor;
+    }
+
+    @Override
+    protected boolean isActive() {
+        return false;
     }
 }

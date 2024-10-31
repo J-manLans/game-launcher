@@ -108,9 +108,9 @@ public class SnakeModel implements BaseModel {
                 this.isGameOver = true;
                 this.snake[snake.length - 1][2] = 3;  // Colors the head at its collision coordinates.
                 this.allowChangesToDirection = false;
-            } case AppConfigProject.COLOR_CHERRY_INT -> {
-                booster.eatBooster(this);
-            } case AppConfigProject.COLOR_SPEED_INT -> booster.eatBooster(this);
+            }
+            case AppConfigProject.COLOR_CHERRY_INT -> booster.eatBooster(this);
+            case AppConfigProject.COLOR_SPEED_INT -> booster.eatBooster(this);
         }
     }
 

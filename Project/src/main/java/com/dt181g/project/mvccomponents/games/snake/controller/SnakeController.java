@@ -173,7 +173,6 @@ public class SnakeController implements GameMainController {
         this.snakeModel.setAllowChangesToDirection(true);
         this.snakeModel.setDirection(AppConfigProject.RIGHT, this.restart);
         BoosterManager.INSTANCE.setGameGrid(this.snakeMainModel.getGameGrid());
-        BoosterManager.INSTANCE.setCurrentBooster(this.cherryBoosterModel);
         BoosterManager.INSTANCE.setIsBoosterAvailable(true);
         BoosterManager.INSTANCE.resetSpawnCountDown();
         BoosterManager.INSTANCE.resetBooster();
@@ -203,7 +202,7 @@ public class SnakeController implements GameMainController {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!restart) {
-                    snakeMainModel.updateGameGrid(snakeModel, BoosterManager.INSTANCE.getCurrentBooster());
+                    snakeMainModel.updateGameGrid(snakeModel);
 
                     if (snakeModel.isGameOver()) {
                         gameLoop.stop();

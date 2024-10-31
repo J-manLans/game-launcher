@@ -10,56 +10,63 @@ public enum BoosterManager {
     INSTANCE;
 
     private final List<SnakeBoostersModel> boosters = new ArrayList<>();
-    private int boosterPosition;
     private int[][] gameGrid;
     private final Random randomizer = new Random();
-    private boolean isBoosterAvailable = true;
+    // Makes the initial booster to spawn a cherry
+    private int currentBoosterModelIndex = AppConfigProject.CHERRY_INDEX;
+    // initial state, since no booster is on the grid at start they are available
+    private boolean isBoostersAvailable = true;
+    // Initial random countdown for spawning a booster
     private int spawnCountDown = randomizer.nextInt(AppConfigProject.UPPER_SPAWNING_BOUND);
-    private int[][] booster;
-    private SnakeBoostersModel currentBoosterModel;
+    private int[][] currentBooster;
 
     public void initializeBooster(SnakeBoostersModel boosterModel) {
-        // Sets the color of the booster to background color
+        // Sets the color of the old booster to background color, effectively
+        // devouring it from the grid since the snake interact with it's color,
+        // not coordinates.
         boosterModel.getBooster()[0][2] = 0;
         // Allows the booster to be spawned on a different cell
-        this.isBoosterAvailable = true;
-        //
-        this.boosterPosition = randomizer.nextInt(boosters.size());
-        this.setCurrentBooster(boosters.get(this.boosterPosition));
+        this.isBoostersAvailable = true;
         // Sets the countdown for allowing the new booster to be spawned
         this.spawnCountDown = randomizer.nextInt(AppConfigProject.UPPER_SPAWNING_BOUND);
     }
 
     public void spawnRandomBooster(int[][] snake) {
-        this.booster = currentBoosterModel.getBooster();
+        if (this.isBoostersAvailable && this.spawnCountDown == 0) {
+            do {
+                this.currentBoosterModelIndex = randomizer.nextInt(boosters.size());
+            } while (this.boosters.get(this.currentBoosterModelIndex).isActive());
+            this.currentBooster = this.boosters.get(this.currentBoosterModelIndex).getBooster();
 
-        if (this.isBoosterAvailable && this.spawnCountDown == 0) {
-            randomizeBoosterLocation();
-            while (boosterSpawnedOnSnake(snake)) {
+            do {
                 randomizeBoosterLocation();
-            }
+            } while (boosterSpawnedOnSnake(snake));
 
-            this.isBoosterAvailable = false;
+            this.isBoostersAvailable = false;
         }
 
         if (this.spawnCountDown > 0) { this.spawnCountDown--; }
     }
 
     private void randomizeBoosterLocation() {
-        this.booster[0] = new int[]{
+        this.currentBooster[0] = new int[]{
             this.randomizer.nextInt(gameGrid.length),
             this.randomizer.nextInt(gameGrid.length),
-            this.boosters.get(boosterPosition).getBoosterColor()
+            this.boosters.get(this.currentBoosterModelIndex).getBoosterColor()
         };
     }
 
     private boolean boosterSpawnedOnSnake(final int[][] snake) {
         for (int[] bodyPart : snake) {
-            if (bodyPart[0] == this.booster[0][0] && bodyPart[1] == this.booster[0][1]) {
+            if (bodyPart[0] == this.currentBooster[0][0] && bodyPart[1] == this.currentBooster[0][1]) {
                 return true;
             }
         }
         return false;
+    }
+
+    void addSpeed(SnakeModel snakeModel, int speed) {
+        snakeModel.setSpeed(speed);
     }
 
     /*============================
@@ -70,16 +77,12 @@ public enum BoosterManager {
         this.boosters.add(booster);
     }
 
-    public void setCurrentBooster(SnakeBoostersModel boosterModel) {
-        this.currentBoosterModel = boosterModel;
-    }
-
     public void setGameGrid(final int[][] gameGrid) {
         this.gameGrid = gameGrid;
     }
 
     public void setIsBoosterAvailable(boolean isBoosterAvailable) {
-        this.isBoosterAvailable = isBoosterAvailable;
+        this.isBoostersAvailable = isBoosterAvailable;
     }
 
     public void resetSpawnCountDown() {
@@ -87,14 +90,18 @@ public enum BoosterManager {
     }
 
     public void resetBooster() {
-        this.currentBoosterModel.getBooster()[0][2] = 0;
+        this.currentBooster = null;
     }
 
     /*============================
      * Getters
      ===========================*/
 
-    public SnakeBoostersModel getCurrentBooster() {
-        return this.currentBoosterModel;
+    public SnakeBoostersModel getCurrentBoosterModel() {
+        return this.boosters.get(this.currentBoosterModelIndex);
+    }
+
+    public int[][] getCurrentBooster() {
+        return this.currentBooster;
     }
 }

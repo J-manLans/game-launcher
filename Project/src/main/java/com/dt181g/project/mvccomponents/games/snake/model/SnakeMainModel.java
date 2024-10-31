@@ -44,14 +44,14 @@ public class SnakeMainModel implements GameMainModel {
      * state of the snake grid and redraws the snake in its new position.
      * </p>
      */
-    public void updateGameGrid(SnakeModel snakeModel, SnakeBoostersModel booster) {
+    public void updateGameGrid(SnakeModel snakeModel) {
         // Make taking input from keyboard possible again in the loop
         snakeModel.setAllowChangesToDirection(true);
 
         // This is done before clearing the grid to get the position of
         // possible boosters that the snake needs to interact with
         snakeModel.setGameGrid(this.gameGrid);
-        snakeModel.moveSnake(booster);
+        snakeModel.moveSnake(BoosterManager.INSTANCE.getCurrentBoosterModel());
         // Clears the grid and then draws the new items on it.
         this.clearGameGrid();
         // Output the snake
@@ -60,7 +60,9 @@ public class SnakeMainModel implements GameMainModel {
         // on the grid, otherwise boosters can spawn on the snake
         BoosterManager.INSTANCE.spawnRandomBooster(snakeModel.getSnake());
         // Outputs possible boosters
-        this.overlayGameItemsOnGrid(BoosterManager.INSTANCE.getCurrentBooster().getBooster());
+        if (BoosterManager.INSTANCE.getCurrentBooster() != null) {
+            this.overlayGameItemsOnGrid(BoosterManager.INSTANCE.getCurrentBooster());
+        }
     }
 
     /**
