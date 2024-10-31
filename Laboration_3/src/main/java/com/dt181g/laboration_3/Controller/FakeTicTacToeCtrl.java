@@ -1,4 +1,3 @@
-
 package com.dt181g.laboration_3.controller;
 
 import javax.swing.Timer;
