@@ -173,15 +173,27 @@ public class SnakeController implements GameMainController {
         this.snakeModel.setAllowChangesToDirection(true);
         this.snakeModel.setDirection(AppConfigProject.RIGHT, this.restart);
         BoosterManager.INSTANCE.setGameGrid(this.snakeMainModel.getGameGrid());
-        BoosterManager.INSTANCE.setInitialBooster(this.cherryBoosterModel);
+        BoosterManager.INSTANCE.setCurrentBooster(this.cherryBoosterModel);
+        BoosterManager.INSTANCE.setIsBoosterAvailable(true);
+        BoosterManager.INSTANCE.resetSpawnCountDown();
+        BoosterManager.INSTANCE.resetBooster();
+        // Updates the grid with the snake created in the initializeSnake method above
         this.snakeMainModel.overlayGameItemsOnGrid(this.snakeModel.getSnake());
         this.snakeMainView.showGame();
+        // Sets the game grid with the updated position of the snake from the
+        // overlayGameItemsOnGrid method used above.
         this.singlePlayerView.setGameAssets(this.snakeMainModel.getGameAssets());
+        // This one is only truly utilized the first time the game starts up.
+        // Every other time it just sets the focus to the panel so the keyListener
+        // will work properly
         this.singlePlayerView.startGame();
+        // This is to get the true state of the game at every startup
         this.singlePlayerView.updateGameGrid();
 
-        // Key listener for the game
-        this.singlePlayerView.addSnakeKeyListener(new SnakeMovementListener(this));
+        // The key listener for the game is only added once
+        if (this.singlePlayerView.getSnakeGrid().getKeyListeners().length == 0) {
+            this.singlePlayerView.addSnakeKeyListener(new SnakeMovementListener(this.snakeModel));
+        }
 
         // For controlling the loop
         this.restart = false;
@@ -191,12 +203,13 @@ public class SnakeController implements GameMainController {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!restart) {
-                    snakeMainModel.updateGameGrid(snakeModel, cherryBoosterModel);
+                    snakeMainModel.updateGameGrid(snakeModel, BoosterManager.INSTANCE.getCurrentBooster());
 
                     if (snakeModel.isGameOver()) {
                         gameLoop.stop();
                         singlePlayerView.updateGameGrid();
                         singlePlayerView.showGameOver("Your snake was " + snakeModel.getSnake().length + " body parts long.");
+
                     } else {
                         // Speeding up the snake by reducing the delay
                         gameLoop.setDelay(Math.max(0, snakeModel.getSpeed())); // Minimum delay of 0ms

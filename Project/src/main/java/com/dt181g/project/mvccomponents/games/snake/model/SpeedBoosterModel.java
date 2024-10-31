@@ -12,6 +12,7 @@ public class SpeedBoosterModel extends SnakeBoostersModel {
 
     @Override
     protected void eatBooster(SnakeModel snakeModel) {
+        BoosterManager.INSTANCE.initializeBooster(this);
         super.addSpeed(snakeModel, 0);
     }
 

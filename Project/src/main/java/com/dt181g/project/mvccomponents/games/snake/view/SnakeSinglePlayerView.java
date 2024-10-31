@@ -71,6 +71,8 @@ public class SnakeSinglePlayerView extends JPanel implements BaseView {
             // Sets up the initial snake grid
             this.initializeGrid();
         }
+        // For enabling the keyListener
+        this.snakeGrid.requestFocusInWindow();
     }
 
     private void setupGameOverPanel() {
@@ -140,7 +142,7 @@ public class SnakeSinglePlayerView extends JPanel implements BaseView {
                             this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_SPEED);
                         } case AppConfigProject.COLOR_SNAKE_DEAD_INT -> {
                             this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_DEAD);
-                        } default -> DebugLogger.INSTANCE.logInfo("Unimplemented snake booster.");
+                        } default -> DebugLogger.INSTANCE.logInfo("Unimplemented snake booster in " + getClass().getName());
                     }
 
                 } else {  // Background
@@ -178,7 +180,6 @@ public class SnakeSinglePlayerView extends JPanel implements BaseView {
 
     public void addSnakeKeyListener(SnakeMovementListener snakeKeyListener) {
         this.snakeGrid.addKeyListener(snakeKeyListener);
-        this.snakeGrid.requestFocusInWindow();
     }
 
     public void removeListeners() {
@@ -196,5 +197,9 @@ public class SnakeSinglePlayerView extends JPanel implements BaseView {
      */
     public JLabel getSnakeBackBtn() {
         return this.snakeBackBtn;
+    }
+
+    public JPanel getSnakeGrid() {
+        return this.snakeGrid;
     }
 }

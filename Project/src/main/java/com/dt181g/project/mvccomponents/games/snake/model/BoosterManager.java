@@ -25,7 +25,7 @@ public enum BoosterManager {
         this.isBoosterAvailable = true;
         //
         this.boosterPosition = randomizer.nextInt(boosters.size());
-        this.setInitialBooster(boosters.get(this.boosterPosition));
+        this.setCurrentBooster(boosters.get(this.boosterPosition));
         // Sets the countdown for allowing the new booster to be spawned
         this.spawnCountDown = randomizer.nextInt(AppConfigProject.UPPER_SPAWNING_BOUND);
     }
@@ -62,17 +62,37 @@ public enum BoosterManager {
         return false;
     }
 
+    /*============================
+     * Setters
+     ===========================*/
+
     public void addBoosters(SnakeBoostersModel booster) {
         this.boosters.add(booster);
     }
 
-    public void setInitialBooster(SnakeBoostersModel boosterModel) {
+    public void setCurrentBooster(SnakeBoostersModel boosterModel) {
         this.currentBoosterModel = boosterModel;
     }
 
     public void setGameGrid(final int[][] gameGrid) {
         this.gameGrid = gameGrid;
     }
+
+    public void setIsBoosterAvailable(boolean isBoosterAvailable) {
+        this.isBoosterAvailable = isBoosterAvailable;
+    }
+
+    public void resetSpawnCountDown() {
+        this.spawnCountDown = randomizer.nextInt(AppConfigProject.UPPER_SPAWNING_BOUND);
+    }
+
+    public void resetBooster() {
+        this.currentBoosterModel.getBooster()[0][2] = 0;
+    }
+
+    /*============================
+     * Getters
+     ===========================*/
 
     public SnakeBoostersModel getCurrentBooster() {
         return this.currentBoosterModel;
