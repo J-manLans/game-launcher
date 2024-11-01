@@ -10,7 +10,7 @@ import com.dt181g.project.mvccomponents.BaseModel;
  * must provide concrete implementations for these methods.
  * </p>
  */
-public interface GameMainModel extends BaseModel{
+public interface IGameMainModel extends BaseModel{
    /**
      * Retrieves the path to the game's icon.
      *

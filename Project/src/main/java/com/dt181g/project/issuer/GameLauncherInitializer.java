@@ -1,5 +1,8 @@
 package com.dt181g.project.issuer;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.dt181g.project.factories.GameControllerFactory;
 import com.dt181g.project.factories.GameModelFactory;
 import com.dt181g.project.factories.GameViewFactory;
@@ -30,6 +33,8 @@ import com.dt181g.project.mvccomponents.launcher.view.GameLauncherView;
 public enum GameLauncherInitializer {
     INSTANCE;
     private GameLauncherController gameLauncherController;
+    private final CountDownLatch latch = new CountDownLatch(1);
+
 
     /**
      * Initializes and runs the game launcher.
@@ -39,8 +44,17 @@ public enum GameLauncherInitializer {
      * and ready to handle the game launching process.</p>
      */
     public void runLauncher() {
-        if (gameLauncherController == null) {
+
+        if (this.gameLauncherController == null) {
             this.instantiateLauncher(GameListModel::new, GameLauncherView::new, GameLauncherController::new);
+        }
+
+        try {
+            latch.await();
+            System.exit(0);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            e.printStackTrace();
         }
     }
 
@@ -51,5 +65,9 @@ public enum GameLauncherInitializer {
     ) {
 
         gameControllerFactory.create(gameViewFactory.create(), gameModelFactory.create()).initialize();
+    }
+
+    public void countDown() {
+        this.latch.countDown();
     }
 }

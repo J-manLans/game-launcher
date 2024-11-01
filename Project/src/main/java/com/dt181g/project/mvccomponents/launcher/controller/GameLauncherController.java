@@ -1,5 +1,6 @@
 package com.dt181g.project.mvccomponents.launcher.controller;
 
+import com.dt181g.project.issuer.GameLauncherInitializer;
 import com.dt181g.project.mvccomponents.BaseController;
 import com.dt181g.project.mvccomponents.BaseModel;
 import com.dt181g.project.mvccomponents.BaseView;
@@ -123,7 +124,7 @@ public class GameLauncherController implements BaseController {
         this.gameLauncherView.addQuitBtnListener(
             new MenuButtonListener(
                 this.gameLauncherView.getQuitBtn(),
-                 gameLauncherView::exitLauncher
+                this::exitLauncher
             )
         );
     }
@@ -135,5 +136,9 @@ public class GameLauncherController implements BaseController {
         SwingUtilities.invokeLater(() -> {
             gameLauncherView.setVisible(true);
         });
+    }
+
+    public void exitLauncher() {
+        GameLauncherInitializer.INSTANCE.countDown();
     }
 }

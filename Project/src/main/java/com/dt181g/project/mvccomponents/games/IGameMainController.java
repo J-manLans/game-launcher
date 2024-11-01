@@ -16,7 +16,7 @@ import com.dt181g.project.mvccomponents.BaseController;
  * functionality to handle user inputs and reset the game when necessary.
  * </p>
  */
-public interface GameMainController extends BaseController {
+public interface IGameMainController extends BaseController {
     /**
      * Initializes the event listeners for user interactions in the game.
      */

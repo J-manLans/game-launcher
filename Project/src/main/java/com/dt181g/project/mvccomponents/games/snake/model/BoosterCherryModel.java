@@ -8,12 +8,12 @@ import com.dt181g.project.support.AppConfigProject;
  * increases the snake's speed and adds a segment to its body.
  * @author Joel Lansgren
  */
-public class CherryBoosterModel implements SnakeBoostersModel {
+public class BoosterCherryModel implements ISnakeBoostersModel {
     private int[][] cherry = new int[1][AppConfigProject.SNAKE_ITEMS_PART_CONTENT];
     private final int boosterColor = AppConfigProject.COLOR_CHERRY_INT;
 
-    public CherryBoosterModel() {
-        SnakeBoosterManager.INSTANCE.addBoosters(this);
+    public BoosterCherryModel() {
+        ManagerSnakeBooster.INSTANCE.addBoosters(this);
     }
 
     /**
@@ -25,8 +25,8 @@ public class CherryBoosterModel implements SnakeBoostersModel {
      */
     @Override
     public void eatBooster(SnakeModel snakeModel) {
-        SnakeBoosterManager.INSTANCE.eatAndResetBooster(this.cherry);
-        SnakeBoosterManager.INSTANCE.setSpeed(
+        ManagerSnakeBooster.INSTANCE.eatAndResetBooster(this.cherry);
+        ManagerSnakeBooster.INSTANCE.setSpeed(
             snakeModel,
             (snakeModel.getSpeed() * AppConfigProject.SNAKE_SPEED_MULTIPLIER)
         );

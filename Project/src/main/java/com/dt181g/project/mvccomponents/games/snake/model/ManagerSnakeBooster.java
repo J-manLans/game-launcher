@@ -15,10 +15,10 @@ import com.dt181g.project.support.AppConfigProject;
  *
  * @author Joel Lansgren
  */
-enum SnakeBoosterManager {
+enum ManagerSnakeBooster {
     INSTANCE;
 
-    private final List<SnakeBoostersModel> boosters = new ArrayList<>();
+    private final List<ISnakeBoostersModel> boosters = new ArrayList<>();
     private int[][] gameGrid;
     private final Random randomizer = new Random();
     // Makes the initial booster to spawn a cherry
@@ -116,11 +116,11 @@ enum SnakeBoosterManager {
      * @param snakeModel The current snake model to apply effects to.
      */
     private void updateActiveBoosters(SnakeModel snakeModel) {
-        for (SnakeBoostersModel boosterModel : boosters) {
+        for (ISnakeBoostersModel boosterModel : boosters) {
             if (boosterModel.isActive()) {
                 boosterEffectDuration -= 1;
                 if (boosterEffectDuration < 0) {
-                    ((BoosterEffect) boosterModel).reset(snakeModel);
+                    ((IBoosterEffect) boosterModel).reset(snakeModel);
                 }
             }
         }
@@ -155,7 +155,7 @@ enum SnakeBoosterManager {
      *
      * @param booster The booster model to add.
      */
-    void addBoosters(SnakeBoostersModel booster) {
+    void addBoosters(ISnakeBoostersModel booster) {
         this.boosters.add(booster);
     }
 
@@ -168,7 +168,7 @@ enum SnakeBoosterManager {
      *
      * @return The current booster model.
      */
-    SnakeBoostersModel getCurrentBoosterModel() {
+    ISnakeBoostersModel getCurrentBoosterModel() {
         return this.boosters.get(this.currentBoosterModelIndex);
     }
 

@@ -1,5 +1,5 @@
 package com.dt181g.project.mvccomponents;
 
-public interface BaseController {
+public interface IBaseController {
     void initialize();
 }
