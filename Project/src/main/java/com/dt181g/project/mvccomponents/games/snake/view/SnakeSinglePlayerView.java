@@ -49,7 +49,29 @@ public class SnakeSinglePlayerView extends JPanel implements BaseView {
         labelStyling(this.snakeLengthLabel, AppConfigProject.TEXT_SIZE_NORMAL);
     }
 
-    public void startGame() {
+    public void initializeView(List<Object> gameAssets) {
+        this.setGameAssets(gameAssets);
+        // This one is only truly utilized the first time the game starts up.
+        // Every other time it just sets the focus to the panel so the keyListener
+        // will work properly
+        this.startGame();
+        // This is to get the true state of the game at every startup
+        this.updateGameGrid();
+    }
+
+    /**
+     * Sets the list with the snakes starter position in the grid.
+     * @param gameAssets a list containing a 2D int array representing the snakes position in the grid
+     */
+    private void setGameAssets(List<Object> gameAssets) {
+        for (Object asset : gameAssets) {
+            if (asset instanceof int[][]) {
+                this.modelGameGrid = (int[][]) asset;
+            }
+        }
+    }
+
+    private void startGame() {
         if (this.snakeGrid == null) {
             this.snakeGrid = new JPanel(new GridLayout(this.modelGameGrid.length, this.modelGameGrid.length));
             this.snakeGrid.setBounds(0, 0, AppConfigProject.SNAKE_GRID_SIZE.width, AppConfigProject.SNAKE_GRID_SIZE.height);
@@ -148,18 +170,6 @@ public class SnakeSinglePlayerView extends JPanel implements BaseView {
                 } else {  // Background
                     this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_DARKER_GREY);
                 }
-            }
-        }
-    }
-
-    /**
-     * Sets the list with the snakes current position in the grid.
-     * @param gameAssets a list containing a 2D int array representing the snakes position in the grid
-     */
-    public void setGameAssets(List<Object> gameAssets) {
-        for (Object asset : gameAssets) {
-            if (asset instanceof int[][]) {
-                this.modelGameGrid = (int[][]) asset;
             }
         }
     }

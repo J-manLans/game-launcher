@@ -8,12 +8,12 @@ import com.dt181g.project.support.AppConfigProject;
  * increases the snake's speed and adds a segment to its body.
  * @author Joel Lansgren
  */
-public class CherryBoosterModel extends SnakeBoostersModel {
+public class CherryBoosterModel implements SnakeBoostersModel {
     private int[][] cherry = new int[1][AppConfigProject.SNAKE_ITEMS_PART_CONTENT];
     private final int boosterColor = AppConfigProject.COLOR_CHERRY_INT;
 
     public CherryBoosterModel() {
-        BoosterManager.INSTANCE.addBoosters(this);
+        SnakeBoosterManager.INSTANCE.addBoosters(this);
     }
 
     /**
@@ -24,14 +24,15 @@ public class CherryBoosterModel extends SnakeBoostersModel {
      * @param snakeModel The snake model to which the effect is applied.
      */
     @Override
-    protected void eatBooster(SnakeModel snakeModel) {
-        BoosterManager.INSTANCE.initializeBooster(this);
-        BoosterManager.INSTANCE.addSpeed(
+    public
+    void eatBooster(SnakeModel snakeModel) {
+        SnakeBoosterManager.INSTANCE.eatAndResetBoosterState(this);
+        SnakeBoosterManager.INSTANCE.setSpeed(
             snakeModel,
-            (int) (snakeModel.getSpeed() * AppConfigProject.SNAKE_SPEED_MULTIPLIER)
+            (snakeModel.getSpeed() * AppConfigProject.SNAKE_SPEED_MULTIPLIER)
         );
         this.grow(snakeModel);
-    }
+            }
 
     /**
      * Adds a new segment to the snake, expanding its body array by one
@@ -62,15 +63,15 @@ public class CherryBoosterModel extends SnakeBoostersModel {
      * @return A 2D array representing the cherry booster.
      */
     public int[][] getBooster() {
-        return cherry;
+        return this.cherry;
     }
 
-    protected int getBoosterColor() {
-        return boosterColor;
+    public int getBoosterColor() {
+        return this.boosterColor;
     }
 
     @Override
-    protected boolean isActive() {
+    public boolean isActive() {
         return false;
     }
 }

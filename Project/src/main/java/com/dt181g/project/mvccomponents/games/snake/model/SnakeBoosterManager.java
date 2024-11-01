@@ -1,12 +1,13 @@
 package com.dt181g.project.mvccomponents.games.snake.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import com.dt181g.project.support.AppConfigProject;
 
-public enum BoosterManager {
+public enum SnakeBoosterManager {
     INSTANCE;
 
     private final List<SnakeBoostersModel> boosters = new ArrayList<>();
@@ -19,8 +20,19 @@ public enum BoosterManager {
     // Initial random countdown for spawning a booster
     private int spawnCountDown = randomizer.nextInt(AppConfigProject.UPPER_SPAWNING_BOUND);
     private int[][] currentBooster;
+    private double speedFactor;
+    private double boosterEffectDuration;
 
-    public void initializeBooster(SnakeBoostersModel boosterModel) {
+
+
+    public void initializeBoosterManager(int[][] gameGrid) {
+        this.gameGrid = gameGrid;
+        this.isBoostersAvailable = true;
+        this.spawnCountDown = randomizer.nextInt(AppConfigProject.UPPER_SPAWNING_BOUND);
+        this.currentBooster = null;
+    }
+
+    public void eatAndResetBoosterState(SnakeBoostersModel boosterModel) {
         // Sets the color of the old booster to background color, effectively
         // devouring it from the grid since the snake interact with it's color,
         // not coordinates.
@@ -32,22 +44,12 @@ public enum BoosterManager {
     }
 
     public void spawnRandomBooster(SnakeModel snakeModel) {
-        // TODO: debug this and see how it works when a speedBooster is active
-        for (SnakeBoostersModel boosterModel : boosters) {
-            if (boosterModel.isActive()) {
-                ((BoosterEffect) boosterModel).setSpeedBoosterEffectTimeout(1);
-                if (((BoosterEffect) boosterModel).getSpeedBoosterEffectTimeout() == 0) {
-                    ((BoosterEffect) boosterModel).reset(snakeModel);
-                }
-            }
-        }
-
+        this.handleActiveBoosters(snakeModel);
         if (this.isBoostersAvailable && this.spawnCountDown == 0) {
             do {
                 this.currentBoosterModelIndex = randomizer.nextInt(boosters.size());
             } while (this.boosters.get(this.currentBoosterModelIndex).isActive());
-            this.currentBooster = this.boosters.get(this.currentBoosterModelIndex).getBooster();
-
+                this.currentBooster = this.boosters.get(this.currentBoosterModelIndex).getBooster();
             do {
                 randomizeBoosterLocation();
             } while (boosterSpawnedOnSnake(snakeModel.getSnake()));
@@ -67,45 +69,45 @@ public enum BoosterManager {
     }
 
     private boolean boosterSpawnedOnSnake(final int[][] snake) {
-        for (int[] bodyPart : snake) {
-            if (bodyPart[0] == this.currentBooster[0][0] && bodyPart[1] == this.currentBooster[0][1]) {
-                return true;
-            }
-        }
-        return false;
+        return Arrays.stream(snake)
+            .anyMatch(bodyPart ->
+                bodyPart[0] == this.currentBooster[0][0] &&
+                bodyPart[1] == this.currentBooster[0][1]
+            );
     }
 
-    void addSpeed(SnakeModel snakeModel, int speed) {
+    private void handleActiveBoosters(SnakeModel snakeModel) {
+            for (SnakeBoostersModel boosterModel : boosters) {
+            if (boosterModel.isActive()) {
+                boosterEffectDuration -= 1;
+                if (boosterEffectDuration < 0) {
+                    ((BoosterEffect) boosterModel).reset(snakeModel);
+                }
+            }
+        }
+    }
+
+    protected void setBoosterDuration(SnakeModel snakeModel) {
+        this.speedFactor = AppConfigProject.SNAKE_TICK_DELAY / snakeModel.getSpeed();
+        this.boosterEffectDuration = AppConfigProject.BASE_BOOSTER_DURATION * this.speedFactor;
+        System.err.println("Duration: " + boosterEffectDuration + "\nTime: " + boosterEffectDuration * snakeModel.getSpeed());
+    }
+
+    void setSpeed(SnakeModel snakeModel, double speed) {
         snakeModel.setSpeed(speed);
     }
 
     /*============================
-     * Setters
-     ===========================*/
+        * Setters
+        ===========================*/
 
     public void addBoosters(SnakeBoostersModel booster) {
         this.boosters.add(booster);
     }
 
-    public void setGameGrid(final int[][] gameGrid) {
-        this.gameGrid = gameGrid;
-    }
-
-    public void setIsBoosterAvailable(boolean isBoosterAvailable) {
-        this.isBoostersAvailable = isBoosterAvailable;
-    }
-
-    public void resetSpawnCountDown() {
-        this.spawnCountDown = randomizer.nextInt(AppConfigProject.UPPER_SPAWNING_BOUND);
-    }
-
-    public void resetBooster() {
-        this.currentBooster = null;
-    }
-
     /*============================
-     * Getters
-     ===========================*/
+        * Getters
+        ===========================*/
 
     public SnakeBoostersModel getCurrentBoosterModel() {
         return this.boosters.get(this.currentBoosterModelIndex);

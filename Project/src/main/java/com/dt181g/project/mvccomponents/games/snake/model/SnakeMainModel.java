@@ -35,6 +35,14 @@ public class SnakeMainModel implements GameMainModel {
         this.gameAssets.add(this.gameGrid);
     }
 
+    public void startNewGame(SnakeModel snakeModel) {
+        this.clearGameGrid();
+        snakeModel.initializeSnakeModel(this.gameGrid);
+        SnakeBoosterManager.INSTANCE.initializeBoosterManager(this.gameGrid);
+        // Updates the grid with the snake created in the initializeSnakeModel method above
+        overlayGameItemsOnGrid(snakeModel.getSnake());
+    }
+
     /**
      * Updates the game grid based on the current state of the snake.
      *
@@ -51,17 +59,17 @@ public class SnakeMainModel implements GameMainModel {
         // This is done before clearing the grid to get the position of
         // possible boosters that the snake needs to interact with
         snakeModel.setGameGrid(this.gameGrid);
-        snakeModel.moveSnake(BoosterManager.INSTANCE.getCurrentBoosterModel());
+        snakeModel.moveSnake(SnakeBoosterManager.INSTANCE.getCurrentBoosterModel());
         // Clears the grid and then draws the new items on it.
         this.clearGameGrid();
         // Output the snake
         this.overlayGameItemsOnGrid(snakeModel.getSnake());
         // This can be done after the grid is cleared but must also be after the snake is laid
         // on the grid, otherwise boosters can spawn on the snake
-        BoosterManager.INSTANCE.spawnRandomBooster(snakeModel);
+        SnakeBoosterManager.INSTANCE.spawnRandomBooster(snakeModel);
         // Outputs possible boosters
-        if (BoosterManager.INSTANCE.getCurrentBooster() != null) {
-            this.overlayGameItemsOnGrid(BoosterManager.INSTANCE.getCurrentBooster());
+        if (SnakeBoosterManager.INSTANCE.getCurrentBooster() != null) {
+            this.overlayGameItemsOnGrid(SnakeBoosterManager.INSTANCE.getCurrentBooster());
         }
     }
 

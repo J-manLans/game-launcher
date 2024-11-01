@@ -2,33 +2,32 @@ package com.dt181g.project.mvccomponents.games.snake.model;
 
 import com.dt181g.project.support.AppConfigProject;
 
-public class SpeedBoosterModel extends SnakeBoostersModel implements BoosterEffect {
+public class SpeedBoosterModel implements SnakeBoostersModel, BoosterEffect {
     private int[][] speedBooster = new int[1][AppConfigProject.SNAKE_ITEMS_PART_CONTENT];
     private final int boosterColor = AppConfigProject.COLOR_SPEED_INT;
-    private int snakeSpeed;
-    private int speedBoosterEffectTimeout;
+    private double snakeSpeed;
+    private double halfSpeed;
     private boolean isActive;
-    private int halfSpeed;
 
     public SpeedBoosterModel() {
-        BoosterManager.INSTANCE.addBoosters(this);
+        SnakeBoosterManager.INSTANCE.addBoosters(this);
     }
 
     @Override
-    protected void eatBooster(SnakeModel snakeModel) {
-        BoosterManager.INSTANCE.initializeBooster(this);
+    public void eatBooster(SnakeModel snakeModel) {
         this.snakeSpeed = snakeModel.getSpeed();
         this.halfSpeed = this.snakeSpeed / 2;
-        this.speedBoosterEffectTimeout = 20;
         this.isActive = true;
 
-        BoosterManager.INSTANCE.addSpeed(snakeModel, (this.halfSpeed));
+        SnakeBoosterManager.INSTANCE.setBoosterDuration(snakeModel);
+        SnakeBoosterManager.INSTANCE.eatAndResetBoosterState(this);
+        SnakeBoosterManager.INSTANCE.setSpeed(snakeModel, (this.halfSpeed));
     }
 
     @Override
     public void reset(SnakeModel snakeModel) {
-        BoosterManager.INSTANCE.addSpeed(snakeModel, (this.snakeSpeed - (this.halfSpeed - snakeModel.getSpeed())));
         this.isActive = false;
+        SnakeBoosterManager.INSTANCE.setSpeed(snakeModel, (this.snakeSpeed - (this.halfSpeed - snakeModel.getSpeed())));
     }
 
     @Override
@@ -37,26 +36,12 @@ public class SpeedBoosterModel extends SnakeBoostersModel implements BoosterEffe
     }
 
     @Override
-    protected int getBoosterColor() {
+    public int getBoosterColor() {
         return this.boosterColor;
     }
 
     @Override
     public boolean isActive() {
         return this.isActive;
-    }
-
-    @Override
-    public int getSpeedBoosterEffectTimeout() {
-        return this.speedBoosterEffectTimeout;
-    }
-
-    public int getSnakeSpeed() {
-        return this.snakeSpeed;
-    }
-
-    @Override
-    public void setSpeedBoosterEffectTimeout(int countDown) {
-        this.speedBoosterEffectTimeout += countDown;
     }
 }

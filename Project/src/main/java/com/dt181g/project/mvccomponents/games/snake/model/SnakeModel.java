@@ -13,14 +13,23 @@ public class SnakeModel implements BaseModel {
     private Boolean allowChangesToDirection = true;
     private Direction currentDirection;
     private boolean isGameOver;
-    private int speed = AppConfigProject.SNAKE_TICK_DELAY;
+    private double speed = AppConfigProject.SNAKE_TICK_DELAY;
 
-     /**
+    public void initializeSnakeModel(int[][] clearedGameGrid) {
+        this.gameGrid = clearedGameGrid;
+        this.initializeSnake();
+        this.speed = AppConfigProject.SNAKE_TICK_DELAY;
+        this.isGameOver = false;
+        this.allowChangesToDirection = true;
+        this.setDirection(AppConfigProject.RIGHT, true);
+    }
+
+    /**
      * Initializes the snake's position on the game grid.
      */
-    public void initializeSnake(final int itemParts) {
+    private void initializeSnake() {
         // Re-initialize the snake
-        this.snake = new int[AppConfigProject.INITIAL_SNAKE_LENGTH][itemParts];
+        this.snake = new int[AppConfigProject.INITIAL_SNAKE_LENGTH][AppConfigProject.SNAKE_ITEMS_PART_CONTENT];
         this.headIndex = AppConfigProject.INITIAL_SNAKE_LENGTH - 1;
         // Set snakes tail position.
         this.snake[0][0] = this.gameGrid.length / 2;  // Y-coordinate.
@@ -106,7 +115,7 @@ public class SnakeModel implements BaseModel {
         switch (this.gameGrid[this.snake[headIndex][0]][this.snake[headIndex][1]]) {
             case AppConfigProject.COLOR_SNAKE_INT -> {
                 this.isGameOver = true;
-                this.snake[snake.length - 1][2] = 3;  // Colors the head at its collision coordinates.
+                this.snake[headIndex][2] = 3;  // Colors the head at its collision coordinates.
                 this.allowChangesToDirection = false;
             }
             case AppConfigProject.COLOR_CHERRY_INT -> booster.eatBooster(this);
@@ -185,15 +194,15 @@ public class SnakeModel implements BaseModel {
         }
     }
 
-    public void setGameGrid(int[][] gameGrid) {
-        this.gameGrid = gameGrid;
+    public void setGameGrid(int[][] updatedGameGrid) {
+        this.gameGrid = updatedGameGrid;
     }
 
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
-    public void setSpeed(int speed) {
+    public void setSpeed(double speed) {
         this.speed = speed;
     }
 }

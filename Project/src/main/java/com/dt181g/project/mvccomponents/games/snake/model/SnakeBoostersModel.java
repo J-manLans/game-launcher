@@ -2,10 +2,10 @@ package com.dt181g.project.mvccomponents.games.snake.model;
 
 import com.dt181g.project.mvccomponents.BaseModel;
 
-public abstract class SnakeBoostersModel implements BaseModel {
+public interface SnakeBoostersModel extends BaseModel {
 
-    protected abstract void eatBooster(SnakeModel snakeModel);
-    public abstract int[][] getBooster();
-    protected abstract int getBoosterColor();
-    protected abstract boolean isActive();
+    void eatBooster(SnakeModel snakeModel);
+    int[][] getBooster();
+    int getBoosterColor();
+    boolean isActive();
 }

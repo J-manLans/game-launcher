@@ -9,9 +9,7 @@ import com.dt181g.project.mvccomponents.games.GameMainController;
 import com.dt181g.project.mvccomponents.games.GameMainModel;
 import com.dt181g.project.mvccomponents.games.GameMainView;
 import com.dt181g.project.mvccomponents.games.listeners.SnakeMovementListener;
-import com.dt181g.project.mvccomponents.games.snake.model.BoosterManager;
 import com.dt181g.project.mvccomponents.games.snake.model.CherryBoosterModel;
-import com.dt181g.project.mvccomponents.games.snake.model.SnakeBoostersModel;
 import com.dt181g.project.mvccomponents.games.snake.model.SnakeMainModel;
 import com.dt181g.project.mvccomponents.games.snake.model.SnakeModel;
 import com.dt181g.project.mvccomponents.games.snake.model.SpeedBoosterModel;
@@ -58,8 +56,6 @@ public class SnakeController implements GameMainController {
     private SnakeControlsView controlsView;
     private final SnakeMainModel snakeMainModel;
     private SnakeModel snakeModel;
-    private SnakeBoostersModel cherryBoosterModel;
-    private SnakeBoostersModel speedBoosterModel;
 
     private Timer gameLoop;
     private boolean restart;
@@ -104,7 +100,7 @@ public class SnakeController implements GameMainController {
         this.singlePlayerView = (SnakeSinglePlayerView) singlePlayerView.create();
         this.controlsView = (SnakeControlsView) controlsView.create();
         this.snakeModel = (SnakeModel) snakeModel.create();
-        this.cherryBoosterModel = (SnakeBoostersModel) cherryBoosterModel.create();
+        cherryBoosterModel.create();
         speedBoosterModel.create();
     }
 
@@ -165,30 +161,9 @@ public class SnakeController implements GameMainController {
      */
     private void startGame() {
         // Game initialization.
-        this.snakeMainModel.clearGameGrid();
-        this.snakeModel.setGameGrid(this.snakeMainModel.getGameGrid());
-        this.snakeModel.initializeSnake(AppConfigProject.SNAKE_ITEMS_PART_CONTENT);
-        this.snakeModel.setSpeed(AppConfigProject.SNAKE_TICK_DELAY);
-        this.snakeModel.setGameOver(false);
-        this.snakeModel.setAllowChangesToDirection(true);
-        this.snakeModel.setDirection(AppConfigProject.RIGHT, this.restart);
-        BoosterManager.INSTANCE.setGameGrid(this.snakeMainModel.getGameGrid());
-        BoosterManager.INSTANCE.setIsBoosterAvailable(true);
-        BoosterManager.INSTANCE.resetSpawnCountDown();
-        BoosterManager.INSTANCE.resetBooster();
-        // Updates the grid with the snake created in the initializeSnake method above
-        this.snakeMainModel.overlayGameItemsOnGrid(this.snakeModel.getSnake());
+        this.snakeMainModel.startNewGame(this.snakeModel);
         this.snakeMainView.showGame();
-        // Sets the game grid with the updated position of the snake from the
-        // overlayGameItemsOnGrid method used above.
-        this.singlePlayerView.setGameAssets(this.snakeMainModel.getGameAssets());
-        // This one is only truly utilized the first time the game starts up.
-        // Every other time it just sets the focus to the panel so the keyListener
-        // will work properly
-        this.singlePlayerView.startGame();
-        // This is to get the true state of the game at every startup
-        this.singlePlayerView.updateGameGrid();
-
+        this.singlePlayerView.initializeView(this.snakeMainModel.getGameAssets());
         // The key listener for the game is only added once
         if (this.singlePlayerView.getSnakeGrid().getKeyListeners().length == 0) {
             this.singlePlayerView.addSnakeKeyListener(new SnakeMovementListener(this.snakeModel));
@@ -211,7 +186,7 @@ public class SnakeController implements GameMainController {
 
                     } else {
                         // Speeding up the snake by reducing the delay
-                        gameLoop.setDelay(Math.max(0, snakeModel.getSpeed())); // Minimum delay of 0ms
+                        gameLoop.setDelay(Math.max(0, (int) snakeModel.getSpeed())); // Minimum delay of 0ms
                         singlePlayerView.updateGameGrid();
                     }
 

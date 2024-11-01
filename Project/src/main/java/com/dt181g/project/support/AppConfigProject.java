@@ -193,11 +193,14 @@ public final class AppConfigProject {
     /** Upper bounds number of maximum tics before spawning a new item. */
 	public static final int UPPER_SPAWNING_BOUND = 20;
 
-	public static int SNAKE_TICK_DELAY = 100;
+	public static int SNAKE_TICK_DELAY = 500;
 
     public static double SNAKE_SPEED_MULTIPLIER = 0.9;
 
     public static final int CHERRY_INDEX = 0;
+
+    public static final int BASE_BOOSTER_DURATION = 50;
+
 
     /* ---------------------------------------
     Steering.
