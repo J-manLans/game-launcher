@@ -1,10 +1,10 @@
 package com.dt181g.project.mvccomponents.games.snake.model;
 
-import com.dt181g.project.mvccomponents.BaseModel;
+import com.dt181g.project.mvccomponents.IBaseModel;
 import com.dt181g.project.support.AppConfigProject;
 import com.dt181g.project.support.AppConfigProject.Direction;
 
-public class SnakeModel implements BaseModel {
+public class SnakeModel implements IBaseModel {
     // A snake that has length of the comingSoon string and stores
     // y and x-coordinates in each of its body parts.
     private int[][] snake;
@@ -70,7 +70,7 @@ public class SnakeModel implements BaseModel {
             case RIGHT -> { this.moveSnakeHeadPosDirection(1); }
         }
 
-        checkHeadCell(SnakeBoosterManager.INSTANCE.getCurrentBoosterModel());
+        checkHeadCell(ManagerSnakeBooster.INSTANCE.getCurrentBoosterModel());
     }
 
     /**
@@ -122,7 +122,7 @@ public class SnakeModel implements BaseModel {
      * @param oldTailY The Y-coordinate of the previous tail position, used if the snake grows.
      * @param oldTailX The X-coordinate of the previous tail position, used if the snake grows.
      */
-    private void checkHeadCell(final SnakeBoostersModel booster) {
+    private void checkHeadCell(final ISnakeBoostersModel booster) {
         switch (this.gameGrid[this.snake[headIndex][0]][this.snake[headIndex][1]]) {
             case AppConfigProject.COLOR_SNAKE_INT -> {
                 this.isGameOver = true;

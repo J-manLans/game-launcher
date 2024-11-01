@@ -6,9 +6,9 @@ import java.awt.event.MouseAdapter;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
-import com.dt181g.project.mvccomponents.games.GameMainController;
-import com.dt181g.project.mvccomponents.games.GameMainModel;
-import com.dt181g.project.mvccomponents.games.GameMainView;
+import com.dt181g.project.mvccomponents.games.IGameMainController;
+import com.dt181g.project.mvccomponents.games.IGameMainModel;
+import com.dt181g.project.mvccomponents.games.IGameMainView;
 import com.dt181g.project.mvccomponents.games.tictactoe.model.FakeTicTacToeModel;
 import com.dt181g.project.mvccomponents.games.tictactoe.view.FakeTicTacToeView;
 import com.dt181g.project.support.AppConfigProject;
@@ -25,7 +25,7 @@ import com.dt181g.project.support.DebugLogger;
  * initializing listeners.
  * </p>
  */
-public class FakeTicTacToeCtrl implements GameMainController {
+public class FakeTicTacToeCtrl implements IGameMainController {
     private final FakeTicTacToeView ticTacToeView;
     private final FakeTicTacToeModel ticTacToeModel;
     private final String gameTitle = AppConfigProject.TIC_TAC_TOE_TITLE;
@@ -39,7 +39,7 @@ public class FakeTicTacToeCtrl implements GameMainController {
      * @param ticTacToePanelView the view representing the Tic Tac Toe game
      * @param ticTacToeModel the model representing the game's state
      */
-    public FakeTicTacToeCtrl(final GameMainView ticTacToeView, final GameMainModel ticTacToeModel) {
+    public FakeTicTacToeCtrl(final IGameMainView ticTacToeView, final IGameMainModel ticTacToeModel) {
         this.ticTacToeView = (FakeTicTacToeView) ticTacToeView;
         this.ticTacToeModel = (FakeTicTacToeModel) ticTacToeModel;
     }

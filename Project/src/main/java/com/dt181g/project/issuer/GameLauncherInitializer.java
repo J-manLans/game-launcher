@@ -1,14 +1,13 @@
 package com.dt181g.project.issuer;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import com.dt181g.project.factories.GameControllerFactory;
-import com.dt181g.project.factories.GameModelFactory;
-import com.dt181g.project.factories.GameViewFactory;
-import com.dt181g.project.mvccomponents.BaseController;
-import com.dt181g.project.mvccomponents.BaseModel;
-import com.dt181g.project.mvccomponents.BaseView;
+import com.dt181g.project.factories.BaseControllerFactory;
+import com.dt181g.project.factories.BaseModelFactory;
+import com.dt181g.project.factories.BaseViewFactory;
+import com.dt181g.project.mvccomponents.IBaseController;
+import com.dt181g.project.mvccomponents.IBaseModel;
+import com.dt181g.project.mvccomponents.IBaseView;
 import com.dt181g.project.mvccomponents.launcher.controller.GameLauncherController;
 import com.dt181g.project.mvccomponents.launcher.model.GameListModel;
 import com.dt181g.project.mvccomponents.launcher.view.GameLauncherView;
@@ -59,9 +58,9 @@ public enum GameLauncherInitializer {
     }
 
     private void instantiateLauncher(
-        final GameModelFactory<BaseModel> gameModelFactory,
-        final GameViewFactory<BaseView> gameViewFactory,
-        final GameControllerFactory<BaseController, BaseView, BaseModel> gameControllerFactory
+        final BaseModelFactory<IBaseModel> gameModelFactory,
+        final BaseViewFactory<IBaseView> gameViewFactory,
+        final BaseControllerFactory<IBaseController, IBaseView, IBaseModel> gameControllerFactory
     ) {
 
         gameControllerFactory.create(gameViewFactory.create(), gameModelFactory.create()).initialize();

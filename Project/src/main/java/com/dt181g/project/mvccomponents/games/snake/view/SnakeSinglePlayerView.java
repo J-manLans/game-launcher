@@ -16,12 +16,12 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-import com.dt181g.project.mvccomponents.BaseView;
+import com.dt181g.project.mvccomponents.IBaseView;
 import com.dt181g.project.mvccomponents.games.listeners.SnakeMovementListener;
 import com.dt181g.project.support.AppConfigProject;
 import com.dt181g.project.support.DebugLogger;
 
-public class SnakeSinglePlayerView extends JPanel implements BaseView {
+public class SnakeSinglePlayerView extends JPanel implements IBaseView {
     private final GridBagConstraints gbc = new GridBagConstraints();
     private final JLayeredPane layeredPane = new JLayeredPane();
     private JPanel snakeGrid;

@@ -1,18 +1,18 @@
 package com.dt181g.project.mvccomponents.games.snake.controller;
 
 import com.dt181g.project.mvccomponents.listeners.MenuButtonListener;
-import com.dt181g.project.factories.GameModelFactory;
-import com.dt181g.project.factories.GameViewFactory;
-import com.dt181g.project.mvccomponents.BaseModel;
-import com.dt181g.project.mvccomponents.BaseView;
-import com.dt181g.project.mvccomponents.games.GameMainController;
-import com.dt181g.project.mvccomponents.games.GameMainModel;
-import com.dt181g.project.mvccomponents.games.GameMainView;
+import com.dt181g.project.factories.BaseModelFactory;
+import com.dt181g.project.factories.BaseViewFactory;
+import com.dt181g.project.mvccomponents.IBaseModel;
+import com.dt181g.project.mvccomponents.IBaseView;
+import com.dt181g.project.mvccomponents.games.IGameMainController;
+import com.dt181g.project.mvccomponents.games.IGameMainModel;
+import com.dt181g.project.mvccomponents.games.IGameMainView;
 import com.dt181g.project.mvccomponents.games.listeners.SnakeMovementListener;
-import com.dt181g.project.mvccomponents.games.snake.model.CherryBoosterModel;
+import com.dt181g.project.mvccomponents.games.snake.model.BoosterCherryModel;
 import com.dt181g.project.mvccomponents.games.snake.model.SnakeMainModel;
 import com.dt181g.project.mvccomponents.games.snake.model.SnakeModel;
-import com.dt181g.project.mvccomponents.games.snake.model.SpeedBoosterModel;
+import com.dt181g.project.mvccomponents.games.snake.model.BoosterSpeedModel;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeControlsView;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeMainView;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeSinglePlayerView;
@@ -46,7 +46,7 @@ import javax.swing.Timer;
  *
  * @author Joel Lansgren
  */
-public class SnakeController implements GameMainController {
+public class SnakeController implements IGameMainController {
 
     private final String gameTitle = AppConfigProject.SNAKE_TITLE;
 
@@ -70,7 +70,7 @@ public class SnakeController implements GameMainController {
      * @param snakeMainView the view associated with the Snake game
      * @param snakeModel the model representing the game's logic
      */
-    public SnakeController(final GameMainView snakeMainView, final GameMainModel snakeModel) {
+    public SnakeController(final IGameMainView snakeMainView, final IGameMainModel snakeModel) {
         this.snakeMainView = (SnakeMainView) snakeMainView;
         this.snakeMainModel = (SnakeMainModel) snakeModel;
     }
@@ -81,20 +81,20 @@ public class SnakeController implements GameMainController {
             SnakeSinglePlayerView::new,
             SnakeControlsView::new,
             SnakeModel::new,
-            CherryBoosterModel::new,
-            SpeedBoosterModel::new
+            BoosterCherryModel::new,
+            BoosterSpeedModel::new
         );
         this.snakeMainView.setViews(this.startMenuView, this.singlePlayerView, this.controlsView);
         this.initializeListeners();
     }
 
     public void instantiateViewsAndModels(
-        final GameViewFactory<BaseView> startMenuView,
-        final GameViewFactory<BaseView> singlePlayerView,
-        final GameViewFactory<BaseView> controlsView,
-        final GameModelFactory<BaseModel> snakeModel,
-        final GameModelFactory<BaseModel> cherryBoosterModel,
-        final GameModelFactory<BaseModel> speedBoosterModel
+        final BaseViewFactory<IBaseView> startMenuView,
+        final BaseViewFactory<IBaseView> singlePlayerView,
+        final BaseViewFactory<IBaseView> controlsView,
+        final BaseModelFactory<IBaseModel> snakeModel,
+        final BaseModelFactory<IBaseModel> cherryBoosterModel,
+        final BaseModelFactory<IBaseModel> speedBoosterModel
     ) {
         this.startMenuView = (SnakeStartMenuView) startMenuView.create();
         this.singlePlayerView = (SnakeSinglePlayerView) singlePlayerView.create();

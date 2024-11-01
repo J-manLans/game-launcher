@@ -3,7 +3,7 @@ package com.dt181g.project.mvccomponents.games.snake.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dt181g.project.mvccomponents.games.GameMainModel;
+import com.dt181g.project.mvccomponents.games.IGameMainModel;
 import com.dt181g.project.support.AppConfigProject;
 
 /**
@@ -24,7 +24,7 @@ import com.dt181g.project.support.AppConfigProject;
  *
  * @author Joel Lansgren
  */
-public class SnakeMainModel implements GameMainModel {
+public class SnakeMainModel implements IGameMainModel {
     private final String gameTitle = AppConfigProject.SNAKE_TITLE;
     private final String iconPath = AppConfigProject.PATH_TO_ICONS + AppConfigProject.SNAKE_ICON;
     private final int gridSize = AppConfigProject.SNAKE_CELL_COUNT;
@@ -38,7 +38,7 @@ public class SnakeMainModel implements GameMainModel {
     public void startNewGame(SnakeModel snakeModel) {
         this.clearGameGrid();
         snakeModel.initializeSnakeModel(this.gameGrid);
-        SnakeBoosterManager.INSTANCE.initializeBoosterManager(this.gameGrid);
+        ManagerSnakeBooster.INSTANCE.initializeBoosterManager(this.gameGrid);
         // Updates the grid with the snake created in the initializeSnakeModel method above
         this.overlayGameItemsOnGrid(snakeModel.getSnake());
     }
@@ -60,10 +60,10 @@ public class SnakeMainModel implements GameMainModel {
         this.overlayGameItemsOnGrid(snakeModel.getSnake());
         // This can be done after the grid is cleared but must also be after the snake is laid
         // on the grid, otherwise boosters can spawn on the snake
-        SnakeBoosterManager.INSTANCE.trySpawnRandomBooster(snakeModel);
+        ManagerSnakeBooster.INSTANCE.trySpawnRandomBooster(snakeModel);
         // Outputs possible boosters
-        if (SnakeBoosterManager.INSTANCE.getCurrentBooster() != null) {
-            this.overlayGameItemsOnGrid(SnakeBoosterManager.INSTANCE.getCurrentBooster());
+        if (ManagerSnakeBooster.INSTANCE.getCurrentBooster() != null) {
+            this.overlayGameItemsOnGrid(ManagerSnakeBooster.INSTANCE.getCurrentBooster());
         }
     }
 

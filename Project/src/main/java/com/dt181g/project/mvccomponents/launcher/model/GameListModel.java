@@ -3,13 +3,13 @@ package com.dt181g.project.mvccomponents.launcher.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dt181g.project.factories.GameControllerFactory;
-import com.dt181g.project.factories.GameModelFactory;
-import com.dt181g.project.factories.GameViewFactory;
-import com.dt181g.project.mvccomponents.BaseModel;
-import com.dt181g.project.mvccomponents.games.GameMainController;
-import com.dt181g.project.mvccomponents.games.GameMainModel;
-import com.dt181g.project.mvccomponents.games.GameMainView;
+import com.dt181g.project.factories.BaseControllerFactory;
+import com.dt181g.project.factories.BaseModelFactory;
+import com.dt181g.project.factories.BaseViewFactory;
+import com.dt181g.project.mvccomponents.IBaseModel;
+import com.dt181g.project.mvccomponents.games.IGameMainController;
+import com.dt181g.project.mvccomponents.games.IGameMainModel;
+import com.dt181g.project.mvccomponents.games.IGameMainView;
 import com.dt181g.project.mvccomponents.games.snake.controller.SnakeController;
 import com.dt181g.project.mvccomponents.games.snake.model.SnakeMainModel;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeMainView;
@@ -29,12 +29,12 @@ import com.dt181g.project.support.DebugLogger;
  *
  * @author Joel Lansgren
  */
-public class GameListModel implements BaseModel {
+public class GameListModel implements IBaseModel {
     private final List<String> iconPaths = new ArrayList<>();
     private final List<String> gameTitles = new ArrayList<>();
-    private final List<GameMainModel> gameModels = new ArrayList<>();
-    private final List<GameMainView> gameViews = new ArrayList<>();
-    private final List<GameMainController> gameControllers = new ArrayList<>();
+    private final List<IGameMainModel> gameModels = new ArrayList<>();
+    private final List<IGameMainView> gameViews = new ArrayList<>();
+    private final List<IGameMainController> gameControllers = new ArrayList<>();
 
     /**
      * Constructs a GameListModel and initializes the game icons and titles.
@@ -75,9 +75,9 @@ public class GameListModel implements BaseModel {
      * @param gameTitle The title of the game, which is used for initializing both the view and the controller.
      */
     private void instantiateGame(
-        final GameModelFactory<GameMainModel> gameModelFactory,
-        final GameViewFactory<GameMainView> gameViewFactory,
-        final GameControllerFactory<GameMainController, GameMainView, GameMainModel> gameControllerFactory,
+        final BaseModelFactory<IGameMainModel> gameModelFactory,
+        final BaseViewFactory<IGameMainView> gameViewFactory,
+        final BaseControllerFactory<IGameMainController, IGameMainView, IGameMainModel> gameControllerFactory,
         final String gameTitle
     ) {
         this.gameModels.add(gameModelFactory.create());
@@ -125,7 +125,7 @@ public class GameListModel implements BaseModel {
      * @param gameTitle the title of the game to retrieve the model for.
      * @return the GameModel associated with the title, or null if not found.
      */
-    public GameMainModel getGameModel(final String gameTitle) {
+    public IGameMainModel getGameModel(final String gameTitle) {
         // As of now the list always contain only one element.
         // But for the project this will change since I will
         // initiate all games in this class constructor so I can
@@ -147,7 +147,7 @@ public class GameListModel implements BaseModel {
      * @param gameTitle the title of the game to retrieve the view for.
      * @return the view associated with the title, or null if not found.
      */
-    public GameMainView getGameView(final String gameTitle) {
+    public IGameMainView getGameView(final String gameTitle) {
         // As of now the list always contain only one element.
         // But for the project this will change since I will
         // initiate all games in this class constructor so I can
@@ -169,7 +169,7 @@ public class GameListModel implements BaseModel {
      * @param gameTitle the title of the game to retrieve the view for.
      * @return the controller associated with the title, or null if not found.
      */
-    public GameMainController getGameController(final String gameTitle) {
+    public IGameMainController getGameController(final String gameTitle) {
         // As of now the list always contain only one element.
         // But for the project this will change since I will
         // initiate all games in this class constructor so I can

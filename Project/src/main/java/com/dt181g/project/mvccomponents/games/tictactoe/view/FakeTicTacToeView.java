@@ -7,12 +7,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.dt181g.project.mvccomponents.games.GameMainView;
+import com.dt181g.project.mvccomponents.games.IGameMainView;
 import com.dt181g.project.mvccomponents.launcher.view.GameLauncherView;
 import com.dt181g.project.support.AppConfigProject;
 
 /**
- * A mock implementation of the {@link GameMainView} interface for the Tic Tac Toe game.
+ * A mock implementation of the {@link IGameMainView} interface for the Tic Tac Toe game.
  *
  * <p>
  * This class serves as a placeholder for testing purposes, simulating the game view
@@ -30,7 +30,7 @@ import com.dt181g.project.support.AppConfigProject;
  * </p>
  * @author Joel Lansgren
  */
-public class FakeTicTacToeView extends JPanel implements GameMainView {
+public class FakeTicTacToeView extends JPanel implements IGameMainView {
     private final JLabel gameTitle = new JLabel(AppConfigProject.TIC_TAC_TOE_TITLE);
     private final JLabel quitBtn = new JLabel("Quit");
     private JPanel gamePanel;
