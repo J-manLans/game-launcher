@@ -109,11 +109,11 @@ public class SnakeSinglePlayerView extends JPanel implements BaseView {
 
     }
 
-    public void showGameOver(String snakeLength) {
+    public void showGameOver(int snakeLength) {
         if (!this.layeredPane.isAncestorOf(gameOverPanel)) {
             this.layeredPane.add(this.gameOverPanel, JLayeredPane.POPUP_LAYER);
         }
-        this.snakeLengthLabel.setText(snakeLength);
+        this.snakeLengthLabel.setText("Your snake was " + snakeLength + " body parts long.");
         this.gameOverPanel.setVisible(true);
     }
 
@@ -162,8 +162,8 @@ public class SnakeSinglePlayerView extends JPanel implements BaseView {
                             this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_CHERRY);
                         } case AppConfigProject.COLOR_SPEED_INT -> {
                             this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_SPEED);
-                        } case AppConfigProject.COLOR_SNAKE_DEAD_INT -> {
-                            this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_DEAD);
+                        } case AppConfigProject.COLOR_SNAKE_HEAD_INT -> {
+                            this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_HEAD);
                         } default -> DebugLogger.INSTANCE.logInfo("Unimplemented snake booster in " + getClass().getName());
                     }
 

@@ -179,10 +179,10 @@ public class SnakeController implements GameMainController {
                 if (!restart) {
                     snakeMainModel.updateGameGrid(snakeModel);
 
-                    if (snakeModel.isGameOver()) {
+                    if (snakeModel.getGameState()) {
                         gameLoop.stop();
                         singlePlayerView.updateGameGrid();
-                        singlePlayerView.showGameOver("Your snake was " + snakeModel.getSnake().length + " body parts long.");
+                        singlePlayerView.showGameOver(snakeModel.getSnake().length);
 
                     } else {
                         // Speeding up the snake by reducing the delay

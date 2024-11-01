@@ -10,6 +10,8 @@
 - Set back button to BaseView as a shared variable. (maybe not, quite handy to have different listeners for controls and singleplayer)
 
 ## BASIC GAME MECHANICS FOR SINGLE-PLAYER SNAKE:
+- Add a third booster if there is time, maybe invincibility, very easy i think. just add a boolean that checks for snake collision and skip that if the boolean is active,
+- Another could be setting up walls around the grid so the snake cant wrap around, think this would involve maybe keeping a int[][] in that booster and just overlay it on the gamegrid, additionally have a separate method in mainview that adds the wall if a boolean is active
 
 ## MENUS:
 - Settings, choose snake color.

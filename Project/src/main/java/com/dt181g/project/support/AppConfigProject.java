@@ -106,10 +106,10 @@ public final class AppConfigProject {
     public static final int COLOR_SPEED_INT = 4;
 
     /** Snakes head color when in collision to mark its position. */
-    public static final Color COLOR_SNAKE_GAME_DEAD = new Color(84,24,24);
+    public static final Color COLOR_SNAKE_HEAD = new Color(140, 100, 43);
 
     /** Number in snakes body representing the death color. */
-    public static final int COLOR_SNAKE_DEAD_INT = 3;
+    public static final int COLOR_SNAKE_HEAD_INT = 3;
 
     /* ---------------------------------------
     Borders.

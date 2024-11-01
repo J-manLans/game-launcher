@@ -15,13 +15,13 @@ public class SnakeModel implements BaseModel {
     private boolean isGameOver;
     private double speed = AppConfigProject.SNAKE_TICK_DELAY;
 
-    public void initializeSnakeModel(int[][] clearedGameGrid) {
+    public void initializeSnakeModel(final int[][] clearedGameGrid) {
         this.gameGrid = clearedGameGrid;
         this.initializeSnake();
         this.speed = AppConfigProject.SNAKE_TICK_DELAY;
         this.isGameOver = false;
         this.allowChangesToDirection = true;
-        this.setDirection(AppConfigProject.RIGHT, true);
+        this.currentDirection = AppConfigProject.RIGHT;
     }
 
     /**
@@ -42,6 +42,17 @@ public class SnakeModel implements BaseModel {
             this.snake[i][1] = this.snake[0][1] + i;  // increase x-coordinate with 1 for each part.
             this.snake[i][2] = AppConfigProject.COLOR_SNAKE_INT;  // Color.
         }
+
+        this.snake[headIndex][2] = AppConfigProject.COLOR_SNAKE_HEAD_INT;
+    }
+
+    public void updateSnakeOnGrid(final int[][] updatedGameGrid) {
+        // Make taking input from keyboard possible again in the game-loop
+        this.allowChangesToDirection = true;
+        // This is done before clearing the grid to get the position of
+        // possible boosters that the snake needs to interact with
+        this.gameGrid = updatedGameGrid;
+        this.moveSnake();
     }
 
     /**
@@ -49,7 +60,7 @@ public class SnakeModel implements BaseModel {
      * Adjusts the body first and then moves the head according to the direction.
      * After moving, it checks the cell the head has moved into for its content.
      */
-    protected void moveSnake(SnakeBoostersModel booster) {
+    protected void moveSnake() {
         this.moveSnakeBody();
 
         switch (this.currentDirection) {
@@ -59,7 +70,7 @@ public class SnakeModel implements BaseModel {
             case RIGHT -> { this.moveSnakeHeadPosDirection(1); }
         }
 
-        checkHeadCell(booster);
+        checkHeadCell(SnakeBoosterManager.INSTANCE.getCurrentBoosterModel());
     }
 
     /**
@@ -111,16 +122,20 @@ public class SnakeModel implements BaseModel {
      * @param oldTailY The Y-coordinate of the previous tail position, used if the snake grows.
      * @param oldTailX The X-coordinate of the previous tail position, used if the snake grows.
      */
-    private void checkHeadCell(SnakeBoostersModel booster) {
+    private void checkHeadCell(final SnakeBoostersModel booster) {
         switch (this.gameGrid[this.snake[headIndex][0]][this.snake[headIndex][1]]) {
             case AppConfigProject.COLOR_SNAKE_INT -> {
                 this.isGameOver = true;
-                this.snake[headIndex][2] = 3;  // Colors the head at its collision coordinates.
                 this.allowChangesToDirection = false;
             }
             case AppConfigProject.COLOR_CHERRY_INT -> booster.eatBooster(this);
             case AppConfigProject.COLOR_SPEED_INT -> booster.eatBooster(this);
         }
+    }
+
+    public void updateSnake(int[][] expandedSnake) {
+        this.snake = expandedSnake;
+        this.headIndex = this.snake.length - 1;
     }
 
     /**
@@ -134,32 +149,12 @@ public class SnakeModel implements BaseModel {
         return this.snake;
     }
 
-    protected void setSnake(int[][] expandedSnake) {
-        this.snake = expandedSnake;
+    public double getSpeed() {
+        return speed;
     }
 
-    protected void setHeadIndex(int headIndex) {
-        this.headIndex = headIndex;
-    }
-
-    public boolean isGameOver() {
+    public boolean getGameState() {
         return this.isGameOver;
-    }
-
-    public void setGameOver(boolean isGameOver) {
-        this.isGameOver = isGameOver;
-    }
-
-    /**
-     * Sets whether changes to the snake's direction are allowed.
-     * Typically used to control if the snake can change direction
-     * based on user input.
-     *
-     * @param isGridUpdated A boolean indicating if the grid has been updated,
-     *                      allowing or preventing direction changes.
-     */
-    public void setAllowChangesToDirection(final boolean isGridUpdated) {
-        this.allowChangesToDirection = isGridUpdated;
     }
 
     /**
@@ -194,15 +189,7 @@ public class SnakeModel implements BaseModel {
         }
     }
 
-    public void setGameGrid(int[][] updatedGameGrid) {
-        this.gameGrid = updatedGameGrid;
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(double speed) {
+    public void setSpeed(final double speed) {
         this.speed = speed;
     }
 }

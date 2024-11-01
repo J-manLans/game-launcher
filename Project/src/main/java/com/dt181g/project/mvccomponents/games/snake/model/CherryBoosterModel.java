@@ -24,15 +24,14 @@ public class CherryBoosterModel implements SnakeBoostersModel {
      * @param snakeModel The snake model to which the effect is applied.
      */
     @Override
-    public
-    void eatBooster(SnakeModel snakeModel) {
-        SnakeBoosterManager.INSTANCE.eatAndResetBoosterState(this);
+    public void eatBooster(SnakeModel snakeModel) {
+        SnakeBoosterManager.INSTANCE.eatAndResetBooster(this.cherry);
         SnakeBoosterManager.INSTANCE.setSpeed(
             snakeModel,
             (snakeModel.getSpeed() * AppConfigProject.SNAKE_SPEED_MULTIPLIER)
         );
         this.grow(snakeModel);
-            }
+    }
 
     /**
      * Adds a new segment to the snake, expanding its body array by one
@@ -51,10 +50,13 @@ public class CherryBoosterModel implements SnakeBoostersModel {
         // The tail is re-added here
         expandedSnake[0] = new int[]{snake[0][0], snake[0][1], AppConfigProject.COLOR_SNAKE_INT};
 
-        // Updates the snake with the new copy and headIndex is updated
-        snakeModel.setSnake(expandedSnake);
-        snakeModel.setHeadIndex(snakeModel.getSnake().length - 1);
+        // Updates the snake
+        snakeModel.updateSnake(expandedSnake);
     }
+
+    /*============================
+    * Getters
+    ===========================*/
 
     /**
      * Returns the cherry booster object, represented as a 2D array, with its

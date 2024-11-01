@@ -5,8 +5,8 @@ import com.dt181g.project.support.AppConfigProject;
 public class SpeedBoosterModel implements SnakeBoostersModel, BoosterEffect {
     private int[][] speedBooster = new int[1][AppConfigProject.SNAKE_ITEMS_PART_CONTENT];
     private final int boosterColor = AppConfigProject.COLOR_SPEED_INT;
-    private double snakeSpeed;
-    private double halfSpeed;
+    private double oldSnakeSpeed;
+    private double oldHalfSpeed;
     private boolean isActive;
 
     public SpeedBoosterModel() {
@@ -15,20 +15,25 @@ public class SpeedBoosterModel implements SnakeBoostersModel, BoosterEffect {
 
     @Override
     public void eatBooster(SnakeModel snakeModel) {
-        this.snakeSpeed = snakeModel.getSpeed();
-        this.halfSpeed = this.snakeSpeed / 2;
-        this.isActive = true;
+        this.oldSnakeSpeed = snakeModel.getSpeed();
+        this.oldHalfSpeed = this.oldSnakeSpeed / 2;
 
-        SnakeBoosterManager.INSTANCE.setBoosterDuration(snakeModel);
-        SnakeBoosterManager.INSTANCE.eatAndResetBoosterState(this);
-        SnakeBoosterManager.INSTANCE.setSpeed(snakeModel, (this.halfSpeed));
+        SnakeBoosterManager.INSTANCE.setBoosterDuration(snakeModel.getSpeed());
+        SnakeBoosterManager.INSTANCE.eatAndResetBooster(this.speedBooster);
+        SnakeBoosterManager.INSTANCE.setSpeed(snakeModel, (this.oldHalfSpeed));
+
+        this.isActive = true;
     }
 
     @Override
     public void reset(SnakeModel snakeModel) {
+        SnakeBoosterManager.INSTANCE.setSpeed(snakeModel, (this.oldSnakeSpeed - (this.oldHalfSpeed - snakeModel.getSpeed())));
         this.isActive = false;
-        SnakeBoosterManager.INSTANCE.setSpeed(snakeModel, (this.snakeSpeed - (this.halfSpeed - snakeModel.getSpeed())));
     }
+
+    /*============================
+    * Getters
+    ===========================*/
 
     @Override
     public int[][] getBooster() {
