@@ -12,7 +12,7 @@ import com.dt181g.project.support.AppConfigProject;
  * </p>
  */
 public class FakeTicTacToeModel implements IGameMainModel {
-    private final String iconPath = AppConfigProject.PATH_TO_ICONS + AppConfigProject.TIC_TAC_TOE_ICON;
+    private final String iconPath = AppConfigProject.PATH_TO_ICONS + AppConfigProject.ICON_TIC_TAC_TOE;
     private final String gameTitle = AppConfigProject.TIC_TAC_TOE_TITLE;
 
     /**

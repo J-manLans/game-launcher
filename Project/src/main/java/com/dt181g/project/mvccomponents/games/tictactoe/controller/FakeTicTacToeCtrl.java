@@ -61,9 +61,6 @@ public class FakeTicTacToeCtrl implements IGameMainController {
     @Override
     public void initiateGame() {
         this.ticTacToeView.showStartMenu();
-        DebugLogger.INSTANCE.logInfo(gameTitle +
-            " has been initiated.\n"
-        );
     }
 
     @Override

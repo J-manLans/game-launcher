@@ -31,10 +31,10 @@ public final class AppConfigProject {
     public static final String PATH_TO_ICONS = "/icons/";
 
     /** Extension to snake image. */
-    public static final String SNAKE_ICON = "snake.jpeg";
+    public static final String ICON_SNAKE = "snake.jpeg";
 
     /** Extension to tic tac toe image. */
-    public static final String TIC_TAC_TOE_ICON = "tictactoe.jpeg";
+    public static final String ICON_TIC_TAC_TOE = "tictactoe.jpeg";
 
     /** Path to images folder */
     public static final String PATH_TO_IMAGES = "/img/";
@@ -45,6 +45,14 @@ public final class AppConfigProject {
         "GameLauncher02.png",
         "GameLauncher03.png"
     };
+
+    public static final String PATH_TO_SOUNDS = "/sounds/";
+
+    public static final String SOUND_EFFECT_CHERRY = "cherry.wav";
+    public static final String SOUND_EFFECT_SPEED = "speed.wav";
+    public static final String SOUND_EFFECT_SILENCE = "keep_alive.wav";
+
+
 
     /* ---------------------------------------
     Game titles.
@@ -193,13 +201,16 @@ public final class AppConfigProject {
     /** Upper bounds number of maximum tics before spawning a new item. */
 	public static final int UPPER_SPAWNING_BOUND = 20;
 
-	public static int SNAKE_TICK_DELAY = 500;
+	public static int SNAKE_TICK_DELAY = 100;
 
     public static double SNAKE_SPEED_MULTIPLIER = 0.9;
 
     public static final int CHERRY_INDEX = 0;
 
     public static final int BASE_BOOSTER_DURATION = 50;
+
+    public static final int SECOND_IN_MS = 1000;
+
 
 
     /* ---------------------------------------

@@ -9,6 +9,7 @@ import com.dt181g.project.mvccomponents.launcher.model.GameListModel;
 import com.dt181g.project.mvccomponents.launcher.view.GameLauncherView;
 import com.dt181g.project.mvccomponents.listeners.MenuButtonListener;
 import com.dt181g.project.support.AppConfigProject;
+import com.dt181g.project.support.AudioManager;
 import com.dt181g.project.support.DebugLogger;
 
 import java.awt.event.MouseWheelEvent;
@@ -58,6 +59,7 @@ public class GameLauncherController implements IBaseController {
         this.addGameIcons();
         this.initializeListeners();
         this.startLauncher();
+        AudioManager.INSTANCE.keepAudioAlive();
     }
 
     /**

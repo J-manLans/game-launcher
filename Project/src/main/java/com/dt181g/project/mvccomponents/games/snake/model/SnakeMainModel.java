@@ -26,7 +26,7 @@ import com.dt181g.project.support.AppConfigProject;
  */
 public class SnakeMainModel implements IGameMainModel {
     private final String gameTitle = AppConfigProject.SNAKE_TITLE;
-    private final String iconPath = AppConfigProject.PATH_TO_ICONS + AppConfigProject.SNAKE_ICON;
+    private final String iconPath = AppConfigProject.PATH_TO_ICONS + AppConfigProject.ICON_SNAKE;
     private final int gridSize = AppConfigProject.SNAKE_CELL_COUNT;
     private final List<Object> gameAssets = new ArrayList<>();
     final int[][] gameGrid = new int[gridSize][gridSize];
@@ -38,7 +38,7 @@ public class SnakeMainModel implements IGameMainModel {
     public void startNewGame(SnakeModel snakeModel) {
         this.clearGameGrid();
         snakeModel.initializeSnakeModel(this.gameGrid);
-        ManagerSnakeBooster.INSTANCE.initializeBoosterManager(this.gameGrid);
+        ManagerSnakeBooster.INSTANCE.initializeBoosterManager(this.gameGrid, snakeModel);
         // Updates the grid with the snake created in the initializeSnakeModel method above
         this.overlayGameItemsOnGrid(snakeModel.getSnake());
     }
@@ -139,5 +139,9 @@ public class SnakeMainModel implements IGameMainModel {
 
     public int[][] getGameGrid() {
         return gameGrid;
+    }
+
+    public void cleanup() {
+        ManagerSnakeBooster.INSTANCE.cleanup();
     }
 }

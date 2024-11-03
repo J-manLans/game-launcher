@@ -1,5 +1,6 @@
 package com.dt181g.project.support;
 
+import java.util.function.Function;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -67,22 +68,77 @@ public enum DebugLogger {
     // ===== Statistical logs =====
 
     /**
-     * Logs information with a yellow color formatting.
+     * Logs information with a yellow color formatting, including the class
+     * and method names of the caller.
      *
      * @param message the message to be logged
      */
     public void logInfo(final String message) {
-        performLog(String.format("%s%s%s", AppConfigProject.ANSI_YELLOW, message, AppConfigProject.ANSI_RESET));
-
+        performLog(String.format("%s%s In: %s.%s()%s",
+            AppConfigProject.ANSI_YELLOW,
+            message,
+            getCallerName(StackWalker.StackFrame::getClassName),
+            getCallerName(StackWalker.StackFrame::getMethodName),
+            AppConfigProject.ANSI_RESET)
+        );
     }
 
 
     /**
-     * Logs warning information with a red color formatting.
+     * Logs warning information with a red color formatting, including the class
+     * and method names of the caller.
      *
      * @param message the message to be logged
      */
     public void logWarning(final String message) {
-        performLog(String.format("%s%s%s", AppConfigProject.ANSI_RED, message, AppConfigProject.ANSI_RESET));
+        performLog(String.format("%s%s In: %s.%s()%s",
+            AppConfigProject.ANSI_RED,
+            message,
+            getCallerName(StackWalker.StackFrame::getClassName),
+            getCallerName(StackWalker.StackFrame::getMethodName),
+            AppConfigProject.ANSI_RESET)
+        );
+    }
+
+    /**
+     * Logs a concise representation of the provided exception, including the class
+     * and method names of the caller.
+     *
+     * @param e the exception that occurred, which is logged with its details.
+     */
+    public void logException(Exception e) {
+        performLog(String.format("%s%s exception in %s.%s()%s",
+            AppConfigProject.ANSI_RED,
+            e.toString(),
+            getCallerName(StackWalker.StackFrame::getClassName),
+            getCallerName(StackWalker.StackFrame::getMethodName),
+            AppConfigProject.ANSI_RESET)
+        );
+    }
+
+    /**
+     * Retrieves the name of the caller (class or method) from the stack trace.
+     *
+     * @param getName a function that takes a StackWalker.StackFrame as input
+     * and returns a String. This function is used to extract
+     * the desired name (either class name or method name) from the
+     * StackFrame. For example, use:
+     * <ul>
+     * <li> StackWalker.StackFrame::getClassName to get the class name</li>
+     * <li> StackWalker.StackFrame::getMethodName to get the method name</li>
+     * </ul>
+     * Note: StackWalker.StackFrame::getFileName also returns a string,
+     * but it may not be applicable for this method.
+     * @return the name of the original caller as a string
+     */
+    private String getCallerName(Function<StackWalker.StackFrame, String> getName) {
+        return StackWalker.getInstance()
+        // The skip(2) method retrieves the calling method directly outside this class as a StackFrame
+        .walk(frames -> frames.skip(2).findFirst())
+        // Applies the provided function to extract the desired value from the StackFrame
+        .map(getName)
+        // Fallback string, essentially never used since it is only used when there is no caller 2 methods above.
+        // However, it’s required because findFirst() returns an Optional that needs a fallback value.
+        .orElse("");
     }
 }

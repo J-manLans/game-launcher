@@ -1,6 +1,7 @@
 package com.dt181g.project.mvccomponents.games.snake.model;
 
 import com.dt181g.project.support.AppConfigProject;
+import com.dt181g.project.support.AudioManager;
 
 /**
  * Represents a cherry booster in the snake game, which the snake can eat to
@@ -11,6 +12,7 @@ import com.dt181g.project.support.AppConfigProject;
 public class BoosterCherryModel implements ISnakeBoostersModel {
     private int[][] cherry = new int[1][AppConfigProject.SNAKE_ITEMS_PART_CONTENT];
     private final int boosterColor = AppConfigProject.COLOR_CHERRY_INT;
+    private String soundEffect = AppConfigProject.PATH_TO_SOUNDS + AppConfigProject.SOUND_EFFECT_CHERRY;
 
     public BoosterCherryModel() {
         ManagerSnakeBooster.INSTANCE.addBoosters(this);
@@ -24,13 +26,13 @@ public class BoosterCherryModel implements ISnakeBoostersModel {
      * @param snakeModel The snake model to which the effect is applied.
      */
     @Override
-    public void eatBooster(SnakeModel snakeModel) {
-        ManagerSnakeBooster.INSTANCE.eatAndResetBooster(this.cherry);
+    public void applyBoosterEffect(SnakeModel snakeModel) {
         ManagerSnakeBooster.INSTANCE.setSpeed(
             snakeModel,
             (snakeModel.getSpeed() * AppConfigProject.SNAKE_SPEED_MULTIPLIER)
         );
         this.grow(snakeModel);
+        AudioManager.INSTANCE.playSound(soundEffect);
     }
 
     /**
@@ -73,7 +75,7 @@ public class BoosterCherryModel implements ISnakeBoostersModel {
     }
 
     @Override
-    public boolean isActive() {
+    public boolean isBoosterActive() {
         return false;
     }
 }

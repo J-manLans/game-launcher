@@ -38,6 +38,7 @@ public class SnakeSinglePlayerView extends JPanel implements IBaseView {
     };
     JLabel gameOver = new JLabel("GAME OVER");
     private final JLabel snakeLengthLabel = new JLabel();
+    private final JLabel snakeSpeedLabel = new JLabel();
     private int[][] modelGameGrid;
     private final JLabel snakeBackBtn = new JLabel("Back");
 
@@ -47,6 +48,7 @@ public class SnakeSinglePlayerView extends JPanel implements IBaseView {
         labelBtn(this.snakeBackBtn, AppConfigProject.COLOR_WHITE);
         labelStyling(this.gameOver, AppConfigProject.TEXT_HEADING_2);
         labelStyling(this.snakeLengthLabel, AppConfigProject.TEXT_SIZE_NORMAL);
+        labelStyling(this.snakeSpeedLabel, AppConfigProject.TEXT_SIZE_NORMAL);
     }
 
     public void initializeView(List<Object> gameAssets) {
@@ -105,15 +107,17 @@ public class SnakeSinglePlayerView extends JPanel implements IBaseView {
         this.gameOverPanel.add(Box.createVerticalGlue());
         this.gameOverPanel.add(this.gameOver);
         this.gameOverPanel.add(this.snakeLengthLabel);
+        this.gameOverPanel.add(this.snakeSpeedLabel);
         this.gameOverPanel.add(Box.createVerticalGlue());
 
     }
 
-    public void showGameOver(int snakeLength) {
-        if (!this.layeredPane.isAncestorOf(gameOverPanel)) {
-            this.layeredPane.add(this.gameOverPanel, JLayeredPane.POPUP_LAYER);
-        }
-        this.snakeLengthLabel.setText("Your snake was " + snakeLength + " body parts long.");
+    public void showGameOver(int snakeLength, int snakeSpeed) {
+            if (!this.layeredPane.isAncestorOf(gameOverPanel)) {
+                this.layeredPane.add(this.gameOverPanel, JLayeredPane.POPUP_LAYER);
+            }
+            this.snakeLengthLabel.setText("Your snake was " + snakeLength + " body parts long.");
+            this.snakeSpeedLabel.setText("It traveled with a speed of " + snakeSpeed + " cells per second.");
         this.gameOverPanel.setVisible(true);
     }
 

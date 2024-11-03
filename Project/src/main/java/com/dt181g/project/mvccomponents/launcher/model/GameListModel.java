@@ -41,8 +41,8 @@ public class GameListModel implements IBaseModel {
      */
     public GameListModel() {
         // TODO: Will refactor this in the future to fetch info from the games themselves.
-        this.iconPaths.add(AppConfigProject.PATH_TO_ICONS + AppConfigProject.SNAKE_ICON);
-        this.iconPaths.add(AppConfigProject.PATH_TO_ICONS + AppConfigProject.TIC_TAC_TOE_ICON);
+        this.iconPaths.add(AppConfigProject.PATH_TO_ICONS + AppConfigProject.ICON_SNAKE);
+        this.iconPaths.add(AppConfigProject.PATH_TO_ICONS + AppConfigProject.ICON_TIC_TAC_TOE);
         this.gameTitles.add(AppConfigProject.SNAKE_TITLE);
         this.gameTitles.add(AppConfigProject.TIC_TAC_TOE_TITLE);
     }
@@ -97,7 +97,7 @@ public class GameListModel implements IBaseModel {
         this.gameViews.clear();
         this.gameControllers.clear();
 
-        DebugLogger.INSTANCE.logWarning(gameTitle + " has been removed\n");
+        DebugLogger.INSTANCE.logWarning(gameTitle + " has been removed.");
     }
 
     /**

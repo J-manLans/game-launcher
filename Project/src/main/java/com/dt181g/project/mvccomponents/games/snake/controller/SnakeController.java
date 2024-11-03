@@ -18,6 +18,7 @@ import com.dt181g.project.mvccomponents.games.snake.view.SnakeMainView;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeSinglePlayerView;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeStartMenuView;
 import com.dt181g.project.support.AppConfigProject;
+import com.dt181g.project.support.AudioManager;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -58,7 +59,7 @@ public class SnakeController implements IGameMainController {
     private SnakeModel snakeModel;
 
     private Timer gameLoop;
-    private boolean restart;
+    private boolean gameOn;
     private boolean isRunning = true;
 
 
@@ -86,6 +87,7 @@ public class SnakeController implements IGameMainController {
         );
         this.snakeMainView.setViews(this.startMenuView, this.singlePlayerView, this.controlsView);
         this.initializeListeners();
+        this.createGameLoop();
     }
 
     public void instantiateViewsAndModels(
@@ -141,6 +143,30 @@ public class SnakeController implements IGameMainController {
         this.startMenuView.addQuitBtnListener(quitBtnListener);
     }
 
+    private void createGameLoop() {
+        this.gameLoop = new Timer(AppConfigProject.SNAKE_TICK_DELAY, new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                if (gameOn) {
+                    snakeMainModel.updateGameGrid(snakeModel);
+
+                    if (snakeModel.getGameOverState()) {
+                        gameLoop.stop();
+                        singlePlayerView.updateGameGrid();
+                        singlePlayerView.showGameOver(snakeModel.getSnake().length, (AppConfigProject.SECOND_IN_MS / (int) snakeModel.getSpeed()));
+                    } else {
+                        // Adjusting speed if necessary
+                        gameLoop.setDelay(Math.max(50, (int) snakeModel.getSpeed())); // Minimum delay of 50ms
+                        singlePlayerView.updateGameGrid();
+                    }
+
+                } else {
+                    gameLoop.stop();
+                }
+            }
+        });
+    }
+
     /**
      * Resets the game state and re-initializes the start menu.
      * Clears the snake model's grid and sets the restart flag to true.
@@ -150,7 +176,7 @@ public class SnakeController implements IGameMainController {
     @Override
     public void initiateGame() {
         // stops the EDT thread from executing
-        this.restart = true;
+        this.gameOn = false;
         // Shows the start menu and hides the game over overlay
         this.snakeMainView.showStartMenu();
         this.singlePlayerView.hideGameOver();
@@ -170,31 +196,8 @@ public class SnakeController implements IGameMainController {
         }
 
         // For controlling the loop
-        this.restart = false;
+        this.gameOn = true;
 
-        // Game loop.
-        this.gameLoop = new Timer(AppConfigProject.SNAKE_TICK_DELAY, new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!restart) {
-                    snakeMainModel.updateGameGrid(snakeModel);
-
-                    if (snakeModel.getGameState()) {
-                        gameLoop.stop();
-                        singlePlayerView.updateGameGrid();
-                        singlePlayerView.showGameOver(snakeModel.getSnake().length);
-
-                    } else {
-                        // Speeding up the snake by reducing the delay
-                        gameLoop.setDelay(Math.max(0, (int) snakeModel.getSpeed())); // Minimum delay of 0ms
-                        singlePlayerView.updateGameGrid();
-                    }
-
-                } else {
-                    gameLoop.stop();
-                }
-            }
-        });
         this.gameLoop.start();
     }
 
@@ -204,18 +207,15 @@ public class SnakeController implements IGameMainController {
         this.removeListeners();
         this.snakeMainView.closeGameView();
         this.isRunning = false;
+        this.snakeMainModel.cleanup();
+        AudioManager.INSTANCE.shutdownAudio();
     }
 
     private void stopGameLoop() {
-        if (gameLoop != null) {
+        if (this.gameLoop != null) {
             this.gameLoop.stop();
             this.gameLoop = null;
         }
-    }
-
-    @Override
-    public Timer getGameLoop() {
-        return gameLoop;
     }
 
     private void removeListeners() {
@@ -224,26 +224,39 @@ public class SnakeController implements IGameMainController {
         this.controlsView.removeListeners();
     }
 
+    /*========================
+     * Getters
+     =======================*/
+
+    @Override
+    public Timer getGameLoop() {
+        return this.gameLoop;
+    }
+
     @Override
     public String getGameTitle() {
-        return gameTitle;
+        return this.gameTitle;
     }
 
     @Override
     public boolean getIsRunning() {
-        return isRunning;
+        return this.isRunning;
     }
 
     public SnakeModel getSnakeModel() {
-        return snakeModel;
-    }
-
-    @Override
-    public void setIsRunning(boolean isRunning) {
-        this.isRunning = isRunning;
+        return this.snakeModel;
     }
 
     public JLabel getQuitBtn() {
         return this.startMenuView.getQuitBtn();
+    }
+
+    /*========================
+     * Setters
+     =======================*/
+
+    @Override
+    public void setIsRunning(boolean isRunning) {
+        this.isRunning = isRunning;
     }
 }

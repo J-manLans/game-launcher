@@ -94,8 +94,8 @@ public class GameIconListener implements ActionListener {
             new MenuButtonListener(
                 model.getGameController(game).getQuitBtn(),
                 () -> {
-                    closeGame(game);
-                    view.display();
+                    this.closeGame(game);
+                    this.view.display();
                 }
             )
         );

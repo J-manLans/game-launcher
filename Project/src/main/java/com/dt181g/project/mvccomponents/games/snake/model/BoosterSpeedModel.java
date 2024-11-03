@@ -1,6 +1,7 @@
 package com.dt181g.project.mvccomponents.games.snake.model;
 
 import com.dt181g.project.support.AppConfigProject;
+import com.dt181g.project.support.AudioManager;
 
 public class BoosterSpeedModel implements ISnakeBoostersModel, IBoosterEffect {
     private int[][] speedBooster = new int[1][AppConfigProject.SNAKE_ITEMS_PART_CONTENT];
@@ -8,25 +9,26 @@ public class BoosterSpeedModel implements ISnakeBoostersModel, IBoosterEffect {
     private double oldSnakeSpeed;
     private double oldHalfSpeed;
     private boolean isActive;
+    private String soundEffect = AppConfigProject.PATH_TO_SOUNDS + AppConfigProject.SOUND_EFFECT_SPEED;
 
     public BoosterSpeedModel() {
         ManagerSnakeBooster.INSTANCE.addBoosters(this);
     }
 
     @Override
-    public void eatBooster(SnakeModel snakeModel) {
+    public void applyBoosterEffect(SnakeModel snakeModel) {
         this.oldSnakeSpeed = snakeModel.getSpeed();
         this.oldHalfSpeed = this.oldSnakeSpeed / 2;
 
-        ManagerSnakeBooster.INSTANCE.setBoosterDuration(snakeModel.getSpeed());
-        ManagerSnakeBooster.INSTANCE.eatAndResetBooster(this.speedBooster);
+        ManagerSnakeBooster.INSTANCE.setBoosterDuration(oldSnakeSpeed);
         ManagerSnakeBooster.INSTANCE.setSpeed(snakeModel, (this.oldHalfSpeed));
+        AudioManager.INSTANCE.playSound(soundEffect);
 
         this.isActive = true;
     }
 
     @Override
-    public void reset(SnakeModel snakeModel) {
+    public void resetBoosterEffect(SnakeModel snakeModel) {
         ManagerSnakeBooster.INSTANCE.setSpeed(snakeModel, (this.oldSnakeSpeed - (this.oldHalfSpeed - snakeModel.getSpeed())));
         this.isActive = false;
     }
@@ -46,7 +48,7 @@ public class BoosterSpeedModel implements ISnakeBoostersModel, IBoosterEffect {
     }
 
     @Override
-    public boolean isActive() {
+    public boolean isBoosterActive() {
         return this.isActive;
     }
 }

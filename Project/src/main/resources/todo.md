@@ -8,6 +8,10 @@
 - Nullify objects for controller, view, and model in the close method.
 - refactor to have one addListener method with switch cases using strings to determine where to add the listener
 - Set back button to BaseView as a shared variable. (maybe not, quite handy to have different listeners for controls and singleplayer)
+- *think about where to control sounds, maybe in boostermanagern. i think so*
+- *add an overarching soundmanager though i think as well*
+- *add backgroundmusic with the controller maybe*
+- add more statistics at deathscreen, speed, distance traveled and more.
 
 ## BASIC GAME MECHANICS FOR SINGLE-PLAYER SNAKE:
 - Add a third booster if there is time, maybe invincibility, very easy i think. just add a boolean that checks for snake collision and skip that if the boolean is active,

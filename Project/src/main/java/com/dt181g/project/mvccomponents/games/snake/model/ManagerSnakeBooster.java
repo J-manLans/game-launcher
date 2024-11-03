@@ -21,11 +21,8 @@ enum ManagerSnakeBooster {
     private final List<ISnakeBoostersModel> boosters = new ArrayList<>();
     private int[][] gameGrid;
     private final Random randomizer = new Random();
-    // Makes the initial booster to spawn a cherry
-    private int currentBoosterModelIndex = AppConfigProject.CHERRY_INDEX;
-    // initial state, since no booster is on the grid at start they are available
-    private boolean isBoosterSpawnAvailable = true;
-    // Initial random countdown for spawning a booster
+    private int currentBoosterModelIndex;
+    private boolean isBoosterSpawnAvailable;
     private int spawnCountDown;
     private int[][] currentBooster;
     private double boosterEffectDuration;
@@ -36,23 +33,43 @@ enum ManagerSnakeBooster {
      *
      * @param gameGrid The current state of the game grid.
      */
-    void initializeBoosterManager(int[][] gameGrid) {
+    void initializeBoosterManager(int[][] gameGrid, SnakeModel snakeModel) {
         this.gameGrid = gameGrid;
         this.isBoosterSpawnAvailable = true;
+
+        // Resets all booster effects
+        for (ISnakeBoostersModel booster : this.boosters) {
+            if (booster instanceof IBoosterEffect) {
+                ((IBoosterEffect)booster).resetBoosterEffect(snakeModel);
+                snakeModel.setSpeed(AppConfigProject.SNAKE_TICK_DELAY);
+            }
+        }
+
         this.currentBooster = null;
+        this.currentBoosterModelIndex = AppConfigProject.CHERRY_INDEX;
         this.spawnCountDown = randomizer.nextInt(AppConfigProject.UPPER_SPAWNING_BOUND);
     }
 
     /**
-     * Resets the state of the specified booster after it has been consumed by the snake.
-     *
-     * @param booster The booster to reset.
+     * Consumes a booster and resets its state in the game grid, applying its effect to the snake.
+     * <p>
+     * This method identifies the booster by its color and applies its effect to the given snake model.
+     * After applying the effect, it resets the booster by setting its color to the background color,
+     * making it available for re-spawning in a different cell. It also resets the spawn countdown for the next booster.
+     * </p>
+     * @param snakeModel   The snake that the booster effect will be applied to.
+     * @param boosterColor The color of the booster to consume, used to locate the correct booster in the list.
      */
-    void eatAndResetBooster(int[][] booster) {
-        // Sets the color of the old booster to background color, effectively
-        // devouring it from the grid since the snake interact with it's color,
-        // not coordinates.
-        booster[0][2] = 0;
+    void eatAndResetBooster(SnakeModel snakeModel, int boosterColor) {
+        for (ISnakeBoostersModel boosterModel : boosters) {
+            if (boosterModel.getBooster()[0][2] == boosterColor) {
+                // Sets the color of the old booster to background color, effectively
+                // devouring it from the grid since the snake interact with it's color,
+                // not coordinates.
+                boosterModel.getBooster()[0][2] = 0;
+                boosterModel.applyBoosterEffect(snakeModel);
+            }
+        }
         // Allows the booster to be spawned on a different cell
         this.isBoosterSpawnAvailable = true;
         // Sets the countdown for allowing the new booster to be spawned
@@ -71,9 +88,9 @@ enum ManagerSnakeBooster {
 
             do {
                 this.currentBoosterModelIndex = randomizer.nextInt(boosters.size());
-            } while (this.boosters.get(this.currentBoosterModelIndex).isActive());
+            } while (this.boosters.get(this.currentBoosterModelIndex).isBoosterActive());
 
-                this.currentBooster = this.boosters.get(this.currentBoosterModelIndex).getBooster();
+            this.currentBooster = this.boosters.get(this.currentBoosterModelIndex).getBooster();
 
             do {
                 randomizeBoosterLocation();
@@ -83,6 +100,22 @@ enum ManagerSnakeBooster {
         }
 
         if (this.spawnCountDown > 0) { this.spawnCountDown--; }
+    }
+
+    /**
+     * Updates the state of active boosters and applies effects if necessary.
+     *
+     * @param snakeModel The current snake model to apply effects to.
+     */
+    private void updateActiveBoosters(SnakeModel snakeModel) {
+        for (ISnakeBoostersModel boosterModel : boosters) {
+            if (boosterModel.isBoosterActive()) {
+                this.boosterEffectDuration -= 1;
+                if (this.boosterEffectDuration < 0) {
+                    ((IBoosterEffect) boosterModel).resetBoosterEffect(snakeModel);
+                }
+            }
+        }
     }
 
     /**
@@ -111,22 +144,6 @@ enum ManagerSnakeBooster {
     }
 
     /**
-     * Updates the state of active boosters and applies effects if necessary.
-     *
-     * @param snakeModel The current snake model to apply effects to.
-     */
-    private void updateActiveBoosters(SnakeModel snakeModel) {
-        for (ISnakeBoostersModel boosterModel : boosters) {
-            if (boosterModel.isActive()) {
-                boosterEffectDuration -= 1;
-                if (boosterEffectDuration < 0) {
-                    ((IBoosterEffect) boosterModel).reset(snakeModel);
-                }
-            }
-        }
-    }
-
-    /**
      * Sets the duration for the current booster effect based on the snake's speed.
      *
      * @param snakeSpeed The current speed of the snake to calculate the speed factor.
@@ -146,6 +163,10 @@ enum ManagerSnakeBooster {
         snakeModel.setSpeed(speed);
     }
 
+    public void cleanup() {
+        this.boosters.clear();
+    }
+
     /*============================
     * Setters
     ===========================*/
@@ -162,15 +183,6 @@ enum ManagerSnakeBooster {
     /*============================
     * Getters
     ===========================*/
-
-    /**
-     * Retrieves the currently active booster model.
-     *
-     * @return The current booster model.
-     */
-    ISnakeBoostersModel getCurrentBoosterModel() {
-        return this.boosters.get(this.currentBoosterModelIndex);
-    }
 
     /**
      * Retrieves the current booster details.

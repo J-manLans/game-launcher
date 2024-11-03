@@ -70,7 +70,7 @@ public class SnakeModel implements IBaseModel {
             case RIGHT -> { this.moveSnakeHeadPosDirection(1); }
         }
 
-        checkHeadCell(ManagerSnakeBooster.INSTANCE.getCurrentBoosterModel());
+        checkHeadCell();
     }
 
     /**
@@ -114,22 +114,23 @@ public class SnakeModel implements IBaseModel {
     }
 
     /**
-     * Helper method that checks the contents of the cell that the snake's head just moved into.
-     * If it encounters an item or the snake body, it triggers the appropriate action.
+     * Checks the cell in front of the snake's head to determine if the game is over
+     * or if a booster has been consumed.
      *
-     * @param y The Y-coordinate of the cell being checked.
-     * @param x The X-coordinate of the cell being checked.
-     * @param oldTailY The Y-coordinate of the previous tail position, used if the snake grows.
-     * @param oldTailX The X-coordinate of the previous tail position, used if the snake grows.
+     * <p>
+     * If the cell color matches {@link AppConfigProject#COLOR_SNAKE_INT}, the game ends.
+     * If the cell color is non-zero (indicating a booster), the booster is consumed and
+     * its effects are applied to the snake.
+     * </p>
      */
-    private void checkHeadCell(final ISnakeBoostersModel booster) {
-        switch (this.gameGrid[this.snake[headIndex][0]][this.snake[headIndex][1]]) {
-            case AppConfigProject.COLOR_SNAKE_INT -> {
-                this.isGameOver = true;
-                this.allowChangesToDirection = false;
-            }
-            case AppConfigProject.COLOR_CHERRY_INT -> booster.eatBooster(this);
-            case AppConfigProject.COLOR_SPEED_INT -> booster.eatBooster(this);
+    private void checkHeadCell() {
+        int cellColor = this.gameGrid[this.snake[this.headIndex][0]][this.snake[this.headIndex][1]];
+
+        if (cellColor == AppConfigProject.COLOR_SNAKE_INT) {
+            isGameOver = true;
+            allowChangesToDirection = false;
+        } else if (cellColor != 0) {
+            ManagerSnakeBooster.INSTANCE.eatAndResetBooster(this, cellColor);
         }
     }
 
@@ -153,7 +154,7 @@ public class SnakeModel implements IBaseModel {
         return speed;
     }
 
-    public boolean getGameState() {
+    public boolean getGameOverState() {
         return this.isGameOver;
     }
 
