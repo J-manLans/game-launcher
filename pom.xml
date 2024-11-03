@@ -3,7 +3,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <!-- Basic project information -->
     <groupId>com.dt181g</groupId>
     <artifactId>assignments</artifactId>
@@ -14,7 +13,6 @@
     <description>
         Main project for the three lab assignments, and final project, in course DT181G.
     </description>
-
     <!-- Modules for the project -->
     <modules>
         <module>Laboration_1</module>
@@ -23,14 +21,12 @@
         <module>_Playground</module>
         <module>Project</module>
     </modules>
-
     <!-- Project properties -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
-
     <!-- Distribution management for site deployment -->
     <distributionManagement>
         <site>
@@ -38,7 +34,6 @@
             <url>file://${project.artifactId}/target/site/</url>
         </site>
     </distributionManagement>
-
     <!-- Reporting plugins for generating documentation and reports -->
     <reporting>
         <plugins>
@@ -46,19 +41,19 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>4.0.0-M13</version>
+                <version>4.0.0-M5</version>
             </plugin>
             <!-- Project information reports plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.5.0</version>
+                <version>3.4.1</version>
             </plugin>
             <!-- JavaDoc generation plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.6.3</version>
+                <version>3.4.0</version>
                 <configuration>
                     <show>protected</show>
                     <quiet>true</quiet>
@@ -75,12 +70,11 @@
                     </reportSet>
                 </reportSets>
             </plugin>
-
             <!-- Surefire report generation plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.2.5</version>
+                <version>3.0.0</version>
                 <configuration>
                     <title>Surefire Report</title>
                     <description>Overview of test outcomes.</description>
@@ -97,12 +91,11 @@
                     </reportSet>
                 </reportSets>
             </plugin>
-
             <!-- Checkstyle plugin for checking code style -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>3.2.1</version>
                 <configuration>
                     <configLocation>_RepoResources/checkstyle.xml</configLocation>
                     <consoleOutput>false</consoleOutput>
@@ -120,7 +113,6 @@
             </plugin>
         </plugins>
     </reporting>
-
     <!-- Build configuration -->
     <build>
         <plugins>
@@ -128,7 +120,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.5</version>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>default-test1</id>
@@ -157,21 +149,19 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>4.0.0-M13</version>
+                <version>4.0.0-M5</version>
             </plugin>
-
             <!-- Compiler plugin for compiling the project -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.12.1</version>
+                <version>3.10.1</version>
                 <configuration>
-                    <release>21</release>
+                    <release>17</release>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
     <!-- Project dependencies -->
     <dependencies>
         <!-- JUnit Jupiter API dependency for tests -->
@@ -194,11 +184,5 @@
             <version>3.0.0</version>
             <type>maven-plugin</type>
         </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>33.3.1-jre</version>
-        </dependency>
     </dependencies>
-
 </project>

@@ -1,8 +1,8 @@
 package com.dt181g.laboration_3.factories;
 
-import com.dt181g.laboration_3.controller.GameController;
-import com.dt181g.laboration_3.model.GameModel;
-import com.dt181g.laboration_3.view.GameView;
+import com.dt181g.laboration_3.mvccomponents.games.GameController;
+import com.dt181g.laboration_3.mvccomponents.games.GameModel;
+import com.dt181g.laboration_3.mvccomponents.games.GameView;
 
 /**
  * A functional interface for creating instances of {@link GameController}.

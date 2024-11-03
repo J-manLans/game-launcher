@@ -1,8 +1,8 @@
 package com.dt181g.laboration_3.issuer;
 
-import com.dt181g.laboration_3.controller.GameLauncherController;
-import com.dt181g.laboration_3.model.GameListModel;
-import com.dt181g.laboration_3.view.GameLauncherView;
+import com.dt181g.laboration_3.mvccomponents.launcher.controller.GameLauncherController;
+import com.dt181g.laboration_3.mvccomponents.launcher.model.GameListModel;
+import com.dt181g.laboration_3.mvccomponents.launcher.view.GameLauncherView;
 
 /**
  * Singleton for initializing and running the game launcher.
@@ -30,8 +30,7 @@ public enum GameLauncherInitializer {
      *
      * <p>This method creates an instance of {@link GameLauncherController}
      * if it has not already been initialized. The controller is then initialized
-     * and ready to handle the game launching process. This method should be called
-     * to start the game launcher.</p>
+     * and ready to handle the game launching process.</p>
      */
     public void runLauncher() {
         if (gameLauncherController == null) {

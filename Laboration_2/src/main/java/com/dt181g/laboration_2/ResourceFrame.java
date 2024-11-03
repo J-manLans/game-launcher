@@ -195,7 +195,7 @@ class ResourceFrame extends JFrame{
             super.paintComponent(g);
             final int x = (getWidth() / 2) - (this.circleDiameter / 2);
             final int y = (getHeight() / 2) - (this.circleDiameter / 2);
-            g.setColor(circleColor);
+            g.setColor(this.circleColor);
             g.fillOval(x, y, this.circleDiameter, this.circleDiameter);
         }
     }

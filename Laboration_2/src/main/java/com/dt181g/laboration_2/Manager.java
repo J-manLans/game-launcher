@@ -60,7 +60,7 @@ enum Manager {
      * and if so, updates the clients and redraws the GUI components accordingly.
      */
     void refreshGUI(final ResourceFrame resourceFrame) {
-        this.currentPoolSize = this.resourcePool.pollForResource();
+        this.currentPoolSize = resourcePool.pollForResource();
         if (this.currentPoolSize != this.tempPoolSize) {
             this.modifyClients();
             this.updateClientCount();

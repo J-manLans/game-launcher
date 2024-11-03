@@ -1,6 +1,6 @@
 package com.dt181g.laboration_1;
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.Random;
 
 
@@ -16,7 +16,7 @@ import java.util.Random;
 public class Storefront {
     final Random randomizer = new Random();
     final int clientPool = randomizer.nextInt(11) + 100;
-    final ArrayList<Client> clients = new ArrayList<Client>(20);
+    final ArrayDeque<Client> clients = new ArrayDeque<Client>(20);
     final ThreadManager manager = ThreadManager.INSTANCE;
 
     Storefront() {
