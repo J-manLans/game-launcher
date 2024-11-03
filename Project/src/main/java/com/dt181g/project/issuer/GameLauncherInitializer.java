@@ -13,9 +13,9 @@ import com.dt181g.project.mvccomponents.launcher.model.GameListModel;
 import com.dt181g.project.mvccomponents.launcher.view.GameLauncherView;
 
 /**
- * Singleton for initializing and running the game launcher.
- * This class manages the creation and coordination of the view, model,
- * and controller for the game launcher using the singleton pattern.
+ * Singleton responsible for initializing and managing the game launcher.
+ * This class handles the creation and coordination of the Model-View-Controller (MVC)
+ * components for the game launcher, ensuring that only one instance exists.
  *
  * <p>
  * It uses an enum-based singleton implementation to ensure that only one
@@ -23,11 +23,14 @@ import com.dt181g.project.mvccomponents.launcher.view.GameLauncherView;
  * </p>
  *
  * <p>
- * This class is thread-safe because the JVM handles the creation of the
- * enum instance and guarantees its uniqueness.
+ * Once initialized, the game launcher remains active until a
+ * shutdown signal is triggered via {@link #countDown()}.
  * </p>
  *
  * @author Joel Lansgren
+ * @see GameLauncherController
+ * @see GameListModel
+ * @see GameLauncherView
  */
 public enum GameLauncherInitializer {
     INSTANCE;
@@ -36,11 +39,16 @@ public enum GameLauncherInitializer {
 
 
     /**
-     * Initializes and runs the game launcher.
+     * Initializes and starts the game launcher.
      *
-     * <p>This method creates an instance of {@link GameLauncherController}
-     * if it has not already been initialized. The controller is then initialized
-     * and ready to handle the game launching process.</p>
+     * <p>
+     * If the launcher’s controller has not been initialized, this method creates
+     * instances of the Model, View, and Controller components and links them to
+     * manage the game launcher lifecycle.
+     * </p>
+     *
+     * <p>The method then waits until {@link #countDown()} is called, allowing the
+     * launcher to run until explicitly shut down.</p>
      */
     public void runLauncher() {
 
@@ -57,6 +65,13 @@ public enum GameLauncherInitializer {
         }
     }
 
+    /**
+     * Creates and initializes the Model, View, and Controller components for the game launcher.
+     *
+     * @param gameModelFactory Factory for creating the launcher model
+     * @param gameViewFactory Factory for creating the launcher view
+     * @param gameControllerFactory Factory for creating the launcher controller
+     */
     private void instantiateLauncher(
         final BaseModelFactory<IBaseModel> gameModelFactory,
         final BaseViewFactory<IBaseView> gameViewFactory,
@@ -66,6 +81,12 @@ public enum GameLauncherInitializer {
         gameControllerFactory.create(gameViewFactory.create(), gameModelFactory.create()).initialize();
     }
 
+    /**
+     * Signals the launcher to shut down.
+     *
+     * <p>Calling this method decreases the latch count, allowing {@link #runLauncher()}
+     * to complete and initiate the application shutdown.</p>
+     */
     public void countDown() {
         this.latch.countDown();
     }
