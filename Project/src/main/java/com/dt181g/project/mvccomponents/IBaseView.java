@@ -11,7 +11,7 @@ import java.awt.Component;
 import java.awt.Color;
 import java.awt.Cursor;
 
-public interface BaseView {
+public interface IBaseView {
     /**
      * Styles a label to look like a button with specific color and border.
      *

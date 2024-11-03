@@ -7,10 +7,10 @@ import java.awt.event.MouseAdapter;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.dt181g.project.mvccomponents.BaseView;
+import com.dt181g.project.mvccomponents.IBaseView;
 import com.dt181g.project.support.AppConfigProject;
 
-public class SnakeStartMenuView extends JPanel implements BaseView {
+public class SnakeStartMenuView extends JPanel implements IBaseView {
     private final GridBagConstraints gbc = new GridBagConstraints();
     private final JLabel startBtn = new JLabel("Start Game");
     private final JLabel multiplayerBtn = new JLabel("Multiplayer");

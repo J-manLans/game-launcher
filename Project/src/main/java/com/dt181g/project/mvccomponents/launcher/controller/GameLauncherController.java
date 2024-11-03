@@ -1,13 +1,15 @@
 package com.dt181g.project.mvccomponents.launcher.controller;
 
-import com.dt181g.project.mvccomponents.BaseController;
-import com.dt181g.project.mvccomponents.BaseModel;
-import com.dt181g.project.mvccomponents.BaseView;
+import com.dt181g.project.issuer.GameLauncherInitializer;
+import com.dt181g.project.mvccomponents.IBaseController;
+import com.dt181g.project.mvccomponents.IBaseModel;
+import com.dt181g.project.mvccomponents.IBaseView;
 import com.dt181g.project.mvccomponents.launcher.listeners.GameIconListener;
 import com.dt181g.project.mvccomponents.launcher.model.GameListModel;
 import com.dt181g.project.mvccomponents.launcher.view.GameLauncherView;
 import com.dt181g.project.mvccomponents.listeners.MenuButtonListener;
 import com.dt181g.project.support.AppConfigProject;
+import com.dt181g.project.support.AudioManager;
 import com.dt181g.project.support.DebugLogger;
 
 import java.awt.event.MouseWheelEvent;
@@ -33,7 +35,7 @@ import javax.imageio.ImageIO;
  *
  * @author Joel lansgren
  */
-public class GameLauncherController implements BaseController {
+public class GameLauncherController implements IBaseController {
     private final GameLauncherView gameLauncherView;
     private final GameListModel gameListModel;
 
@@ -43,7 +45,7 @@ public class GameLauncherController implements BaseController {
      * @param gameLauncherView the view component for the game launcher
      * @param gameListModel the model component containing the list of games that the launcher will display
      */
-    public GameLauncherController(final BaseView gameLauncherView, final BaseModel gameListModel) {
+    public GameLauncherController(final IBaseView gameLauncherView, final IBaseModel gameListModel) {
         this.gameLauncherView = (GameLauncherView) gameLauncherView;
         this.gameListModel = (GameListModel) gameListModel;
     }
@@ -57,6 +59,7 @@ public class GameLauncherController implements BaseController {
         this.addGameIcons();
         this.initializeListeners();
         this.startLauncher();
+        AudioManager.INSTANCE.keepAudioAlive();
     }
 
     /**
@@ -123,7 +126,7 @@ public class GameLauncherController implements BaseController {
         this.gameLauncherView.addQuitBtnListener(
             new MenuButtonListener(
                 this.gameLauncherView.getQuitBtn(),
-                 gameLauncherView::exitLauncher
+                this::exitLauncher
             )
         );
     }
@@ -135,5 +138,9 @@ public class GameLauncherController implements BaseController {
         SwingUtilities.invokeLater(() -> {
             gameLauncherView.setVisible(true);
         });
+    }
+
+    public void exitLauncher() {
+        GameLauncherInitializer.INSTANCE.countDown();
     }
 }

@@ -31,10 +31,7 @@ public final class AppConfigProject {
     public static final String PATH_TO_ICONS = "/icons/";
 
     /** Extension to snake image. */
-    public static final String SNAKE_ICON = "snake.jpeg";
-
-    /** Extension to tic tac toe image. */
-    public static final String TIC_TAC_TOE_ICON = "tictactoe.jpeg";
+    public static final String ICON_SNAKE = "snake.jpeg";
 
     /** Path to images folder */
     public static final String PATH_TO_IMAGES = "/img/";
@@ -46,14 +43,19 @@ public final class AppConfigProject {
         "GameLauncher03.png"
     };
 
+    public static final String PATH_TO_SOUNDS = "/sounds/";
+
+    public static final String SOUND_EFFECT_CHERRY = "cherry.wav";
+    public static final String SOUND_EFFECT_SPEED = "speed.wav";
+    public static final String SOUND_EFFECT_SILENCE = "keep_alive.wav";
+
+
+
     /* ---------------------------------------
     Game titles.
     ------------------------------------------ */
     /** Snake title. */
     public static final String SNAKE_TITLE = "SNAKE(S)";
-
-    /** Tic tac toe title. */
-    public static final String TIC_TAC_TOE_TITLE = "TIC TAC TOE";
 
     /* ---------------------------------------
     Fonts.
@@ -103,13 +105,13 @@ public final class AppConfigProject {
     public static final Color COLOR_SNAKE_GAME_SPEED = Color.YELLOW;
 
     /** Number in speed boosters body representing the color. */
-    public static final int COLOR_SPEED_INT = 3;
+    public static final int COLOR_SPEED_INT = 4;
 
     /** Snakes head color when in collision to mark its position. */
-    public static final Color COLOR_SNAKE_GAME_DEAD = new Color(84,24,24);
+    public static final Color COLOR_SNAKE_HEAD = new Color(140, 100, 43);
 
     /** Number in snakes body representing the death color. */
-    public static final int COLOR_SNAKE_DEAD_INT = 3;
+    public static final int COLOR_SNAKE_HEAD_INT = 3;
 
     /* ---------------------------------------
     Borders.
@@ -197,6 +199,14 @@ public final class AppConfigProject {
 
     public static double SNAKE_SPEED_MULTIPLIER = 0.9;
 
+    public static final int CHERRY_INDEX = 0;
+
+    public static final int BASE_BOOSTER_DURATION = 50;
+
+    public static final int SECOND_IN_MS = 1000;
+
+
+
     /* ---------------------------------------
     Steering.
     ------------------------------------------ */
@@ -244,8 +254,6 @@ public final class AppConfigProject {
 
     /** Magenta color. */
     public static final String ANSI_MAGENTA = DebugColor.MAGENTA.ansiCode;
-
-
 
     /**
      * An enum representing ANSI color codes for console output.

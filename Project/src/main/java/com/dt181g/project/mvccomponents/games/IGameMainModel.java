@@ -1,6 +1,6 @@
 package com.dt181g.project.mvccomponents.games;
 
-import com.dt181g.project.mvccomponents.BaseModel;
+import com.dt181g.project.mvccomponents.IBaseModel;
 
 /**
  * An interface representing the essential model of a game.
@@ -10,7 +10,7 @@ import com.dt181g.project.mvccomponents.BaseModel;
  * must provide concrete implementations for these methods.
  * </p>
  */
-public interface GameMainModel extends BaseModel{
+public interface IGameMainModel extends IBaseModel{
    /**
      * Retrieves the path to the game's icon.
      *

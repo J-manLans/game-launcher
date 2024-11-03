@@ -5,7 +5,7 @@ import java.awt.event.MouseAdapter;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
-import com.dt181g.project.mvccomponents.BaseController;
+import com.dt181g.project.mvccomponents.IBaseController;
 
 /**
  * Interface representing the controllers for the game in the game launcher application.
@@ -16,7 +16,7 @@ import com.dt181g.project.mvccomponents.BaseController;
  * functionality to handle user inputs and reset the game when necessary.
  * </p>
  */
-public interface GameMainController extends BaseController {
+public interface IGameMainController extends IBaseController {
     /**
      * Initializes the event listeners for user interactions in the game.
      */

@@ -23,5 +23,9 @@ public interface Booster<T> {
 }
 ````
 
+I could have the mainView and model handle all other models, letting the controller only interact with them, letting them act as intermediary classes. However, I chose to let the controller handle everything since it's still a small game and the intermediary functions of mainView and model felt like it didn't add anything. But would I implement a bigger game in the future I think i might go that path for a cleaner approach and separation of concerns, alternatively have additionally dedicated controllers.
+
+use an List<int[]> for the snake for easy addition of body segments, but I'm using an interface for both the snakemodel and cherry model
+
 ## Personal Reflections
 [replace this with relevant information]

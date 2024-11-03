@@ -1,6 +1,6 @@
 package com.dt181g.project.mvccomponents.launcher.view;
-import com.dt181g.project.mvccomponents.BaseView;
-import com.dt181g.project.mvccomponents.games.GameMainView;
+import com.dt181g.project.mvccomponents.IBaseView;
+import com.dt181g.project.mvccomponents.games.IGameMainView;
 import com.dt181g.project.support.AppConfigProject;
 import com.dt181g.project.support.BackgroundPanel;
 
@@ -45,7 +45,7 @@ import javax.swing.JScrollPane;
  *
  * @author Joel Lansgren
  */
-public class GameLauncherView extends JFrame implements BaseView {
+public class GameLauncherView extends JFrame implements IBaseView {
     // Game selector panel
 
     private final JPanel gameSelectorPanel = new JPanel();
@@ -160,9 +160,9 @@ public class GameLauncherView extends JFrame implements BaseView {
      * It adds the new game's view to the card layout panel. It then shows the view.
      * </p>
      *
-     * @param gameView the {@link GameMainView} to be displayed in the panel
+     * @param gameView the {@link IGameMainView} to be displayed in the panel
      */
-    public void displayGame(final GameMainView gameView) {
+    public void displayGame(final IGameMainView gameView) {
         // Adds the panel and show the game view.
         this.gamePanel.add((JPanel) gameView, "Game");
         this.gamePanelCL.show(this.gamePanel, "Game");

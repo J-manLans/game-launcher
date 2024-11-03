@@ -16,12 +16,12 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-import com.dt181g.project.mvccomponents.BaseView;
+import com.dt181g.project.mvccomponents.IBaseView;
 import com.dt181g.project.mvccomponents.games.listeners.SnakeMovementListener;
 import com.dt181g.project.support.AppConfigProject;
 import com.dt181g.project.support.DebugLogger;
 
-public class SnakeSinglePlayerView extends JPanel implements BaseView {
+public class SnakeSinglePlayerView extends JPanel implements IBaseView {
     private final GridBagConstraints gbc = new GridBagConstraints();
     private final JLayeredPane layeredPane = new JLayeredPane();
     private JPanel snakeGrid;
@@ -38,6 +38,7 @@ public class SnakeSinglePlayerView extends JPanel implements BaseView {
     };
     JLabel gameOver = new JLabel("GAME OVER");
     private final JLabel snakeLengthLabel = new JLabel();
+    private final JLabel snakeSpeedLabel = new JLabel();
     private int[][] modelGameGrid;
     private final JLabel snakeBackBtn = new JLabel("Back");
 
@@ -47,9 +48,32 @@ public class SnakeSinglePlayerView extends JPanel implements BaseView {
         labelBtn(this.snakeBackBtn, AppConfigProject.COLOR_WHITE);
         labelStyling(this.gameOver, AppConfigProject.TEXT_HEADING_2);
         labelStyling(this.snakeLengthLabel, AppConfigProject.TEXT_SIZE_NORMAL);
+        labelStyling(this.snakeSpeedLabel, AppConfigProject.TEXT_SIZE_NORMAL);
     }
 
-    public void startGame() {
+    public void initializeView(List<Object> gameAssets) {
+        this.setGameAssets(gameAssets);
+        // This one is only truly utilized the first time the game starts up.
+        // Every other time it just sets the focus to the panel so the keyListener
+        // will work properly
+        this.startGame();
+        // This is to get the true state of the game at every startup
+        this.updateGameGrid();
+    }
+
+    /**
+     * Sets the list with the snakes starter position in the grid.
+     * @param gameAssets a list containing a 2D int array representing the snakes position in the grid
+     */
+    private void setGameAssets(List<Object> gameAssets) {
+        for (Object asset : gameAssets) {
+            if (asset instanceof int[][]) {
+                this.modelGameGrid = (int[][]) asset;
+            }
+        }
+    }
+
+    private void startGame() {
         if (this.snakeGrid == null) {
             this.snakeGrid = new JPanel(new GridLayout(this.modelGameGrid.length, this.modelGameGrid.length));
             this.snakeGrid.setBounds(0, 0, AppConfigProject.SNAKE_GRID_SIZE.width, AppConfigProject.SNAKE_GRID_SIZE.height);
@@ -71,6 +95,8 @@ public class SnakeSinglePlayerView extends JPanel implements BaseView {
             // Sets up the initial snake grid
             this.initializeGrid();
         }
+        // For enabling the keyListener
+        this.snakeGrid.requestFocusInWindow();
     }
 
     private void setupGameOverPanel() {
@@ -81,15 +107,17 @@ public class SnakeSinglePlayerView extends JPanel implements BaseView {
         this.gameOverPanel.add(Box.createVerticalGlue());
         this.gameOverPanel.add(this.gameOver);
         this.gameOverPanel.add(this.snakeLengthLabel);
+        this.gameOverPanel.add(this.snakeSpeedLabel);
         this.gameOverPanel.add(Box.createVerticalGlue());
 
     }
 
-    public void showGameOver(String snakeLength) {
-        if (!this.layeredPane.isAncestorOf(gameOverPanel)) {
-            this.layeredPane.add(this.gameOverPanel, JLayeredPane.POPUP_LAYER);
-        }
-        this.snakeLengthLabel.setText(snakeLength);
+    public void showGameOver(int snakeLength, int snakeSpeed) {
+            if (!this.layeredPane.isAncestorOf(gameOverPanel)) {
+                this.layeredPane.add(this.gameOverPanel, JLayeredPane.POPUP_LAYER);
+            }
+            this.snakeLengthLabel.setText("Your snake was " + snakeLength + " body parts long.");
+            this.snakeSpeedLabel.setText("It traveled with a speed of " + snakeSpeed + " cells per second.");
         this.gameOverPanel.setVisible(true);
     }
 
@@ -136,26 +164,16 @@ public class SnakeSinglePlayerView extends JPanel implements BaseView {
                             this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_ACCENT);
                         } case AppConfigProject.COLOR_CHERRY_INT -> {
                             this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_CHERRY);
-                        } case AppConfigProject.COLOR_SNAKE_DEAD_INT -> {
-                            this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_DEAD);
-                        } default -> DebugLogger.INSTANCE.logInfo("Unimplemented snake booster.");
+                        } case AppConfigProject.COLOR_SPEED_INT -> {
+                            this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_GAME_SPEED);
+                        } case AppConfigProject.COLOR_SNAKE_HEAD_INT -> {
+                            this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_SNAKE_HEAD);
+                        } default -> DebugLogger.INSTANCE.logInfo("Unimplemented snake booster in " + getClass().getName());
                     }
 
                 } else {  // Background
                     this.snakeGridCells[i][j].setBackground(AppConfigProject.COLOR_DARKER_GREY);
                 }
-            }
-        }
-    }
-
-    /**
-     * Sets the list with the snakes current position in the grid.
-     * @param gameAssets a list containing a 2D int array representing the snakes position in the grid
-     */
-    public void setGameAssets(List<Object> gameAssets) {
-        for (Object asset : gameAssets) {
-            if (asset instanceof int[][]) {
-                this.modelGameGrid = (int[][]) asset;
             }
         }
     }
@@ -176,7 +194,6 @@ public class SnakeSinglePlayerView extends JPanel implements BaseView {
 
     public void addSnakeKeyListener(SnakeMovementListener snakeKeyListener) {
         this.snakeGrid.addKeyListener(snakeKeyListener);
-        this.snakeGrid.requestFocusInWindow();
     }
 
     public void removeListeners() {
@@ -194,5 +211,9 @@ public class SnakeSinglePlayerView extends JPanel implements BaseView {
      */
     public JLabel getSnakeBackBtn() {
         return this.snakeBackBtn;
+    }
+
+    public JPanel getSnakeGrid() {
+        return this.snakeGrid;
     }
 }

@@ -19,5 +19,6 @@ public final class Project {
      * @param args command-line arguments (not used).
      */
     public static void main(final String... args) {
-        GameLauncherInitializer.INSTANCE.runLauncher();    }
+        GameLauncherInitializer.INSTANCE.runLauncher();
+    }
 }

@@ -7,10 +7,15 @@
 ## QUALITY OF LIFE IMPLEMENTATIONS:
 - Nullify objects for controller, view, and model in the close method.
 - refactor to have one addListener method with switch cases using strings to determine where to add the listener
-- *Figure out how to work with boosters*
 - Set back button to BaseView as a shared variable. (maybe not, quite handy to have different listeners for controls and singleplayer)
+- *think about where to control sounds, maybe in boostermanagern. i think so*
+- *add an overarching soundmanager though i think as well*
+- *add backgroundmusic with the controller maybe*
+- add more statistics at deathscreen, speed, distance traveled and more.
 
 ## BASIC GAME MECHANICS FOR SINGLE-PLAYER SNAKE:
+- Add a third booster if there is time, maybe invincibility, very easy i think. just add a boolean that checks for snake collision and skip that if the boolean is active,
+- Another could be setting up walls around the grid so the snake cant wrap around, think this would involve maybe keeping a int[][] in that booster and just overlay it on the gamegrid, additionally have a separate method in mainview that adds the wall if a boolean is active
 
 ## MENUS:
 - Settings, choose snake color.

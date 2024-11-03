@@ -1,6 +1,7 @@
 package com.dt181g.project.mvccomponents.games.snake.model;
 
 import com.dt181g.project.support.AppConfigProject;
+import com.dt181g.project.support.AudioManager;
 
 /**
  * Represents a cherry booster in the snake game, which the snake can eat to
@@ -8,12 +9,13 @@ import com.dt181g.project.support.AppConfigProject;
  * increases the snake's speed and adds a segment to its body.
  * @author Joel Lansgren
  */
-public class CherryBoosterModel extends SnakeBoostersModel {
+public class BoosterCherryModel implements ISnakeBoostersModel {
     private int[][] cherry = new int[1][AppConfigProject.SNAKE_ITEMS_PART_CONTENT];
     private final int boosterColor = AppConfigProject.COLOR_CHERRY_INT;
+    private String soundEffect = AppConfigProject.PATH_TO_SOUNDS + AppConfigProject.SOUND_EFFECT_CHERRY;
 
-    public CherryBoosterModel() {
-        BoosterManager.INSTANCE.setBooster(this);
+    public BoosterCherryModel() {
+        ManagerSnakeBooster.INSTANCE.addBoosters(this);
     }
 
     /**
@@ -24,10 +26,13 @@ public class CherryBoosterModel extends SnakeBoostersModel {
      * @param snakeModel The snake model to which the effect is applied.
      */
     @Override
-    protected void eatBooster(SnakeModel snakeModel) {
-        BoosterManager.INSTANCE.initializeBooster(this);
-        super.addSpeed(snakeModel, (int) (snakeModel.getSpeed() * AppConfigProject.SNAKE_SPEED_MULTIPLIER));
+    public void applyBoosterEffect(SnakeModel snakeModel) {
+        ManagerSnakeBooster.INSTANCE.setSpeed(
+            snakeModel,
+            (snakeModel.getSpeed() * AppConfigProject.SNAKE_SPEED_MULTIPLIER)
+        );
         this.grow(snakeModel);
+        AudioManager.INSTANCE.playSound(soundEffect);
     }
 
     /**
@@ -47,10 +52,13 @@ public class CherryBoosterModel extends SnakeBoostersModel {
         // The tail is re-added here
         expandedSnake[0] = new int[]{snake[0][0], snake[0][1], AppConfigProject.COLOR_SNAKE_INT};
 
-        // Updates the snake with the new copy and headIndex is updated
-        snakeModel.setSnake(expandedSnake);
-        snakeModel.setHeadIndex(snakeModel.getSnake().length - 1);
+        // Updates the snake
+        snakeModel.updateSnake(expandedSnake);
     }
+
+    /*============================
+    * Getters
+    ===========================*/
 
     /**
      * Returns the cherry booster object, represented as a 2D array, with its
@@ -59,10 +67,15 @@ public class CherryBoosterModel extends SnakeBoostersModel {
      * @return A 2D array representing the cherry booster.
      */
     public int[][] getBooster() {
-        return cherry;
+        return this.cherry;
     }
 
     public int getBoosterColor() {
-        return boosterColor;
+        return this.boosterColor;
+    }
+
+    @Override
+    public boolean isBoosterActive() {
+        return false;
     }
 }

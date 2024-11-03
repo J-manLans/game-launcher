@@ -7,10 +7,10 @@ import java.awt.event.MouseAdapter;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 
-import com.dt181g.project.mvccomponents.BaseView;
+import com.dt181g.project.mvccomponents.IBaseView;
 import com.dt181g.project.support.AppConfigProject;
 
-public class SnakeControlsView extends JPanel implements BaseView {
+public class SnakeControlsView extends JPanel implements IBaseView {
     private final GridBagConstraints gbc = new GridBagConstraints();
     private final JLabel controlsMainLabel = new JLabel("CONTROLS:");
     private final JLabel controlsSubLabel = new JLabel("W,S,A,D or arrow keys to move the snake around");

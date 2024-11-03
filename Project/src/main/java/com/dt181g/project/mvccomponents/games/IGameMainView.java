@@ -3,7 +3,7 @@ package com.dt181g.project.mvccomponents.games;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import com.dt181g.project.mvccomponents.BaseView;
+import com.dt181g.project.mvccomponents.IBaseView;
 import com.dt181g.project.support.DebugLogger;
 
 /**
@@ -14,7 +14,7 @@ import com.dt181g.project.support.DebugLogger;
  * and retrieving information from a game view.
  * </p>
  */
-public interface GameMainView extends BaseView {
+public interface IGameMainView extends IBaseView {
     /**
      * Starts the game with the provided game model and title.
      * @param gameAssets a list of assorted assets from the game model to the view
