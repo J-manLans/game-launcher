@@ -12,9 +12,6 @@ import com.dt181g.laboration_3.mvccomponents.games.GameView;
 import com.dt181g.laboration_3.mvccomponents.games.snake.controller.SnakeController;
 import com.dt181g.laboration_3.mvccomponents.games.snake.model.SnakeModel;
 import com.dt181g.laboration_3.mvccomponents.games.snake.view.SnakeView;
-import com.dt181g.laboration_3.mvccomponents.games.tictactoe.controller.FakeTicTacToeCtrl;
-import com.dt181g.laboration_3.mvccomponents.games.tictactoe.model.FakeTicTacToeModel;
-import com.dt181g.laboration_3.mvccomponents.games.tictactoe.view.FakeTicTacToeView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.DebugLogger;
 
@@ -40,11 +37,8 @@ public class GameListModel {
      * Constructs a GameListModel and initializes the game icons and titles.
      */
     public GameListModel() {
-        // TODO: Will refactor this in the future to fetch info from the games themselves.
         this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON);
-        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.TIC_TAC_TOE_ICON);
         this.gameTitles.add(AppConfigLab3.SNAKE_TITLE);
-        this.gameTitles.add(AppConfigLab3.TIC_TAC_TOE_TITLE);
     }
 
     /**
@@ -55,8 +49,6 @@ public class GameListModel {
         switch (game) {
             case AppConfigLab3.SNAKE_TITLE -> {
                 this.instantiateViewAndController(SnakeModel::new, SnakeView::new, SnakeController::new, game);
-            } case AppConfigLab3.TIC_TAC_TOE_TITLE -> {
-                this.instantiateViewAndController(FakeTicTacToeModel::new, FakeTicTacToeView::new, FakeTicTacToeCtrl::new, game);
             }
         }
 
