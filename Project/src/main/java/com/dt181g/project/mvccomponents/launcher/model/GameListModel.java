@@ -13,9 +13,6 @@ import com.dt181g.project.mvccomponents.games.IGameMainView;
 import com.dt181g.project.mvccomponents.games.snake.controller.SnakeController;
 import com.dt181g.project.mvccomponents.games.snake.model.SnakeMainModel;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeMainView;
-import com.dt181g.project.mvccomponents.games.tictactoe.controller.FakeTicTacToeCtrl;
-import com.dt181g.project.mvccomponents.games.tictactoe.model.FakeTicTacToeModel;
-import com.dt181g.project.mvccomponents.games.tictactoe.view.FakeTicTacToeView;
 import com.dt181g.project.support.AppConfigProject;
 import com.dt181g.project.support.DebugLogger;
 
@@ -40,11 +37,8 @@ public class GameListModel implements IBaseModel {
      * Constructs a GameListModel and initializes the game icons and titles.
      */
     public GameListModel() {
-        // TODO: Will refactor this in the future to fetch info from the games themselves.
         this.iconPaths.add(AppConfigProject.PATH_TO_ICONS + AppConfigProject.ICON_SNAKE);
-        this.iconPaths.add(AppConfigProject.PATH_TO_ICONS + AppConfigProject.ICON_TIC_TAC_TOE);
         this.gameTitles.add(AppConfigProject.SNAKE_TITLE);
-        this.gameTitles.add(AppConfigProject.TIC_TAC_TOE_TITLE);
     }
 
     /**
@@ -55,8 +49,6 @@ public class GameListModel implements IBaseModel {
         switch (gameTitle) {
             case AppConfigProject.SNAKE_TITLE -> {
                 this.instantiateGame(SnakeMainModel::new, SnakeMainView::new, SnakeController::new, gameTitle);
-            } case AppConfigProject.TIC_TAC_TOE_TITLE -> {
-                this.instantiateGame(FakeTicTacToeModel::new, FakeTicTacToeView::new, FakeTicTacToeCtrl::new, gameTitle);
             }
         }
 

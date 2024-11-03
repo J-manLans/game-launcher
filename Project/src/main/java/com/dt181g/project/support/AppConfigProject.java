@@ -33,9 +33,6 @@ public final class AppConfigProject {
     /** Extension to snake image. */
     public static final String ICON_SNAKE = "snake.jpeg";
 
-    /** Extension to tic tac toe image. */
-    public static final String ICON_TIC_TAC_TOE = "tictactoe.jpeg";
-
     /** Path to images folder */
     public static final String PATH_TO_IMAGES = "/img/";
 
@@ -59,9 +56,6 @@ public final class AppConfigProject {
     ------------------------------------------ */
     /** Snake title. */
     public static final String SNAKE_TITLE = "SNAKE(S)";
-
-    /** Tic tac toe title. */
-    public static final String TIC_TAC_TOE_TITLE = "TIC TAC TOE";
 
     /* ---------------------------------------
     Fonts.
