@@ -15,6 +15,8 @@ import com.dt181g.project.mvccomponents.listeners.MenuButtonListener;
  * The selected game is then re-instantiated, re-initiated and displayed in the game launcher view.
  * All other games will be disposed of.
  * </p>
+ *
+ * @author Joel  lansgren
  */
 public class GameIconListener implements ActionListener {
     private final GameLauncherView view;
@@ -32,6 +34,15 @@ public class GameIconListener implements ActionListener {
         this.model = model;
     }
 
+    /**
+     * Invoked when a game icon is clicked.
+     * <p>
+     * This method checks if the clicked game is different from the last selected one
+     * or if the game has not been instantiated, then switches to the selected game.
+     * </p>
+     *
+     * @param e the event that triggered this action
+     */
     @Override
     public void actionPerformed(final ActionEvent e) {
         // Get the game title from the clicked button's action command set earlier.
@@ -86,8 +97,10 @@ public class GameIconListener implements ActionListener {
     }
 
     /**
-     * A listener that closes the game that gets attached to whatever game that is being loaded.
-     * @param game the loaded game
+     * Attaches a listener to the quit button of the specified game.
+     * When the quit button is clicked, the game will be closed.
+     *
+     * @param game the name of the game whose quit button is being listened to
      */
     public void gameExitListener(final String game) {
         model.getGameController(game).addQuitBtnListener(

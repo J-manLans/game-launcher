@@ -10,6 +10,18 @@ import javax.swing.JLabel;
 import com.dt181g.project.mvccomponents.IBaseView;
 import com.dt181g.project.support.AppConfigProject;
 
+/**
+ * Represents the controls view for the Snake game, displaying
+ * instructions on how to control the snake and providing an option
+ * to return to the previous menu.
+ *
+ * <p>
+ * This class extends {@link JPanel} and implements {@link IBaseView}.
+ * It uses a grid bag layout to arrange the control instructions and the back button.
+ * </p>
+ *
+ * @author Joel Lansgren
+ */
 public class SnakeControlsView extends JPanel implements IBaseView {
     private final GridBagConstraints gbc = new GridBagConstraints();
     private final JLabel controlsMainLabel = new JLabel("CONTROLS:");
@@ -18,14 +30,13 @@ public class SnakeControlsView extends JPanel implements IBaseView {
 
 
     /**
-     * Displays the controls menu for the game.
+     * Initializes the controls view, setting up the layout
+     * and displaying control instructions for the game.
      *
      * <p>
-     * This constructor clears the current view and sets up the control panel with
-     * instructions on how to control the snake. It also provides a back button
-     * to return to the previous menu.
+     * This constructor configures the control panel with necessary labels
+     * and a back button for navigation.
      * </p>
-     * @param snakeView the main snake view
      */
     public SnakeControlsView() {
         this.setLayout(new GridBagLayout());
@@ -70,9 +81,7 @@ public class SnakeControlsView extends JPanel implements IBaseView {
     }
 
     /**
-     * Removes all mouse listeners from the game control buttons.
-     * This method iterates through each button and removes any attached mouse listeners,
-     * ensuring that no event handlers remain active on these buttons.
+     * Removes mouse listeners from the game control buttons.
      */
     public void removeListeners() {
         removeAllListenersFromButton(this.snakeBackBtn);

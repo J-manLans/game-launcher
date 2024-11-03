@@ -28,27 +28,17 @@ import javax.swing.JLabel;
 import javax.swing.Timer;
 
 /**
- * The SnakeCtrl class serves as the controller for the Snake game.
- * It mediates the interaction between the SnakeView and SnakeModel,
- * handling user inputs, updating the game state, and rendering changes
- * to the view.
+ * The SnakeController class manages the interaction between the Snake game view and the model.
+ * It handles user inputs, updates game state, and renders changes to the view.
  *
  * <p>
- * This class implements the GameCtrl interface and defines various
- * mouse listeners for game controls, including starting the game and
- * showing controls.
- * </p>
- *
- * <p>
- * This program is under construction and more game mechanics will be
- * incorporated moving forward, as of now, the game only displays a
- * snake with a banner text informing more is to come.
+ * This class defines various mouse listeners for game controls, including starting the game,
+ * showing controls, and managing the game loop.
  * </p>
  *
  * @author Joel Lansgren
  */
 public class SnakeController implements IGameMainController {
-
     private final String gameTitle = AppConfigProject.SNAKE_TITLE;
 
     private final SnakeMainView snakeMainView;
@@ -60,22 +50,22 @@ public class SnakeController implements IGameMainController {
 
     private Timer gameLoop;
     private boolean gameOn;
-    private boolean isRunning = true;
-
-
 
     /**
-     * Constructs a SnakeCtrl with the specified game title, SnakeView and SnakeModel.
-     * It also initialize the listeners.
+     * Constructs a SnakeController with the specified main view and model.
      *
      * @param snakeMainView the view associated with the Snake game
-     * @param snakeModel the model representing the game's logic
+     * @param snakeModel    the model representing the game's logic
      */
     public SnakeController(final IGameMainView snakeMainView, final IGameMainModel snakeModel) {
         this.snakeMainView = (SnakeMainView) snakeMainView;
         this.snakeMainModel = (SnakeMainModel) snakeModel;
     }
 
+    /**
+     * Initializes the controller, instantiates views and models,
+     * and sets up the necessary listeners for user input.
+     */
     public void initialize() {
         this.instantiateViewsAndModels(
             SnakeStartMenuView::new,
@@ -86,10 +76,20 @@ public class SnakeController implements IGameMainController {
             BoosterSpeedModel::new
         );
         this.snakeMainView.setViews(this.startMenuView, this.singlePlayerView, this.controlsView);
-        this.initializeListeners();
         this.createGameLoop();
+        this.initializeListeners();
     }
 
+    /**
+     * Instantiates the views and models required for the game.
+     *
+     * @param startMenuView        factory for creating the start menu view
+     * @param singlePlayerView     factory for creating the single-player view
+     * @param controlsView         factory for creating the controls view
+     * @param snakeModel           factory for creating the snake model
+     * @param cherryBoosterModel   factory for creating the cherry booster model
+     * @param speedBoosterModel    factory for creating the speed booster model
+     */
     public void instantiateViewsAndModels(
         final BaseViewFactory<IBaseView> startMenuView,
         final BaseViewFactory<IBaseView> singlePlayerView,
@@ -106,43 +106,13 @@ public class SnakeController implements IGameMainController {
         speedBoosterModel.create();
     }
 
-    @Override
-    public void initializeListeners() {
-        // Button listeners
-        this.startMenuView.addStartBtnListener(
-            new MenuButtonListener(
-                this.startMenuView.getStartBtn(),
-                this::startGame
-            )
-        );
+    /*======================
+    * Start Methods
+    =====================*/
 
-        this.startMenuView.addControlsBtnListener(
-            new MenuButtonListener(
-                this.startMenuView.getControlsBtn(),
-                this.snakeMainView::showControlsMenu
-            )
-        );
-
-        this.singlePlayerView.addSnakeBackBtnListener(
-            new MenuButtonListener(
-                this.singlePlayerView.getSnakeBackBtn(),
-                this::initiateGame
-            )
-        );
-
-        this.controlsView.addSnakeBackBtnListener(
-            new MenuButtonListener(
-                this.controlsView.getSnakeBackBtn(),
-                this.snakeMainView::showStartMenu
-            )
-        );
-    }
-
-    @Override
-    public void addQuitBtnListener(final MouseAdapter quitBtnListener) {
-        this.startMenuView.addQuitBtnListener(quitBtnListener);
-    }
-
+    /**
+     * Creates the game loop that updates the game state at regular intervals.
+     */
     private void createGameLoop() {
         this.gameLoop = new Timer(AppConfigProject.SNAKE_TICK_DELAY, new ActionListener() {
             @Override
@@ -169,27 +139,25 @@ public class SnakeController implements IGameMainController {
 
     /**
      * Resets the game state and re-initializes the start menu.
-     * Clears the snake model's grid and sets the restart flag to true.
-     * The restart flag is utilized in the game loop to stop the
-     * EDT timer thread when the game is exited.
+     * Stops the game loop and prepares the view for restarting.
      */
     @Override
     public void initiateGame() {
-        // stops the EDT thread from executing
-        this.gameOn = false;
-        // Shows the start menu and hides the game over overlay
-        this.snakeMainView.showStartMenu();
-        this.singlePlayerView.hideGameOver();
+        this.gameOn = false;  // stops the EDT thread from executing
+        this.snakeMainView.showStartMenu();  // Shows the start menu
+        this.singlePlayerView.hideGameOver();  // Hides the game over screen
     }
 
     /**
-     * Gets attached as a listener for the Start button. It starts the game and manages the game loop.
+     * Starts the game and initializes the game loop.
+     * Prepares the game state and updates the view for gameplay.
      */
     private void startGame() {
         // Game initialization.
         this.snakeMainModel.startNewGame(this.snakeModel);
         this.snakeMainView.showGame();
         this.singlePlayerView.initializeView(this.snakeMainModel.getGameAssets());
+
         // The key listener for the game is only added once
         if (this.singlePlayerView.getSnakeGrid().getKeyListeners().length == 0) {
             this.singlePlayerView.addSnakeKeyListener(new SnakeMovementListener(this.snakeModel));
@@ -197,20 +165,28 @@ public class SnakeController implements IGameMainController {
 
         // For controlling the loop
         this.gameOn = true;
-
         this.gameLoop.start();
     }
 
+    /*======================
+    * Close Methods
+    =====================*/
+
+    /**
+     * Closes the game, stopping the game loop and cleaning up resources.
+     */
     @Override
     public void closeGame() {
         this.stopGameLoop();
         this.removeListeners();
         this.snakeMainView.closeGameView();
-        this.isRunning = false;
         this.snakeMainModel.cleanup();
         AudioManager.INSTANCE.shutdownAudio();
     }
 
+    /**
+     * Stops the game loop timer if it is currently running when closing the game.
+     */
     private void stopGameLoop() {
         if (this.gameLoop != null) {
             this.gameLoop.stop();
@@ -218,6 +194,61 @@ public class SnakeController implements IGameMainController {
         }
     }
 
+    /*======================
+    * Listeners
+    =====================*/
+
+    /**
+     * Initializes the listeners for user interactions with the game.
+     */
+    @Override
+    public void initializeListeners() {
+        // Button listeners for the start menu
+        this.startMenuView.addStartBtnListener(
+            new MenuButtonListener(
+                this.startMenuView.getStartBtn(),
+                this::startGame
+            )
+        );
+
+        this.startMenuView.addControlsBtnListener(
+            new MenuButtonListener(
+                this.startMenuView.getControlsBtn(),
+                this.snakeMainView::showControlsMenu
+            )
+        );
+
+        // Button listeners for single player view
+        this.singlePlayerView.addSnakeBackBtnListener(
+            new MenuButtonListener(
+                this.singlePlayerView.getSnakeBackBtn(),
+                this::initiateGame
+            )
+        );
+
+        // Button listeners for controls view
+        this.controlsView.addSnakeBackBtnListener(
+            new MenuButtonListener(
+                this.controlsView.getSnakeBackBtn(),
+                this.snakeMainView::showStartMenu
+            )
+        );
+    }
+
+    /**
+     * Adds a listener for the quit button.
+     * Attached by the GameIconListener.
+     *
+     * @param quitBtnListener the listener for the quit button
+     */
+    @Override
+    public void addQuitBtnListener(final MouseAdapter quitBtnListener) {
+        this.startMenuView.addQuitBtnListener(quitBtnListener);
+    }
+
+    /**
+     * Removes all listeners from the views.
+     */
     private void removeListeners() {
         this.singlePlayerView.removeListeners();
         this.startMenuView.removeListeners();
@@ -228,35 +259,22 @@ public class SnakeController implements IGameMainController {
      * Getters
      =======================*/
 
-    @Override
-    public Timer getGameLoop() {
-        return this.gameLoop;
-    }
-
+    /**
+     * Returns the title of the game.
+     *
+     * @return the game title
+     */
     @Override
     public String getGameTitle() {
         return this.gameTitle;
     }
 
-    @Override
-    public boolean getIsRunning() {
-        return this.isRunning;
-    }
-
-    public SnakeModel getSnakeModel() {
-        return this.snakeModel;
-    }
-
+    /**
+     * Returns the quit button from the start menu view.
+     *
+     * @return the quit button
+     */
     public JLabel getQuitBtn() {
         return this.startMenuView.getQuitBtn();
-    }
-
-    /*========================
-     * Setters
-     =======================*/
-
-    @Override
-    public void setIsRunning(boolean isRunning) {
-        this.isRunning = isRunning;
     }
 }

@@ -33,6 +33,11 @@ import javax.imageio.ImageIO;
  * actions in the view trigger the appropriate responses in the model.
  * </p>
  *
+ * <p>
+ * It is responsible for initializing the launcher, loading game icons,
+ * setting up event listeners, and managing the launcher lifecycle.
+ * </p>
+ *
  * @author Joel lansgren
  */
 public class GameLauncherController implements IBaseController {
@@ -51,9 +56,9 @@ public class GameLauncherController implements IBaseController {
     }
 
     /**
-     * Initializes the game launcher using various helper methods.
-     * First it sets up the game icons, then attach listeners to them
-     * and lastly displays the launcher.
+     * Initializes the game launcher by setting up game icons, attaching listeners,
+     * and displaying the launcher.
+     * This method also ensures that the audio is maintained during the launchers lifecycle.
      */
     public void initialize() {
         this.addGameIcons();
@@ -100,21 +105,21 @@ public class GameLauncherController implements IBaseController {
 
             return new ImageIcon(scaledImage);
         } catch (final IOException e) {
-            DebugLogger.INSTANCE.logWarning(e + "\nSomething went wrong while loading the picture to the game icons");
+            DebugLogger.INSTANCE.logWarning(e + "\nSomething went wrong while loading the picture to the game icons.");
             return null;
         }
     }
 
     /**
-     * Helper method that initialize listeners.
+     * Initializes listeners for user interactions within the launcher.
      */
     private void initializeListeners() {
-        // For game icons so they start the game when clicked
+        // Add listeners for game icons to start the game when clicked
         for (final JButton gameIcon : this.gameLauncherView.getGameIconsList()) {
             this.gameLauncherView.addGameIconListeners(gameIcon, new GameIconListener(this.gameLauncherView, this.gameListModel));
         }
 
-        // For scroll pane speed
+        // Listener for scroll pane speed adjustment
         this.gameLauncherView.addScrollPaneListener((final MouseWheelEvent e) -> {
             final int notches = e.getWheelRotation();  // Gets the direction (1 or -1).
             final JScrollBar vertical = gameLauncherView.getScrollPane().getVerticalScrollBar();
@@ -126,7 +131,7 @@ public class GameLauncherController implements IBaseController {
         this.gameLauncherView.addQuitBtnListener(
             new MenuButtonListener(
                 this.gameLauncherView.getQuitBtn(),
-                this::exitLauncher
+                GameLauncherInitializer.INSTANCE::countDown
             )
         );
     }
@@ -138,9 +143,5 @@ public class GameLauncherController implements IBaseController {
         SwingUtilities.invokeLater(() -> {
             gameLauncherView.setVisible(true);
         });
-    }
-
-    public void exitLauncher() {
-        GameLauncherInitializer.INSTANCE.countDown();
     }
 }

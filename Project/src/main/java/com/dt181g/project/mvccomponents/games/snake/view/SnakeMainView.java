@@ -13,18 +13,18 @@ import javax.swing.JPanel;
  *
  * <p>
  * This class extends {@link JPanel} and implements {@link IGameMainView}.
- * It uses a grid layout to display the snake's position on the board and
- * provides methods for interacting with game controls.
+ * It uses a card layout to display the different views of the Snake game.
  * </p>
  *
  * <p>
- * It's still under construction and both settings and multiplayer will be
- * implemented further on.
+ * This class is still under construction, with plans to implement additional
+ * settings and multiplayer functionality in the future.
+ * </p>
  *
  * @author Joel Lansgren
  */
 public class SnakeMainView extends JPanel implements IGameMainView {
-    private String gameTitle = AppConfigProject.SNAKE_TITLE;
+    private final String gameTitle = AppConfigProject.SNAKE_TITLE;
     private final CardLayout cardLayout = new CardLayout();
 
     // Shared button between menus
@@ -32,10 +32,20 @@ public class SnakeMainView extends JPanel implements IGameMainView {
     /** The panel this panel resides in, used for proper closing of the game. */
     private JPanel gamePanel;
 
+    /**
+     * Constructs a SnakeMainView and sets the layout to CardLayout.
+     */
     public SnakeMainView() {
         this.setLayout(cardLayout);
     }
 
+    /**
+     * Sets the different views for the Snake game.
+     *
+     * @param startMenuView the view for the start menu
+     * @param singlePlayerView the view for the single-player game
+     * @param controlsView the view for the controls menu
+     */
     public void setViews(
         final SnakeStartMenuView startMenuView,
         final SnakeSinglePlayerView singlePlayerView,
@@ -68,9 +78,7 @@ public class SnakeMainView extends JPanel implements IGameMainView {
     //===== Snake game =====
 
      /**
-     * Starts the game.
-     *
-     * @param gameAssets the 2D array representing the snake and a String just for fun.
+     * Starts the game by displaying the single-player view.
      */
     @Override
     public void showGame() {
@@ -78,7 +86,7 @@ public class SnakeMainView extends JPanel implements IGameMainView {
     }
 
     /*=========================================
-    * Override methods (not Override getters)
+    * Override methods
     =========================================*/
 
     @Override

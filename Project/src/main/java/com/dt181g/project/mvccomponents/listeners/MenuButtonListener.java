@@ -7,10 +7,26 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 
+/**
+ * Listener for menu buttons that provides visual feedback and triggers actions on mouse events.
+ * <p>
+ * This class extends {@link MouseAdapter} to handle mouse interactions with a {@link JLabel}
+ * representing a button. It updates the button's appearance on hover and executes a specified
+ * action when the button is clicked.
+ * </p>
+ *
+ * @author Joel Lansgren
+ */
 public class MenuButtonListener extends MouseAdapter {
     private final JLabel button;
     private final Runnable action;
 
+    /**
+     * Constructs a MenuButtonListener for the specified button with the associated action to execute.
+     *
+     * @param button the JLabel representing the button
+     * @param action the action to execute when the button is clicked
+     */
     public MenuButtonListener(final JLabel button, final Runnable action) {
         this.button = button;
         this.action = action;
@@ -19,7 +35,6 @@ public class MenuButtonListener extends MouseAdapter {
     /**
      * Helper method to update the appearance of the specified button based on hover state.
      *
-     * @param button the button to update
      * @param isHovered true if the button is hovered, false otherwise
      */
     public void updateButtonAppearance(final boolean isHovered) {

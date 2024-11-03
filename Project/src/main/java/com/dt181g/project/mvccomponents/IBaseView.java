@@ -11,6 +11,15 @@ import java.awt.Component;
 import java.awt.Color;
 import java.awt.Cursor;
 
+/**
+ * Base interface for all views in the application.
+ * <p>
+ * This interface defines default methods for styling components and managing
+ * user interactions within the application's views. Implementing classes
+ * can provide specific implementations of these methods to achieve
+ * distinctive styles as needed.
+ * </p>
+ */
 public interface IBaseView {
     /**
      * Styles a label to look like a button with specific color and border.
@@ -36,9 +45,10 @@ public interface IBaseView {
     }
 
     /**
-     * Applies styling to a label for uniform appearance.
+     * Applies consistent styling to a JLabel for a uniform appearance across the application.
      *
      * @param label the JLabel to style
+     * @param textSize the font size to apply to the label
      */
     default void labelStyling(final JLabel label, final int textSize) {
         label.setAlignmentX(Component.CENTER_ALIGNMENT);

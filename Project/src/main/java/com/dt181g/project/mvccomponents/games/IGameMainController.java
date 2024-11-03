@@ -1,10 +1,7 @@
 package com.dt181g.project.mvccomponents.games;
 
 import java.awt.event.MouseAdapter;
-
 import javax.swing.JLabel;
-import javax.swing.Timer;
-
 import com.dt181g.project.mvccomponents.IBaseController;
 
 /**
@@ -12,51 +9,63 @@ import com.dt181g.project.mvccomponents.IBaseController;
  *
  * <p>
  * This interface defines the methods required for initializing event listeners,
- * and resetting the game's state. Implementing classes should provide specific
- * functionality to handle user inputs and reset the game when necessary.
+ * resetting the game's state, and managing game lifecycle actions.
+ * Implementing classes should provide specific functionality to handle user inputs
+ * and reset the game when necessary.
  * </p>
  */
 public interface IGameMainController extends IBaseController {
     /**
      * Initializes the event listeners for user interactions in the game.
+     *
+     * <p>
+     * Implementing classes should set up all necessary listeners to respond to user actions,
+     * such as button clicks and key presses, ensuring that the game reacts appropriately to
+     * user input.
+     * </p>
      */
     void initializeListeners();
 
     /**
      * Resets the game to its initial state.
+     *
+     * <p>
      * This method should clear any current game data, restore initial settings,
-     * and prepare the game for a new session.
-     * It should also update the user interface to reflect the reset state.
+     * and prepare the game for a new session. It should also update the user interface
+     * to reflect the reset state, ensuring a clean start for the player.
+     * </p>
      */
     void initiateGame();
 
     /**
-     * Method that shall handle closing of the game.
+     * Closes the game and releases any resources.
      *
      * <p>
-     * Stopping active threads, remove listeners, close the view and make variables ready
-     * for garbage collection.
+     * This method should handle cleanup operations such as stopping game loops,
+     * removing listeners, and ensuring that any resources used by the game are properly
+     * released before exiting.
      * </p>
      */
     void closeGame();
 
-    boolean getIsRunning();
-
-    void setIsRunning(boolean isRunning);
+    /**
+     * Returns the title of the game.
+     *
+     * @return the title of the game as a String.
+     */
+    String getGameTitle();
 
     /**
-     * Returns the swing timer that runs the game loop.
-     * @return the swing timer.
+     * Returns the quit button associated with the game.
+     *
+     * @return the JLabel representing the quit button.
      */
-    Timer getGameLoop();
-
-    /**
-     * Returns the game title
-     * @return the game title
-     */
-    Object getGameTitle();
-
     JLabel getQuitBtn();
 
+    /**
+     * Adds a listener for the quit button.
+     *
+     * @param menuButtonListener the listener to be added for quit button actions.
+     */
     void addQuitBtnListener(MouseAdapter menuButtonListener);
 }

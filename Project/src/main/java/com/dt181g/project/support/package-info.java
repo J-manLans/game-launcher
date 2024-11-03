@@ -1,4 +1,4 @@
 /**
- * Provides support classes for the Laboration 3 application.
+ * Provides various support classes for the game launcher application.
  */
 package com.dt181g.project.support;

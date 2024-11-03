@@ -4,7 +4,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import com.dt181g.project.mvccomponents.IBaseView;
-import com.dt181g.project.support.DebugLogger;
 
 /**
  * Interface representing a game view in the game launcher application.
@@ -16,15 +15,12 @@ import com.dt181g.project.support.DebugLogger;
  */
 public interface IGameMainView extends IBaseView {
     /**
-     * Starts the game with the provided game model and title.
-     * @param gameAssets a list of assorted assets from the game model to the view
+     * Starts the game and displays the associated game interface.
      */
     void showGame();
 
     /**
-     * Resets the game view to its initial state.
-     * This method should clear any previous game data and prepare
-     * the view for a new game session.
+     * Displays the start menu.
      */
     void showStartMenu();
 
@@ -46,12 +42,16 @@ public interface IGameMainView extends IBaseView {
     void closeGameView();
 
     /**
-     * This method removes the game view from the game panel.
+     * Clears the specified game view from the provided game panel.
+     * This method should be called when the game view is no longer needed.
+     *
+     * @param gamePanel the JPanel containing the game views
+     * @param gameView the JPanel representing the current game view to be cleared
+     * @param title the title of the game for logging purposes
      */
     default void clearGameView(JPanel gamePanel, JPanel gameView, String title) {
         SwingUtilities.invokeLater(() -> {
             gamePanel.remove(gameView);
         });
-        DebugLogger.INSTANCE.logInfo(title + " view has been reset.");
     }
 }

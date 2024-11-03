@@ -14,14 +14,14 @@ import com.dt181g.project.mvccomponents.games.snake.controller.SnakeController;
 import com.dt181g.project.mvccomponents.games.snake.model.SnakeMainModel;
 import com.dt181g.project.mvccomponents.games.snake.view.SnakeMainView;
 import com.dt181g.project.support.AppConfigProject;
-import com.dt181g.project.support.DebugLogger;
 
 /**
  * The GameListModel class maintains a list of game models, their corresponding views and controllers.
  *
  * <p>
- * It initializes the game models, views and controllers at construction and provides methods
- * to access the titles, icon paths, and specific game models views or controllers by title.
+ * It initializes the game models, views, and controllers at construction and provides methods
+ * to access the titles, icon paths, and specific game models, views, or controllers by title.
+ * This class is designed to support multiple games, allowing for easy expansion in the future.
  * </p>
  *
  * @author Joel Lansgren
@@ -35,6 +35,10 @@ public class GameListModel implements IBaseModel {
 
     /**
      * Constructs a GameListModel and initializes the game icons and titles.
+     * <p>
+     * Currently, it initializes only the snake game, but the implementation is designed
+     * to accommodate additional games in the future.
+     * </p>
      */
     public GameListModel() {
         this.iconPaths.add(AppConfigProject.PATH_TO_ICONS + AppConfigProject.ICON_SNAKE);
@@ -43,7 +47,13 @@ public class GameListModel implements IBaseModel {
 
     /**
      * Starts the game clicked in the games list in the launcher.
-     * @param gameTitle the clicked games title.
+     * <p>
+     * This method instantiates the game specified by the title. As of now, it supports
+     * only the Snake game. If other games are added, they should be included in this
+     * method's switch statement.
+     * </p>
+     *
+     * @param gameTitle the clicked game's title.
      */
     public void startGame(final String gameTitle) {
         switch (gameTitle) {
@@ -51,8 +61,6 @@ public class GameListModel implements IBaseModel {
                 this.instantiateGame(SnakeMainModel::new, SnakeMainView::new, SnakeController::new, gameTitle);
             }
         }
-
-        DebugLogger.INSTANCE.logWarning(gameTitle + " has been instantiated.");
     }
 
     /**
@@ -88,9 +96,11 @@ public class GameListModel implements IBaseModel {
         this.gameModels.clear();
         this.gameViews.clear();
         this.gameControllers.clear();
-
-        DebugLogger.INSTANCE.logWarning(gameTitle + " has been removed.");
     }
+
+    /*====================
+     * Getters
+     ===================*/
 
     /**
      * Returns the icon paths to the games.

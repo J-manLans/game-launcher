@@ -21,11 +21,22 @@ import com.dt181g.project.mvccomponents.games.listeners.SnakeMovementListener;
 import com.dt181g.project.support.AppConfigProject;
 import com.dt181g.project.support.DebugLogger;
 
+/**
+ * Represents the single-player view of the Snake game, displaying the game grid,
+ * game over information, and user interaction controls.
+ *
+ * <p>
+ * This class extends {@link JPanel} and implements {@link IBaseView}.
+ * It provides a grid layout for the snake game, manages game assets,
+ * and handles user input for controlling the snake's movement.
+ * </p>
+ */
 public class SnakeSinglePlayerView extends JPanel implements IBaseView {
     private final GridBagConstraints gbc = new GridBagConstraints();
     private final JLayeredPane layeredPane = new JLayeredPane();
     private JPanel snakeGrid;
     private JPanel[][] snakeGridCells;
+
     // The paintComponent method is overridden to create a transparent overlay effect,
     // for some reason the setBackground method doesn't apply the alpha channel as one would wish.
     private final JPanel gameOverPanel = new JPanel() {
@@ -36,12 +47,17 @@ public class SnakeSinglePlayerView extends JPanel implements IBaseView {
             g.fillRect(0, 0, getWidth(), getHeight());
         }
     };
-    JLabel gameOver = new JLabel("GAME OVER");
+
+    private final JLabel gameOver = new JLabel("GAME OVER");
     private final JLabel snakeLengthLabel = new JLabel();
     private final JLabel snakeSpeedLabel = new JLabel();
     private int[][] modelGameGrid;
     private final JLabel snakeBackBtn = new JLabel("Back");
 
+    /**
+     * Initializes the single-player view for the Snake game.
+     * Sets up the layout and labels for displaying the game status.
+     */
     public SnakeSinglePlayerView() {
         this.setLayout(new GridBagLayout());
         this.setBackground(AppConfigProject.COLOR_DARKER_GREY);
@@ -51,6 +67,11 @@ public class SnakeSinglePlayerView extends JPanel implements IBaseView {
         labelStyling(this.snakeSpeedLabel, AppConfigProject.TEXT_SIZE_NORMAL);
     }
 
+    /**
+     * Initializes the view with the specified game assets.
+     *
+     * @param gameAssets A list of game assets, including the initial position of the snake.
+     */
     public void initializeView(List<Object> gameAssets) {
         this.setGameAssets(gameAssets);
         // This one is only truly utilized the first time the game starts up.
@@ -62,8 +83,9 @@ public class SnakeSinglePlayerView extends JPanel implements IBaseView {
     }
 
     /**
-     * Sets the list with the snakes starter position in the grid.
-     * @param gameAssets a list containing a 2D int array representing the snakes position in the grid
+     * Sets the initial game assets for the snake's position in the grid.
+     *
+     * @param gameAssets a list containing a 2D int array representing the snake's position.
      */
     private void setGameAssets(List<Object> gameAssets) {
         for (Object asset : gameAssets) {
@@ -73,6 +95,19 @@ public class SnakeSinglePlayerView extends JPanel implements IBaseView {
         }
     }
 
+    /**
+     * Initializes and starts the game by setting up the game grid and adding it to the view.
+     * <p>
+     * This method checks if the snake grid has already been created. If not, it initializes
+     * the grid with a GridLayout based on the size of the game model. It also sets
+     * up the game over panel and adds the necessary components to the layered pane for display.
+     * </p>
+     *
+     * <p>
+     * The method concludes by requesting focus on the snake grid to enable key listeners for
+     * controlling the snake's movement.
+     * </p>
+     */
     private void startGame() {
         if (this.snakeGrid == null) {
             this.snakeGrid = new JPanel(new GridLayout(this.modelGameGrid.length, this.modelGameGrid.length));
@@ -99,6 +134,15 @@ public class SnakeSinglePlayerView extends JPanel implements IBaseView {
         this.snakeGrid.requestFocusInWindow();
     }
 
+    /**
+     * Configures the game over panel, setting its layout, bounds, and adding components.
+     * <p>
+     * This method initializes the game over panel to be displayed when the game ends. It sets
+     * the layout to a vertical box layout and adds the game over message, the snake's length,
+     * and the snake's speed labels. The panel is set to be transparent to allow for an overlay
+     * effect over the game grid.
+     * </p>
+     */
     private void setupGameOverPanel() {
         this.gameOverPanel.setLayout(new BoxLayout(this.gameOverPanel, BoxLayout.Y_AXIS));
         this.gameOverPanel.setBounds(0, 0, AppConfigProject.SNAKE_GRID_SIZE.width, AppConfigProject.SNAKE_GRID_SIZE.height);
@@ -109,9 +153,14 @@ public class SnakeSinglePlayerView extends JPanel implements IBaseView {
         this.gameOverPanel.add(this.snakeLengthLabel);
         this.gameOverPanel.add(this.snakeSpeedLabel);
         this.gameOverPanel.add(Box.createVerticalGlue());
-
     }
 
+    /**
+     * Displays the game over panel with the snake's length and speed.
+     *
+     * @param snakeLength The length of the snake at the time of game over.
+     * @param snakeSpeed The speed of the snake at the time of game over.
+     */
     public void showGameOver(int snakeLength, int snakeSpeed) {
             if (!this.layeredPane.isAncestorOf(gameOverPanel)) {
                 this.layeredPane.add(this.gameOverPanel, JLayeredPane.POPUP_LAYER);
@@ -121,13 +170,15 @@ public class SnakeSinglePlayerView extends JPanel implements IBaseView {
         this.gameOverPanel.setVisible(true);
     }
 
+    /**
+     * Hides the game over panel when the game restarts.
+     */
     public void hideGameOver() {
         this.gameOverPanel.setVisible(false);
     }
 
     /**
      * Initializes the grid with the current state of the snake.
-     * @param modelGameGrid  A 2D array representing the current state of the snake grid.
      */
     private void initializeGrid() {
         for (int i = 0; i < this.modelGameGrid.length; i++) {
@@ -151,7 +202,7 @@ public class SnakeSinglePlayerView extends JPanel implements IBaseView {
     }
 
     /**
-     * Updates the game grid with the current state of the snake.
+     * Updates the game grid with the current state of the snake and booster items.
      */
     public void updateGameGrid() {
         for (int i = 0; i < this.modelGameGrid.length; i++) {
@@ -192,20 +243,33 @@ public class SnakeSinglePlayerView extends JPanel implements IBaseView {
         this.snakeBackBtn.addMouseListener(controlsBackBtnListener);
     }
 
+    /**
+     * Adds a key listener for snake movement control.
+     *
+     * @param snakeKeyListener The key listener to be added for handling snake movement.
+     */
     public void addSnakeKeyListener(SnakeMovementListener snakeKeyListener) {
         this.snakeGrid.addKeyListener(snakeKeyListener);
     }
 
+    /**
+     * Removes all listeners from the grid and back button.
+     */
     public void removeListeners() {
         if (this.snakeGrid != null) {
             for (KeyListener listener : this.snakeGrid.getKeyListeners()) {
                 this.snakeGrid.removeKeyListener(listener);
             }
         }
+        removeAllListenersFromButton(this.snakeBackBtn);
     }
 
+    /*=========================
+     * Getters
+     ========================*/
+
     /**
-     * Returns the back button in the controls menu.
+     * Returns the back button.
      *
      * @return The JLabel representing the back button.
      */
@@ -213,6 +277,11 @@ public class SnakeSinglePlayerView extends JPanel implements IBaseView {
         return this.snakeBackBtn;
     }
 
+    /**
+     * Returns the panel representing the snake grid.
+     *
+     * @return The JPanel representing the snake grid.
+     */
     public JPanel getSnakeGrid() {
         return this.snakeGrid;
     }

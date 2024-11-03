@@ -10,6 +10,17 @@ import javax.swing.JPanel;
 import com.dt181g.project.mvccomponents.IBaseView;
 import com.dt181g.project.support.AppConfigProject;
 
+/**
+ * Represents the start menu view for the Snake game, providing options
+ * for starting the game, accessing multiplayer, settings, controls, and quitting.
+ *
+ * <p>
+ * This class extends {@link JPanel} and implements {@link IBaseView}.
+ * It uses a grid bag layout to arrange the menu options.
+ * </p>
+ *
+ * @author Joel Lansgren
+ */
 public class SnakeStartMenuView extends JPanel implements IBaseView {
     private final GridBagConstraints gbc = new GridBagConstraints();
     private final JLabel startBtn = new JLabel("Start Game");
@@ -57,6 +68,11 @@ public class SnakeStartMenuView extends JPanel implements IBaseView {
         this.setBackground(AppConfigProject.COLOR_DARKER_GREY);
     }
 
+    /**
+     * Sets the title label at the top of the start menu.
+     *
+     * @param title The JLabel to be set as the title.
+     */
     protected void setTitle(JLabel title) {
         this.gbc.gridy = 0;
         this.add(title, this.gbc);
@@ -116,6 +132,9 @@ public class SnakeStartMenuView extends JPanel implements IBaseView {
         this.quitBtn.addMouseListener(quitBtnListener);
     }
 
+    /**
+     * Removes all mouse listeners from the buttons in the menu.
+     */
     public void removeListeners() {
         removeAllListenersFromButton(this.startBtn);
         removeAllListenersFromButton(this.multiplayerBtn);
@@ -127,22 +146,47 @@ public class SnakeStartMenuView extends JPanel implements IBaseView {
      * Getters
      ==============================*/
 
+     /**
+     * Retrieves the start button.
+     *
+     * @return The JLabel representing the start button.
+     */
     public JLabel getStartBtn() {
         return startBtn;
     }
 
+    /**
+     * Retrieves the multiplayer button.
+     *
+     * @return The JLabel representing the multiplayer button.
+     */
     protected JLabel getMultiplayerBtn() {
         return multiplayerBtn;
     }
 
+    /**
+     * Retrieves the settings button.
+     *
+     * @return The JLabel representing the settings button.
+     */
     protected JLabel getSettingsBtn() {
         return settingsBtn;
     }
 
+    /**
+     * Retrieves the controls button.
+     *
+     * @return The JLabel representing the controls button.
+     */
     public JLabel getControlsBtn() {
         return controlsBtn;
     }
 
+    /**
+     * Retrieves the quit button.
+     *
+     * @return The JLabel representing the quit button.
+     */
     public JLabel getQuitBtn() {
         return quitBtn;
     }
