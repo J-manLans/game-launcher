@@ -1,7 +1,6 @@
 package com.dt181g.laboration_2;
 
 import java.awt.Color;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The AppConfig class provides a collection of constants used throughout
