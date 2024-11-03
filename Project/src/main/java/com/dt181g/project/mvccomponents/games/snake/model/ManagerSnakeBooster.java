@@ -9,15 +9,20 @@ import com.dt181g.project.support.AppConfigProject;
 
 /**
  * Enum representing the singleton instance of the Snake Booster Manager.
+ * <p>
  * This class handles the management of snake boosters in the game,
  * including spawning, updating, and resetting boosters as well as
  * their effects on the snake.
+ * </p>
+ * <p>
+ * It ensures that boosters are only spawned under certain conditions
+ * and handles the application of booster effects to the snake model.
+ * </p>
  *
  * @author Joel Lansgren
  */
 enum ManagerSnakeBooster {
     INSTANCE;
-
     private final List<ISnakeBoostersModel> boosters = new ArrayList<>();
     private int[][] gameGrid;
     private final Random randomizer = new Random();
@@ -28,10 +33,10 @@ enum ManagerSnakeBooster {
     private double boosterEffectDuration;
 
     /**
-     * Initializes the booster manager with the specified game grid.
-     * Sets the availability of boosters and initializes the spawn countdown.
+     * Initializes the booster manager with the specified game grid and resets all booster effects.
      *
      * @param gameGrid The current state of the game grid.
+     * @param snakeModel The current snake model.
      */
     void initializeBoosterManager(int[][] gameGrid, SnakeModel snakeModel) {
         this.gameGrid = gameGrid;
@@ -51,14 +56,15 @@ enum ManagerSnakeBooster {
     }
 
     /**
-     * Consumes a booster and resets its state in the game grid, applying its effect to the snake.
+     * Consumes a booster, applies its effect to the snake, and resets its state in the game grid.
      * <p>
      * This method identifies the booster by its color and applies its effect to the given snake model.
      * After applying the effect, it resets the booster by setting its color to the background color,
-     * making it available for re-spawning in a different cell. It also resets the spawn countdown for the next booster.
+     * making it available for re-spawning in a different cell.
      * </p>
-     * @param snakeModel   The snake that the booster effect will be applied to.
-     * @param boosterColor The color of the booster to consume, used to locate the correct booster in the list.
+     *
+     * @param snakeModel The snake to which the booster effect will be applied.
+     * @param boosterColor The color of the booster to consume.
      */
     void eatAndResetBooster(SnakeModel snakeModel, int boosterColor) {
         for (ISnakeBoostersModel boosterModel : boosters) {
@@ -163,6 +169,9 @@ enum ManagerSnakeBooster {
         snakeModel.setSpeed(speed);
     }
 
+    /**
+     * Clears the list of boosters.
+     */
     public void cleanup() {
         this.boosters.clear();
     }

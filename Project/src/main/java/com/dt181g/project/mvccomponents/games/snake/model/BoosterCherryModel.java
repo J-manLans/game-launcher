@@ -14,6 +14,10 @@ public class BoosterCherryModel implements ISnakeBoostersModel {
     private final int boosterColor = AppConfigProject.COLOR_CHERRY_INT;
     private String soundEffect = AppConfigProject.PATH_TO_SOUNDS + AppConfigProject.SOUND_EFFECT_CHERRY;
 
+    /**
+     * Constructor that initializes the cherry booster model and registers it
+     * with the booster manager.
+     */
     public BoosterCherryModel() {
         ManagerSnakeBooster.INSTANCE.addBoosters(this);
     }
@@ -70,10 +74,21 @@ public class BoosterCherryModel implements ISnakeBoostersModel {
         return this.cherry;
     }
 
+    /**
+     * Returns the color associated with the cherry booster.
+     *
+     * @return An integer representing the color of the cherry booster.
+     */
     public int getBoosterColor() {
         return this.boosterColor;
     }
 
+    /**
+     * Indicates whether the booster is currently active.
+     *
+     * @return A boolean value, always false as this booster does not maintain
+     *         an active state.
+     */
     @Override
     public boolean isBoosterActive() {
         return false;

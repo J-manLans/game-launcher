@@ -4,9 +4,19 @@ import com.dt181g.project.mvccomponents.IBaseModel;
 import com.dt181g.project.support.AppConfigProject;
 import com.dt181g.project.support.AppConfigProject.Direction;
 
+/**
+ * The SnakeModel class represents the model of the Snake.
+ * It maintains the state of the snake, its position, direction,
+ * and the overall game grid.
+ *
+ * <p>
+ * This class provides methods to initialize the snake, update its position
+ * based on user input, and check game conditions such as collision with itself.
+ * </p>
+ *
+ * @author Joel Lansgren
+ */
 public class SnakeModel implements IBaseModel {
-    // A snake that has length of the comingSoon string and stores
-    // y and x-coordinates in each of its body parts.
     private int[][] snake;
     private int headIndex = AppConfigProject.INITIAL_SNAKE_LENGTH - 1;
     private int[][] gameGrid;
@@ -15,6 +25,12 @@ public class SnakeModel implements IBaseModel {
     private boolean isGameOver;
     private double speed = AppConfigProject.SNAKE_TICK_DELAY;
 
+    /**
+     * Initializes the snake model with the provided cleared game grid.
+     * Resets the snake's state and prepares it for a new game.
+     *
+     * @param clearedGameGrid The cleared game grid to initialize the snake's position on.
+     */
     public void initializeSnakeModel(final int[][] clearedGameGrid) {
         this.gameGrid = clearedGameGrid;
         this.initializeSnake();
@@ -26,11 +42,13 @@ public class SnakeModel implements IBaseModel {
 
     /**
      * Initializes the snake's position on the game grid.
+     * Sets the initial coordinates and color of the snake's segments.
      */
     private void initializeSnake() {
         // Re-initialize the snake
         this.snake = new int[AppConfigProject.INITIAL_SNAKE_LENGTH][AppConfigProject.SNAKE_ITEMS_PART_CONTENT];
         this.headIndex = AppConfigProject.INITIAL_SNAKE_LENGTH - 1;
+
         // Set snakes tail position.
         this.snake[0][0] = this.gameGrid.length / 2;  // Y-coordinate.
         this.snake[0][1] = this.gameGrid.length / 2 - (AppConfigProject.INITIAL_SNAKE_LENGTH / 2);  // X-coordinate.
@@ -46,6 +64,12 @@ public class SnakeModel implements IBaseModel {
         this.snake[headIndex][2] = AppConfigProject.COLOR_SNAKE_HEAD_INT;
     }
 
+    /**
+     * Updates the snake's position on the game grid.
+     * Allows for changes in direction based on user input.
+     *
+     * @param updatedGameGrid The current state of the game grid.
+     */
     public void updateSnakeOnGrid(final int[][] updatedGameGrid) {
         // Make taking input from keyboard possible again in the game-loop
         this.allowChangesToDirection = true;
@@ -134,10 +158,19 @@ public class SnakeModel implements IBaseModel {
         }
     }
 
+    /**
+     * Updates the snake's state with the provided expanded snake array.
+     *
+     * @param expandedSnake The new state of the snake.
+     */
     public void updateSnake(int[][] expandedSnake) {
         this.snake = expandedSnake;
         this.headIndex = this.snake.length - 1;
     }
+
+    /*====================
+     * Getters
+     ===================*/
 
     /**
      * Returns the current state of the snake as a 2D array.
@@ -150,13 +183,27 @@ public class SnakeModel implements IBaseModel {
         return this.snake;
     }
 
+    /**
+     * Returns the current speed of the snake.
+     *
+     * @return A double representing the snake's speed.
+     */
     public double getSpeed() {
         return speed;
     }
 
+    /**
+     * Checks if the game is over.
+     *
+     * @return A boolean indicating if the game is over.
+     */
     public boolean getGameOverState() {
         return this.isGameOver;
     }
+
+    /*====================
+     * Setters
+     ===================*/
 
     /**
      * Sets the current direction of the snake.
@@ -167,8 +214,9 @@ public class SnakeModel implements IBaseModel {
      * makes sure of this) and is not opposite to the current direction
      * (e.g., UP to DOWN).
      * </p>
-     * @param direction the new direction for the snake (must not be the opposite
-     * of the current direction).
+     * @param direction The new direction for the snake (must not be opposite
+     * to the current direction).
+     * @param restart Indicates whether to ignore the direction change restriction.
      */
     public void setDirection(final Direction direction, final boolean restart) {
         // Prevent illegal moves.
@@ -190,6 +238,11 @@ public class SnakeModel implements IBaseModel {
         }
     }
 
+    /**
+     * Sets the speed of the snake.
+     *
+     * @param speed The new speed for the snake.
+     */
     public void setSpeed(final double speed) {
         this.speed = speed;
     }

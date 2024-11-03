@@ -7,19 +7,14 @@ import com.dt181g.project.mvccomponents.games.IGameMainModel;
 import com.dt181g.project.support.AppConfigProject;
 
 /**
- * The SnakeModel class represents the model for the Snake game.
+ * The SnakeMainModel class represents the model for the Snake game.
  * It maintains the state of the snake and the game grid.
  *
  * <p>
- * This class implements the GameModel interface and provides
+ * This class implements the IGameMainModel interface and provides
  * methods to initialize the snake, update the game grid, and clear the grid.
  * It also includes getters for game metadata such as title, icon path,
  * and grid size.
- * </p>
- *
- * <p>
- * It's not yet fully implemented, as of now the snake is not controllable
- * and no food is spawning for the player to eat
  * </p>
  *
  * @author Joel Lansgren
@@ -29,12 +24,22 @@ public class SnakeMainModel implements IGameMainModel {
     private final String iconPath = AppConfigProject.PATH_TO_ICONS + AppConfigProject.ICON_SNAKE;
     private final int gridSize = AppConfigProject.SNAKE_CELL_COUNT;
     private final List<Object> gameAssets = new ArrayList<>();
-    final int[][] gameGrid = new int[gridSize][gridSize];
+    private final int[][] gameGrid = new int[gridSize][gridSize];
 
+    /**
+     * Constructs a new SnakeMainModel, initializing the game assets
+     * with an empty game grid.
+     */
     public SnakeMainModel() {
         this.gameAssets.add(this.gameGrid);
     }
 
+    /**
+     * Starts a new game by clearing the game grid and initializing
+     * the snake model.
+     *
+     * @param snakeModel the SnakeModel instance used to manage the snake's state.
+     */
     public void startNewGame(SnakeModel snakeModel) {
         this.clearGameGrid();
         snakeModel.initializeSnakeModel(this.gameGrid);
@@ -51,6 +56,8 @@ public class SnakeMainModel implements IGameMainModel {
      * the {@link #updateSnake()} method. It then clears the current
      * state of the snake grid and redraws the snake in its new position.
      * </p>
+     *
+     * @param snakeModel the SnakeModel instance used to manage the snake's state.
      */
     public void updateGameGrid(SnakeModel snakeModel) {
         snakeModel.updateSnakeOnGrid(this.gameGrid);
@@ -69,6 +76,8 @@ public class SnakeMainModel implements IGameMainModel {
 
     /**
      * Helper method to overlay the snake and items on the grid.
+     *
+     * @param gameItem a 2D array representing the items to overlay on the game grid.
      */
     public void overlayGameItemsOnGrid(int[][] gameItem) {
         // Removes the old grid.
@@ -84,6 +93,8 @@ public class SnakeMainModel implements IGameMainModel {
 
     /**
      * Helper method to place items on the grid.
+     *
+     * @param gameItem a 2D array representing the items to place on the game grid.
      */
     private void placeItems(int[][] gameItem) {
         for (int[] part : gameItem) {
@@ -137,10 +148,18 @@ public class SnakeMainModel implements IGameMainModel {
        return iconPath;
     }
 
+    /**
+     * Returns the current game grid.
+     *
+     * @return a 2D array representing the current game grid.
+     */
     public int[][] getGameGrid() {
         return gameGrid;
     }
 
+    /**
+     * Cleans up resources used by the game.
+     */
     public void cleanup() {
         ManagerSnakeBooster.INSTANCE.cleanup();
     }

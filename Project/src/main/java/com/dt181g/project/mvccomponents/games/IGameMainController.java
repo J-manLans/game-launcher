@@ -13,6 +13,8 @@ import com.dt181g.project.mvccomponents.IBaseController;
  * Implementing classes should provide specific functionality to handle user inputs
  * and reset the game when necessary.
  * </p>
+ *
+ * @author Joel Lansgren
  */
 public interface IGameMainController extends IBaseController {
     /**

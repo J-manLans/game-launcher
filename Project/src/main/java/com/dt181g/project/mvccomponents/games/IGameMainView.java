@@ -12,6 +12,8 @@ import com.dt181g.project.mvccomponents.IBaseView;
  * This interface defines the necessary methods for starting, resetting,
  * and retrieving information from a game view.
  * </p>
+ *
+ * @author Joel Lansgren
  */
 public interface IGameMainView extends IBaseView {
     /**

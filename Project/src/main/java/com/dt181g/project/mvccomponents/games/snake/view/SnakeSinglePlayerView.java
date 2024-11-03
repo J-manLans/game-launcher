@@ -30,6 +30,8 @@ import com.dt181g.project.support.DebugLogger;
  * It provides a grid layout for the snake game, manages game assets,
  * and handles user input for controlling the snake's movement.
  * </p>
+ *
+ * @author Joel Lansgren
  */
 public class SnakeSinglePlayerView extends JPanel implements IBaseView {
     private final GridBagConstraints gbc = new GridBagConstraints();
