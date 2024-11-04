@@ -39,6 +39,21 @@ public class GameListModel {
     public GameListModel() {
         this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON);
         this.gameTitles.add(AppConfigLab3.SNAKE_TITLE);
+
+        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON);
+        this.gameTitles.add(AppConfigLab3.SNAKE_TITLE);
+
+        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON);
+        this.gameTitles.add(AppConfigLab3.SNAKE_TITLE);
+
+        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON);
+        this.gameTitles.add(AppConfigLab3.SNAKE_TITLE);
+
+        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON);
+        this.gameTitles.add(AppConfigLab3.SNAKE_TITLE);
+
+        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON);
+        this.gameTitles.add(AppConfigLab3.SNAKE_TITLE);
     }
 
     /**

@@ -10,11 +10,13 @@ import com.dt181g.laboration_3.mvccomponents.listeners.MenuButtonListener;
 /**
  * Listener for game icon clicks in the launcher.
  * <p>
- * This inner class handles actions triggered when a user clicks a game
+ * This  class handles actions triggered when a user clicks a game
  * icon from the launcher. It identifies the selected game.
  * The selected game is then re-instantiated, re-initiated and displayed in the game launcher view.
  * All other games will be disposed of.
  * </p>
+ *
+ * @author Joel Lansgren
  */
 public class GameIconListener implements ActionListener {
     private final GameLauncherView view;

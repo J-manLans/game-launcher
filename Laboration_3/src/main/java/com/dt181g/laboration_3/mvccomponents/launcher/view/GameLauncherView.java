@@ -3,6 +3,7 @@ import com.dt181g.laboration_3.mvccomponents.BaseView;
 import com.dt181g.laboration_3.mvccomponents.games.GameView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
 import com.dt181g.laboration_3.support.BackgroundPanel;
+import com.dt181g.laboration_3.support.ImageManager;
 
 import java.awt.Component;
 import java.awt.Cursor;
@@ -19,12 +20,13 @@ import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 
 /**
  * The view component of the Game Launcher.
@@ -49,9 +51,9 @@ public class GameLauncherView extends JFrame implements BaseView {
     // Game selector panel
 
     private final JPanel gameSelectorPanel = new JPanel();
-    private final JPanel gamesPanel = new JPanel();
+    private final JPanel gamesListPanel = new JPanel();
     private final JLabel pickAGameLabel = new JLabel("PICK A GAME");
-    private final JScrollPane scrollPane = new JScrollPane(gamesPanel);
+    private final JScrollPane scrollPane = new JScrollPane(gamesListPanel);
     private final List<JButton> gameIcons = new ArrayList<JButton>();
 
     // Game panel
@@ -74,12 +76,12 @@ public class GameLauncherView extends JFrame implements BaseView {
         this.gameSelectorPanel.setLayout(new GridBagLayout());
         this.gameSelectorPanel.setPreferredSize(AppConfigLab3.GAME_SELECTOR_PANEL_DIMENSIONS);
         this.gameSelectorPanel.setBackground(AppConfigLab3.COLOR_DARK_GREY);
-        this.gamesPanel.setLayout(new BoxLayout(gamesPanel, BoxLayout.Y_AXIS));
-        this.gamesPanel.setBackground(AppConfigLab3.COLOR_DARK_GREY);
+        this.gamesListPanel.setLayout(new BoxLayout(gamesListPanel, BoxLayout.Y_AXIS));
+        this.gamesListPanel.setBackground(AppConfigLab3.COLOR_DARK_GREY);
         labelStyling(pickAGameLabel, AppConfigLab3.TEXT_SIZE_NORMAL, false);
         this.pickAGameLabel.setBorder(AppConfigLab3.BOTTOM_SPACER_30);
-        this.gamesPanel.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
-        this.gamesPanel.add(pickAGameLabel);
+        this.gamesListPanel.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
+        this.gamesListPanel.add(pickAGameLabel);
         // this.scrollPane.setBorder(BorderFactory.createLineBorder(AppConfigLab3.COLOR_WHITE)); <- not needed?
 
         // ScrollPane (handles size of gamesPanel)
@@ -130,26 +132,40 @@ public class GameLauncherView extends JFrame implements BaseView {
      * @param pathToIcon a list of file paths for the game icons
      * @param titles a list of game titles corresponding to each icon
      */
-    public void addGameIcons(final ImageIcon imageIcon, final String title) {
-        // Set up the icon.
-        JButton gameIcon = new JButton();
-        gameIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
-        gameIcon.setBorder(AppConfigLab3.REMOVE_BORDER);
-        gameIcon.setContentAreaFilled(false);
-        gameIcon.setBorderPainted(false);
-        gameIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        // Fetch  and sets the icon image.
-        gameIcon.setIcon(imageIcon);
-        // Set the action command of the icon to the game title,
-        // to let the action listener know which game was clicked.
-        gameIcon.setActionCommand(title);
+    public void addGameIcons(final List<String> iconPaths, final List<String> titles) {
+        for (int i = 0; i < iconPaths.size(); i++) {
+            // Set up the icon.
+            JButton gameIcon = new JButton();
+            gameIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
+            gameIcon.setBorder(AppConfigLab3.REMOVE_BORDER);
+            gameIcon.setContentAreaFilled(false);
+            gameIcon.setBorderPainted(false);
+            gameIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            // Fetch  and sets the icon image.
+            gameIcon.setIcon(ImageManager.INSTANCE.loadIcon(iconPaths.get(i)));
+            // Set the action command of the icon to the game title,
+            // to let the action listener know which game was clicked.
+            gameIcon.setActionCommand(titles.get(i));
 
-        // Add icon to the panel, plus a distance to create some air.
-        gamesPanel.add(gameIcon);
-        gamesPanel.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
+            // Add icon to the panel, plus a distance to create some air.
+            gamesListPanel.add(gameIcon);
+            gamesListPanel.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
 
-        // Add the icon to the icon list so action listeners can be attached at a later stage.
-        gameIcons.add(gameIcon);
+            // Add the icon to the icon list so action listeners can be attached at a later stage.
+            gameIcons.add(gameIcon);
+        }
+        // Adds flexible space below the icons,
+        // allowing the panel to respect the preferred size of the buttons.
+        gamesListPanel.add(Box.createVerticalGlue());
+    }
+
+    /**
+     * Makes the game launcher view visible on the Event Dispatch Thread (EDT).
+     */
+    public void showLauncher() {
+        SwingUtilities.invokeLater(() -> {
+            this.setVisible(true);
+        });
     }
 
     /**
@@ -180,8 +196,8 @@ public class GameLauncherView extends JFrame implements BaseView {
      * Returns the games panel.
      * @return the {@link JPanel} representing the games panel.
      */
-    public JPanel getGamesPanel() {
-        return gamesPanel;
+    public JPanel getGamesListPanel() {
+        return gamesListPanel;
     }
 
     /**
@@ -201,14 +217,6 @@ public class GameLauncherView extends JFrame implements BaseView {
     }
 
     /**
-     * Returns the list of game icon buttons.
-     * @return a List of {@link JButton} representing the game icons.
-     */
-    public List<JButton> getGameIconsList() {
-        return this.gameIcons;
-    }
-
-    /**
      * Adds a mouse listener to the quit button.
      * @param quitBtnListener the {@link MouseAdapter} that listens for events on the quit button.
      */
@@ -222,8 +230,11 @@ public class GameLauncherView extends JFrame implements BaseView {
      * @param gameIcon the {@link JButton} representing the game icon to which the listener is added.
      * @param gameIconListener the {@link ActionListener} that listens for action events on the game icon button.
      */
-    public void addGameIconListeners(JButton gameIcon, ActionListener gameIconListener) {
-        gameIcon.addActionListener(gameIconListener);
+    public void addGameIconListeners(ActionListener gameIconListener) {
+        // For game icons so they start the game when clicked
+        for (JButton gameIcon : this.gameIcons) {
+            gameIcon.addActionListener(gameIconListener);
+        }
     }
 
     /**
@@ -232,6 +243,16 @@ public class GameLauncherView extends JFrame implements BaseView {
      */
     public void addScrollPaneListener(MouseWheelListener scrollPaneListener) {
         scrollPane.addMouseWheelListener(scrollPaneListener);
+    }
+
+    /**
+     * Method that controls the scroll speed of the scroll pane.
+     * @param notches The direction of the mouse wheel (1 or -1).
+     */
+    public void handleScroll(int notches) {
+        JScrollBar vertical = this.getScrollPane().getVerticalScrollBar();
+        // Sets the new position either up (-1) or down (1) depending on scroll direction.
+        vertical.setValue(vertical.getValue() + (notches * AppConfigLab3.SCROLL_SPEED_MULTIPLIER));
     }
 
     /**
