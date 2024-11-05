@@ -2,7 +2,6 @@ package com.dt181g.laboration_3.mvccomponents.games.snake.view;
 
 import com.dt181g.laboration_3.mvccomponents.games.GameView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
-import com.dt181g.laboration_3.support.DebugLogger;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;
@@ -13,54 +12,50 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- * Represents the view component of the Snake game, responsible for rendering
- * the game interface, including the start menu, game grid, and control menu.
+ * Represents the main view component of the Snake game.
  *
  * <p>
- * This class extends {@link JPanel} and implements {@link GameView}.
- * It uses a grid layout to display the snake's position on the board and
- * provides methods for interacting with game controls.
+ * This class is responsible for rendering the game interface, which includes
+ * the start menu, game grid, and controls menu. It's utilizing a CardLayout to switch
+ * between different views.
  * </p>
  *
  * <p>
- * It's still under construction and both settings and multiplayer will be
- * implemented further on.
+ * This implementation is still under development, with features like settings
+ * and multiplayer planned for future versions.
+ * </p>
  *
  * @author Joel Lansgren
  */
-public class SnakeView extends JPanel implements GameView {
-    DebugLogger logger = DebugLogger.INSTANCE;
-
-    private final CardLayout snakeViewCL = new CardLayout();
+public class SnakeMainView extends JPanel implements GameView {
     // Shared button between menus
     private final JLabel snakeBackBtn = new JLabel("Back");
 
-    // Start menu components
+    private final CardLayout snakeViewCL = new CardLayout();
     private JLabel title = new JLabel();
     private final SnakeStartMenuView startMenu = new SnakeStartMenuView(this);
-    // Snake panel
     private final SnakeSinglePlayerView singlePlayer = new SnakeSinglePlayerView(this);
-    // Control panel
-    private final SnakeControlsView controlPanel = new SnakeControlsView(this);
+    private final SnakeHowToView controlPanel = new SnakeHowToView(this);
 
     /** The panel this panel resides in, used for proper closing of the game. */
     private JPanel gamePanel;
 
     /**
-     * Constructs a SnakeView with the specified title and snake cell count.
+     * Constructs a SnakeMainView with the specified title.
      *
      * @param title The title to be displayed on the view.
      */
-    public SnakeView(final String title) {
+    public SnakeMainView(final String title) {
         this.setLayout(snakeViewCL);
-        // sets the title to the label
-        this.title.setText(title);
 
-        // Style snake components
+        // sets the title to the label, styles it and adds it to the start menu.
+        this.title.setText(title);
         labelStyling(this.title, AppConfigLab3.TEXT_HEADING_2, false);
+        this.startMenu.setTitle(this.title);
+
         labelBtn(snakeBackBtn, AppConfigLab3.COLOR_WHITE);
 
-        this.startMenu.setTitle(this.title);
+        // Adds the views to the cardLayout
         this.add(startMenu, "Start Menu");
         this.add(singlePlayer, "Snake");
         this.add(controlPanel, "Control Menu");
@@ -70,11 +65,8 @@ public class SnakeView extends JPanel implements GameView {
      * Show methods
      ==============================*/
 
-    /**
-     * Displays the start menu with game options.
-     */
     @Override
-    public void ShowStartMenu() {
+    public void showStartMenu() {
         this.snakeViewCL.show(this, "Start Menu");
     }
 
@@ -90,9 +82,9 @@ public class SnakeView extends JPanel implements GameView {
     //===== Snake game =====
 
      /**
-     * Starts the game.
+     * Starts the game and initializes game assets.
      *
-     * @param gameAssets the 2D array representing the snake and a String just for fun.
+     * @param gameAssets the list representing the current state of the game.
      */
     public void startGame(final List<Object> gameAssets) {
         this.snakeViewCL.show(this, "Snake");
@@ -125,26 +117,6 @@ public class SnakeView extends JPanel implements GameView {
     }
 
     /**
-     * Adds a mouse listener to the multiplayer button.
-     *
-     * @param multiplayerBtnListener The mouse listener to be added to the multiplayer button,
-     * allowing for interaction when the button is clicked.
-     */
-    public void addMultiplayerBtnListener(final MouseAdapter multiplayerBtnListener) {
-        this.startMenu.addMultiplayerBtnListener(multiplayerBtnListener);
-    }
-
-    /**
-     * Adds a mouse listener to the settings button.
-     *
-     * @param settingsBtnListener The mouse listener to be added to the settings button,
-     * allowing for interaction when the button is clicked.
-     */
-    public void addSettingsBtnListener(final MouseAdapter settingsBtnListener) {
-        this.startMenu.addSettingsBtnListener(settingsBtnListener);
-    }
-
-    /**
      * Adds a mouse listener to the controls button.
      *
      * @param controlsBtnListener The mouse listener to be added to the controls button,
@@ -165,7 +137,7 @@ public class SnakeView extends JPanel implements GameView {
     }
 
     /**
-     * Adds a mouse listener to the back button in the controls menu.
+     * Adds a mouse listener to the back button.
      *
      * @param controlsBackBtnListener The mouse listener to be added to the back button,
      * allowing for interaction when the button is clicked.
@@ -200,11 +172,6 @@ public class SnakeView extends JPanel implements GameView {
     * Getters
     ==============================*/
 
-    /**
-     * Returns the title of the game.
-     *
-     * @return A string representing the title text displayed in the view.
-     */
     @Override
     public String getTitle() {
         return title.getText();
@@ -276,7 +243,7 @@ public class SnakeView extends JPanel implements GameView {
     @Override
     public void closeGameView() {
         if (this.gamePanel != null) {
-            this.clearGameView(this.gamePanel, this, title.getText());
+            this.clearGameView(this.gamePanel, this);
         }
     }
 }

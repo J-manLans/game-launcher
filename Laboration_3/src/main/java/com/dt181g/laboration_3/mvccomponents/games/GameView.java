@@ -16,6 +16,8 @@ import com.dt181g.laboration_3.support.DebugLogger;
  * This interface defines the necessary methods for starting, resetting,
  * and retrieving information from a game view.
  * </p>
+ *
+ * @author Joel Lansgren
  */
 public interface GameView extends BaseView {
     DebugLogger logger = DebugLogger.INSTANCE;
@@ -30,11 +32,9 @@ public interface GameView extends BaseView {
     void startGame(List<Object> gameAssets);
 
     /**
-     * Resets the game view to its initial state.
-     * This method should clear any previous game data and prepare
-     * the view for a new game session.
+     * Displays the start menu.
      */
-    void ShowStartMenu();
+    void showStartMenu();
 
     /**
      * Retrieves the title of the game.
@@ -57,11 +57,10 @@ public interface GameView extends BaseView {
     /**
      * This method removes the game view from the game panel.
      */
-    default void clearGameView(JPanel gamePanel, JPanel gameView, String title) {
+    default void clearGameView(final JPanel gamePanel, final JPanel gameView) {
         SwingUtilities.invokeLater(() -> {
             gamePanel.remove(gameView);
         });
-        logger.logInfo(title + " view has been reset.");
     }
 
     /**

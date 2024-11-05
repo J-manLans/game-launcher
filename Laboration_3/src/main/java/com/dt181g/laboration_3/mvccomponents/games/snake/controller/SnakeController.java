@@ -6,9 +6,8 @@ import com.dt181g.laboration_3.mvccomponents.games.GameController;
 import com.dt181g.laboration_3.mvccomponents.games.GameModel;
 import com.dt181g.laboration_3.mvccomponents.games.GameView;
 import com.dt181g.laboration_3.mvccomponents.games.snake.model.SnakeModel;
-import com.dt181g.laboration_3.mvccomponents.games.snake.view.SnakeView;
+import com.dt181g.laboration_3.mvccomponents.games.snake.view.SnakeMainView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
-import com.dt181g.laboration_3.support.DebugLogger;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,121 +35,121 @@ import javax.swing.Timer;
  * @author Joel Lansgren
  */
 public class SnakeController implements GameController, BaseController {
-    DebugLogger logger = DebugLogger.INSTANCE;
-
-    private final SnakeView snakeView;
+    private final SnakeMainView snakeMainView;
     private final SnakeModel snakeModel;
     private final String title;
     private Timer gameLoop;
-    private boolean restart;
-    private boolean isRunning = true;
+    private boolean gameOn;
 
     /**
      * Constructs a SnakeCtrl with the specified game title, SnakeView and SnakeModel.
-     * It also initialize the listeners.
      *
      * @param title the snake game title
-     * @param snakeView the view associated with the Snake game
+     * @param snakeMainView the view associated with the Snake game
      * @param snakeModel the model representing the game's logic
      */
-    public SnakeController(final String title, final GameView snakeView, final GameModel snakeModel) {
+    public SnakeController(final String title, final GameView snakeMainView, final GameModel snakeModel) {
         this.title = title;
-        this.snakeView = (SnakeView) snakeView;
+        this.snakeMainView = (SnakeMainView) snakeMainView;
         this.snakeModel = (SnakeModel) snakeModel;
-
-        this.initializeListeners();
     }
 
+    /*==========================
+     * Start Methods
+     =========================*/
+
+    @Override
+    public void initialize() {
+        this.initializeListeners();
+        this.createGameLoop();
+    }
 
     @Override
     public void initializeListeners() {
-        this.snakeView.addStartBtnListener(
+        this.snakeMainView.addStartBtnListener(
             new MenuButtonListener(
-                this.snakeView.getStartBtn(),
+                this.snakeMainView.getStartBtn(),
                 this::startGame
             )
         );
 
-        // this.snakeView.addMultiplayerBtnListener(this.multiplayerBtnListener);
-
-        // this.snakeView.addSettingsBtnListener(this.settingsBtnListener);
-
-        this.snakeView.addControlsBtnListener(
+        this.snakeMainView.addControlsBtnListener(
             new MenuButtonListener(
-                this.snakeView.getControlsBtn(),
-                snakeView::showControlsMenu
+                this.snakeMainView.getControlsBtn(),
+                snakeMainView::showControlsMenu
             )
         );
 
-        this.snakeView.addSnakeBackBtnListener(
+        this.snakeMainView.addSnakeBackBtnListener(
             new MenuButtonListener(
-                this.snakeView.getSnakeBackBtn(),
+                this.snakeMainView.getSnakeBackBtn(),
                 this::initiateGame
             )
         );
     }
 
     /**
-     * Resets the game state and re-initializes the start menu.
-     * Clears the snake model's grid and sets the restart flag to true.
-     * The restart flag is utilized in the game loop to stop the
-     * EDT timer thread when the game is exited.
+     * Creates the game loop that updates the game state at regular intervals.
      */
-    @Override
-    public void initiateGame() {
-        // Shows the start menu
-        this.snakeView.ShowStartMenu();
-        // Resets the snake models 2D array
-        this.snakeModel.clearSnakeGrid();
-        // stops the EDT thread from executing
-        this.restart = true;
-
-        logger.logInfo(title + " has been initiated.\n");
-    }
-
-    /**
-     * Gets attached as a listener for the Start button. It starts the game and manages the game loop.
-     */
-    public void startGame() {
-        // Grid initialization.
-        this.snakeModel.initializeSnake();
-        this.snakeView.startGame(this.snakeModel.getGameAssets());
-
-        // For controlling the loop
-        this.restart = false;
-
-        // Game loop.
+    private void createGameLoop() {
         this.gameLoop = new Timer(AppConfigLab3.NUM_200, new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                if (!restart) {
+                if (gameOn) {
                     snakeModel.updateGameGrid();
-                    snakeView.updateGameGrid(snakeModel.getGameAssets());
+                    snakeMainView.updateGameGrid(snakeModel.getGameAssets());
                 } else {
                     gameLoop.stop();
                 }
             }
         });
-
-        this.gameLoop.start();
-        this.setGameLoop(gameLoop);
     }
+
+    @Override
+    public void initiateGame() {
+        // Shows the start menu
+        this.snakeMainView.showStartMenu();
+        // Resets the snake models 2D array
+        this.snakeModel.clearSnakeGrid();
+        // Stops the EDT thread from executing
+        this.gameOn = false;
+    }
+
+    /**
+     * Starts the game and initializes the game loop.
+     * Prepares the game state and updates the view for gameplay.
+     */
+    private void startGame() {
+        // Grid initialization.
+        this.snakeModel.initializeSnake();
+        this.snakeMainView.startGame(this.snakeModel.getGameAssets());
+
+        // For controlling the loop
+        this.gameOn = true;
+        this.gameLoop.start();
+    }
+
+    /*==========================
+     * Close Methods
+     =========================*/
 
     @Override
     public void closeGame() {
         this.stopGameLoop();
-
         this.removeListeners();
-
-        this.snakeView.closeGameView();
-
-        this.isRunning = false;
+        this.snakeMainView.closeGameView();
     }
 
+    /**
+     * Removes all listeners from the views.
+     */
     private void removeListeners() {
-        this.snakeView.removeListeners();
+        this.snakeMainView.removeListeners();
     }
 
+    /**
+     * Stops the game loop timer if it is currently running when closing the game.
+     */
     private void stopGameLoop() {
         if (gameLoop != null) {
             this.gameLoop.stop();
@@ -158,27 +157,12 @@ public class SnakeController implements GameController, BaseController {
         }
     }
 
-    private void setGameLoop(Timer gameLoop) {
-        this.gameLoop = gameLoop;
-    }
-
-    @Override
-    public Timer getGameLoop() {
-        return gameLoop;
-    }
+    /*==========================
+     * Getters
+     =========================*/
 
     @Override
     public String getTitle() {
         return title;
-    }
-
-    @Override
-    public boolean getIsRunning() {
-        return isRunning;
-    }
-
-    @Override
-    public void setIsRunning(boolean isRunning) {
-        this.isRunning = isRunning;
     }
 }

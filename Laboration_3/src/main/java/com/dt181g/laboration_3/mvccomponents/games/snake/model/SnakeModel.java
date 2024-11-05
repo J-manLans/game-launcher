@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.dt181g.laboration_3.mvccomponents.games.GameModel;
 import com.dt181g.laboration_3.support.AppConfigLab3;
-import com.dt181g.laboration_3.support.DebugLogger;
 
 /**
  * The SnakeModel class represents the model for the Snake game.
@@ -26,12 +25,8 @@ import com.dt181g.laboration_3.support.DebugLogger;
  * @author Joel Lansgren
  */
 public class SnakeModel implements GameModel {
-    // Remove when game functionality is implemented
     private final String comingSoon = " COMING SOON ";
-
-    DebugLogger logger = DebugLogger.INSTANCE;
-
-    private final String title = AppConfigLab3.SNAKE_TITLE;
+    private final String title;
     private final String iconPath = AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON;
     private final int gridSize = AppConfigLab3.SNAKE_CELL_COUNT;
     private final List<Object> gameAssets = new ArrayList<>();
@@ -39,6 +34,10 @@ public class SnakeModel implements GameModel {
     // y and x-coordinates in each of its body parts.
     private final int[][] snake = new int[comingSoon.length()][2];
     private final int[][] snakeGrid = new int[gridSize][gridSize];
+
+    public SnakeModel(final String title) {
+        this.title = title;
+    }
 
     /**
      * Initializes the snake's position on the game grid.
@@ -55,7 +54,7 @@ public class SnakeModel implements GameModel {
         }
 
         // Overlay the snake on the grid.
-        for (int[] part : snake) {
+        for (final int[] part : snake) {
             snakeGrid[part[0]][part[1]] = 1;
         }
         this.gameAssets.add(comingSoon);
@@ -78,7 +77,7 @@ public class SnakeModel implements GameModel {
 
         // Clears the grid and then draws the new snake on it.
         this.clearSnakeGrid();
-        for (int[] part : this.snake) {
+        for (final int[] part : this.snake) {
             this.snakeGrid[part[0]][part[1]] = 1;
         }
 
@@ -134,13 +133,14 @@ public class SnakeModel implements GameModel {
      * Getters
      ==============================*/
 
-    /**
-     * Returns the title of the game.
-     *
-     * @return the title of the snake game.
-     */
+    @Override
     public String getTitle() {
         return this.title;
+    }
+
+    @Override
+    public String getIconPath() {
+       return iconPath;
     }
 
     /**
@@ -149,15 +149,5 @@ public class SnakeModel implements GameModel {
      */
     public List<Object> getGameAssets() {
         return gameAssets;
-    }
-
-    /**
-     * Returns the path to the game icon.
-     *
-     * @return the icon path as a string.
-     */
-    @Override
-    public String getIconPath() {
-       return iconPath;
     }
 }

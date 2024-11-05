@@ -19,8 +19,17 @@
 - Solid walls or not.
 - Power-ups on or off, one for single-player and one for multiplayer (for single-player, it could be to slow down speed, bomb placement of food, etc.; for multiplayer, it could involve setting solid walls, slowing down, preventing food spawn and increasing speed, etc.).
 
-## CHANGES FROM LAB3
-- Add the ImageManager to support and remove the loadicon method from the controller. now this enum can be used by views across the whole application
-- Change the addGameIconListeners in launcher view so it handles the for each loop instead of the controller
-- change the scroll pane listener as well
-- move the swingutilities i have in the startlauncher method into the view instead of the controller
+## Instructions from the man
+Complement this
+- Per the requirements, your application must provide clear instructions for its use. The method of embedding these guidelines is at your discretion, but they must be easily accessible to users, and needs to be included even if you deem the usage to be apparent.
+
+- **We cannot accept designs that leaves open access to mutable data, as it breaks cohesion of classes, the point of encapsulation, and violates data protection. In short, we cannot break any of the pillars upon which the paradigm is designed for. No open access to mutable attributes will be allowed at any point in the course.**
+
+- **As stated by the requirements we need to separate responsibilities and conform to intended roles. The events that drive changes in our application needs to pass through controller, but neither the view or model should not be composed, aggregated or in any way have a reference to each other, or controller for that matter. You need to handle the flow here by the use of listeners and / or callback mechanics, and may not circumvent these matters by passing the full controller object as argument. Attend to this, and take note of below MVC example where you find implementation of both mechanic types.**
+
+- **There's an Exit button in UI which doesn't seem to work!**
+
+- **All graphical events needs to be scheduled for the EDT, which includes both creation and updates for components.**
+
+- **Multiple cases of missing author tags in the documentation of main entities.**
+- **Multiple cases of missing documentation for shared interfaces, such as overridden methods and other public methods in classes.**

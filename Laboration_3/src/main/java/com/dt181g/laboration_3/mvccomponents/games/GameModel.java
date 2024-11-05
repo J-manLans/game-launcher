@@ -7,6 +7,8 @@ package com.dt181g.laboration_3.mvccomponents.games;
  * title, and grid size. Any class implementing this interface
  * must provide concrete implementations for these methods.
  * </p>
+ *
+ * @author Joel Lansgren
  */
 public interface GameModel {
    /**

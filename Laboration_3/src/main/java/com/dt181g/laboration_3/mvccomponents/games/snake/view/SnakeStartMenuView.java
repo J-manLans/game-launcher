@@ -9,25 +9,41 @@ import javax.swing.JPanel;
 
 import com.dt181g.laboration_3.support.AppConfigLab3;
 
-
+/**
+ * Represents the start menu view for the Snake game.
+ * This view class provides interactive menu options that allow
+ * the user to start a game, access settings, view controls, and quit the game.
+ *
+ * <p>
+ * Components and button labels are styled according to the main view's styling
+ * methods and are displayed using a grid layout.
+ * </p>
+ *
+ * <p>
+ * The buttons include Start Game, Multiplayer, Settings, Controls, and Quit, each
+ * with configurable listeners.
+ * </p>
+ *
+ * <p>Interactions are handled through listeners that can be added or removed.
+ * </p>
+ *
+ * @author Joel Lansgren
+ */
 public class SnakeStartMenuView extends JPanel {
     private final GridBagConstraints gbc = new GridBagConstraints();
-    private final SnakeView snakeView;
+    private final SnakeMainView snakeView;
     private final JLabel startBtn = new JLabel("Start Game");
     private final JLabel multiplayerBtn = new JLabel("Multiplayer");
     private final JLabel settingsBtn = new JLabel("Settings");
-    private final JLabel controlsBtn = new JLabel("Controls");
+    private final JLabel controlsBtn = new JLabel("How to \"Snake\"");
     private final JLabel quitBtn = new JLabel("Quit");
 
     /**
-     * Initializes and displays the start menu with game options.
+     * Constructs the start menu view, initializing buttons and styling.
      *
-     * <p>
-     * This constructor sets up the layout and adds the necessary buttons and labels
-     * to allow the user to start the game, access multiplayer, settings, and controls.
-     * </p>
+     * @param snakeView The main view component for shared layout and styling access.
      */
-    protected SnakeStartMenuView(SnakeView snakeView) {
+    protected SnakeStartMenuView(SnakeMainView snakeView) {
         this.setLayout(new GridBagLayout());
         this.snakeView = snakeView;
 
@@ -59,6 +75,11 @@ public class SnakeStartMenuView extends JPanel {
         this.setBackground(AppConfigLab3.COLOR_DARKER_GREY);
     }
 
+    /**
+     * Sets the title label at the top of the menu view.
+     *
+     * @param title The title label to be displayed at the top.
+     */
     protected void setTitle(JLabel title) {
         this.gbc.gridy = 0;
         this.add(title, this.gbc);
@@ -76,26 +97,6 @@ public class SnakeStartMenuView extends JPanel {
      */
     protected void addStartBtnListener(final MouseAdapter startBtnListener) {
         this.startBtn.addMouseListener(startBtnListener);
-    }
-
-    /**
-     * Adds a mouse listener to the multiplayer button.
-     *
-     * @param multiplayerBtnListener The mouse listener to be added to the multiplayer button,
-     * allowing for interaction when the button is clicked.
-     */
-    protected void addMultiplayerBtnListener(final MouseAdapter multiplayerBtnListener) {
-        this.multiplayerBtn.addMouseListener(multiplayerBtnListener);
-    }
-
-    /**
-     * Adds a mouse listener to the settings button.
-     *
-     * @param settingsBtnListener The mouse listener to be added to the settings button,
-     * allowing for interaction when the button is clicked.
-     */
-    protected void addSettingsBtnListener(final MouseAdapter settingsBtnListener) {
-        this.settingsBtn.addMouseListener(settingsBtnListener);
     }
 
     /**
@@ -118,6 +119,10 @@ public class SnakeStartMenuView extends JPanel {
         this.quitBtn.addMouseListener(quitBtnListener);
     }
 
+    /**
+     * Removes all listeners from each button to prevent memory leaks or
+     * unintended actions when switching views.
+     */
     protected void removeListeners() {
         this.snakeView.removeAllListenersFromButton(this.startBtn);
         this.snakeView.removeAllListenersFromButton(this.multiplayerBtn);
@@ -128,23 +133,47 @@ public class SnakeStartMenuView extends JPanel {
     /*==============================
      * Getters
      ==============================*/
-
+    /**
+     * Retrieves the Start Game button component.
+     *
+     * @return The JLabel representing the Start Game button.
+     */
     protected JLabel getStartBtn() {
         return startBtn;
     }
 
+    /**
+     * Retrieves the Multiplayer button component.
+     *
+     * @return The JLabel representing the Multiplayer button.
+     */
     protected JLabel getMultiplayerBtn() {
         return multiplayerBtn;
     }
 
+    /**
+     * Retrieves the Settings button component.
+     *
+     * @return The JLabel representing the Settings button.
+     */
     protected JLabel getSettingsBtn() {
         return settingsBtn;
     }
 
+    /**
+     * Retrieves the Controls button component.
+     *
+     * @return The JLabel representing the Controls button.
+     */
     protected JLabel getControlsBtn() {
         return controlsBtn;
     }
 
+    /**
+     * Retrieves the Quit button component.
+     *
+     * @return The JLabel representing the Quit button.
+     */
     protected JLabel getQuitBtn() {
         return quitBtn;
     }

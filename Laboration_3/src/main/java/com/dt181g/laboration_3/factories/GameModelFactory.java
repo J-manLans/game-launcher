@@ -14,5 +14,5 @@ public  interface GameModelFactory {
      *
      * @return A new instance of {@link GameModel}.
      */
-    GameModel create();
+    GameModel create(final String title);
 }

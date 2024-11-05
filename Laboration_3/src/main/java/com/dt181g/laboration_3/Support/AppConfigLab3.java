@@ -18,6 +18,8 @@ import javax.swing.border.Border;
  * <p>
  * The class is not meant to be instantiated; all fields and methods are static.
  * </p>
+ *
+ * @author Joel Lansgren
  */
 public final class AppConfigLab3 {
     // Prevent instantiation
@@ -32,7 +34,6 @@ public final class AppConfigLab3 {
 
     /** Extension to snake image. */
     public static final String SNAKE_ICON = "snake.jpeg";
-
 
     /** Path to images folder */
     public static final String PATH_TO_IMAGES = "/img/";
@@ -123,6 +124,10 @@ public final class AppConfigLab3 {
     /** Another GridBag inset. */
     public static final Insets INSET_BOTTOM_30 = new Insets(0, 0, 30, 0);
 
+    /** Yet another GridBag inset. */
+    public static final Insets INSET_TOP_30_BOTTOM_20 = new Insets(30, 0, 20, 0);
+
+    /** Yet another GridBag inset. */
     public static final Insets INSET_LEFT_BOTTOM_CORNER_30 = new Insets(0, 30, 30, 0);
 
 

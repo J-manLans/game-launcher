@@ -3,17 +3,10 @@ package com.dt181g.laboration_3.mvccomponents.launcher.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dt181g.laboration_3.factories.GameControllerFactory;
-import com.dt181g.laboration_3.factories.GameModelFactory;
-import com.dt181g.laboration_3.factories.GameViewFactory;
 import com.dt181g.laboration_3.mvccomponents.games.GameController;
 import com.dt181g.laboration_3.mvccomponents.games.GameModel;
 import com.dt181g.laboration_3.mvccomponents.games.GameView;
-import com.dt181g.laboration_3.mvccomponents.games.snake.controller.SnakeController;
-import com.dt181g.laboration_3.mvccomponents.games.snake.model.SnakeModel;
-import com.dt181g.laboration_3.mvccomponents.games.snake.view.SnakeView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
-import com.dt181g.laboration_3.support.DebugLogger;
 
 /**
  * The GameListModel class maintains a list of game models, their corresponding views and controllers.
@@ -26,84 +19,41 @@ import com.dt181g.laboration_3.support.DebugLogger;
  * @author Joel Lansgren
  */
 public class GameListModel {
-    DebugLogger logger = DebugLogger.INSTANCE;
-    private final List<String> iconPaths = new ArrayList<>();
     private final List<String> gameTitles = new ArrayList<>();
+    private final List<String> iconPaths = new ArrayList<>();
     private final List<GameModel> gameModels = new ArrayList<>();
     private final List<GameView> gameViews = new ArrayList<>();
     private final List<GameController> gameControllers = new ArrayList<>();
+    private String activeGame;
 
     /**
      * Constructs a GameListModel and initializes the game icons and titles.
+     * When new games are added their title and icon paths needs to be
+     * added to the games array.
      */
     public GameListModel() {
-        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON);
-        this.gameTitles.add(AppConfigLab3.SNAKE_TITLE);
-
-        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON);
-        this.gameTitles.add(AppConfigLab3.SNAKE_TITLE);
-
-        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON);
-        this.gameTitles.add(AppConfigLab3.SNAKE_TITLE);
-
-        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON);
-        this.gameTitles.add(AppConfigLab3.SNAKE_TITLE);
-
-        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON);
-        this.gameTitles.add(AppConfigLab3.SNAKE_TITLE);
-
-        this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + AppConfigLab3.SNAKE_ICON);
-        this.gameTitles.add(AppConfigLab3.SNAKE_TITLE);
-    }
-
-    /**
-     * Starts the game clicked in the games list in the launcher.
-     * @param game the clicked games title.
-     */
-    public void startGame(String game) {
-        switch (game) {
-            case AppConfigLab3.SNAKE_TITLE -> {
-                this.instantiateViewAndController(SnakeModel::new, SnakeView::new, SnakeController::new, game);
-            }
+        String[][] games = {
+            {AppConfigLab3.SNAKE_TITLE, AppConfigLab3.SNAKE_ICON},
+            {AppConfigLab3.SNAKE_TITLE, AppConfigLab3.SNAKE_ICON},
+            {AppConfigLab3.SNAKE_TITLE, AppConfigLab3.SNAKE_ICON},
+            {AppConfigLab3.SNAKE_TITLE, AppConfigLab3.SNAKE_ICON},
+        };
+        for (String[] game : games) {
+            this.gameTitles.add(game[0]);
+            this.iconPaths.add(AppConfigLab3.PATH_TO_ICONS + game[1]);
         }
-
-        logger.logWarning(game + " has been instantiated.");
     }
 
-    /**
-     * Helper method that instantiates a view and a controller for a game based on the provided factories and title.
-     *
-     * @param gameModelFactory A functional interface used to create the game model.
-     * In this case it's a method reference to a game models constructor.
-     * @param gameViewFactory A functional interface used to create the game view.
-     * In this case it's a method reference to a game views constructor.
-     * @param gameControllerFactory A functional interface used to create the game controller.
-     * In this case it's a method reference to a game controllers constructor.
-     * @param title The title of the game, which is used for initializing both the view and the controller.
-     */
-    private void instantiateViewAndController(
-        GameModelFactory gameModelFactory,
-        GameViewFactory gameViewFactory,
-        GameControllerFactory gameControllerFactory,
-        String title
-    ) {
-        this.gameModels.add(gameModelFactory.create());
-        this.gameViews.add(gameViewFactory.create(title));
-        this.gameControllers.add(
-            gameControllerFactory.create(title, this.getGameView(title), this.getGameModel(title))
-        );
-    }
+    /*=====================
+     * Getters
+     ====================*/
 
     /**
-     * Clears each game list since a new one is about to be re-instantiated.
-     * @param game the games title.
+     * Returns the active game.
+     * @return the active game
      */
-    public void removeGame(String game) {
-        this.gameModels.clear();
-        this.gameViews.clear();
-        this.gameControllers.clear();
-
-        logger.logWarning(game + " has been removed\n");
+    public String getActiveGame() {
+        return this.activeGame;
     }
 
     /**
@@ -123,10 +73,26 @@ public class GameListModel {
     }
 
     /**
-     * Returns the title of the games.
-     * @return a list of game titles.
+     * Returns the models list.
+     * @return the models list
      */
-    public List<GameController> gameControllers() {
+    public List<GameModel> getGameModels() {
+        return this.gameModels;
+    }
+
+    /**
+     * Returns the views list.
+     * @return the views list
+     */
+    public List<GameView> getGameViews() {
+        return this.gameViews;
+    }
+
+    /**
+     * Returns the controllers list.
+     * @return the controllers list
+     */
+    public List<GameController> getGameControllers() {
         return this.gameControllers;
     }
 
@@ -140,10 +106,6 @@ public class GameListModel {
      * @return the GameModel associated with the title, or null if not found.
      */
     public GameModel getGameModel(final String title) {
-        // As of now the list always contain only one element.
-        // But for the project this will change since I will
-        // initiate all games in this class constructor so I can
-        // fetch the images and icons from them.
         return gameModels.stream()
         .filter(gameModel -> gameModel.getTitle().equals(title))
         .findFirst()
@@ -162,10 +124,6 @@ public class GameListModel {
      * @return the view associated with the title, or null if not found.
      */
     public GameView getGameView(final String title) {
-        // As of now the list always contain only one element.
-        // But for the project this will change since I will
-        // initiate all games in this class constructor so I can
-        // fetch the images and icons from them.
         return gameViews.stream()
         .filter(gameView -> gameView.getTitle().equals(title))
         .findFirst()
@@ -184,13 +142,45 @@ public class GameListModel {
      * @return the controller associated with the title, or null if not found.
      */
     public GameController getGameController(final String title) {
-        // As of now the list always contain only one element.
-        // But for the project this will change since I will
-        // initiate all games in this class constructor so I can
-        // fetch the images and icons from them.
         return gameControllers.stream()
         .filter(gameController -> gameController.getTitle().equals(title))
         .findFirst()
         .orElse(null);
+    }
+
+    /*================
+     * Setters
+     ===============*/
+
+     /**
+      * Sets the active game.
+      * @param activeGame the active game
+      */
+    public void setActiveGame(final String activeGame) {
+        this.activeGame = activeGame;
+    }
+
+    /**
+     * Adds a game model to the gameModels list
+     * @param gameModel the model to add
+     */
+    public void addGameModel(GameModel gameModel) {
+        this.gameModels.add(gameModel);
+    }
+
+    /**
+     * Adds a game view to the gameViews list
+     * @param gameView the view to add
+     */
+    public void addGameView(GameView gameView) {
+        this.gameViews.add(gameView);
+    }
+
+    /**
+     * Adds a game controller to the gameControllers list
+     * @param gameController the controller to add
+     */
+    public void addGameController(GameController gameController) {
+        this.gameControllers.add(gameController);
     }
 }

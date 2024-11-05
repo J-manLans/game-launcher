@@ -1,6 +1,5 @@
 package com.dt181g.laboration_3.mvccomponents.games;
 
-import javax.swing.Timer;
 
 /**
  * Interface representing the controllers for the game in the game launcher application.
@@ -10,6 +9,8 @@ import javax.swing.Timer;
  * and resetting the game's state. Implementing classes should provide specific
  * functionality to handle user inputs and reset the game when necessary.
  * </p>
+ *
+ * @author Joel Lansgren
  */
 public interface GameController {
     /**
@@ -19,9 +20,12 @@ public interface GameController {
 
     /**
      * Resets the game to its initial state.
+     *
+     * <p>
      * This method should clear any current game data, restore initial settings,
-     * and prepare the game for a new session.
-     * It should also update the user interface to reflect the reset state.
+     * and prepare the game for a new session. It's executed every time a game starts up
+     * or when the user navigates back to the start menu.
+     * </p>
      */
     void initiateGame();
 
@@ -34,16 +38,6 @@ public interface GameController {
      * </p>
      */
     void closeGame();
-
-    boolean getIsRunning();
-
-    void setIsRunning(boolean isRunning);
-
-    /**
-     * Returns the swing timer that runs the game loop.
-     * @return the swing timer.
-     */
-    Timer getGameLoop();
 
     /**
      * Returns the game title

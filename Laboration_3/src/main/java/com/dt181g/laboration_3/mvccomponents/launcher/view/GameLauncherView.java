@@ -2,7 +2,6 @@ package com.dt181g.laboration_3.mvccomponents.launcher.view;
 import com.dt181g.laboration_3.mvccomponents.BaseView;
 import com.dt181g.laboration_3.mvccomponents.games.GameView;
 import com.dt181g.laboration_3.support.AppConfigLab3;
-import com.dt181g.laboration_3.support.BackgroundPanel;
 import com.dt181g.laboration_3.support.ImageManager;
 
 import java.awt.Component;
@@ -49,76 +48,153 @@ import javax.swing.SwingUtilities;
  */
 public class GameLauncherView extends JFrame implements BaseView {
     // Game selector panel
-
+    private final GridBagConstraints gbc = new GridBagConstraints();
     private final JPanel gameSelectorPanel = new JPanel();
+    private final JLabel gameLabel = new JLabel("GAMES:");
     private final JPanel gamesListPanel = new JPanel();
-    private final JLabel pickAGameLabel = new JLabel("PICK A GAME");
     private final JScrollPane scrollPane = new JScrollPane(gamesListPanel);
     private final List<JButton> gameIcons = new ArrayList<JButton>();
+    private final JLabel quitBtn = new JLabel("Exit");
+    private final JLabel aboutBtn = new JLabel("About");
 
     // Game panel
-    private final GridBagConstraints gbc = new GridBagConstraints();
     private final CardLayout gamePanelCL = new CardLayout();
     private final JPanel gamePanel = new JPanel();
-    private final BackgroundPanel backgroundPanel = new BackgroundPanel(AppConfigLab3.PATH_TO_IMAGES, AppConfigLab3.LAUNCHER_BACKGROUNDS);
-    private final JPanel startScreen = backgroundPanel;
-    private final JLabel quitBtn = new JLabel("Exit");
+    private final JPanel startScreen = new JPanel();
+    private final JPanel aboutPanel = new JPanel();
+    private final JLabel instructionsHeading = new JLabel("Instructions:");
+    private final JLabel instructionsSelectGame = new JLabel("Click on a game from the left side panel to start it");
+    private final JLabel instructionsExit = new JLabel("Use the \"Exit\" button to close the launcher");
+    private final JLabel instructionsAbout = new JLabel("...Or the \"About\" button to open this screen");
+    private final JLabel instructionsEnjoy = new JLabel("Enjoy!");
+    private final JLabel instructionsSmiley = new JLabel("(^_^)");
+    private final JLabel instructionsBackBtn = new JLabel("Back");
 
     /**
-     * Constructs the GameLauncherView and sets up its components.
+     * Sets up the GameLauncherView components.
      * <p>
      * Initializes the game selection panel, the scroll pane that holds it, and the game display panel.
      * Also sets the layout for the JFrame and configures general window properties.
      * </p>
      */
-    public GameLauncherView() {
-        // GameSelectorPanel
-        this.gameSelectorPanel.setLayout(new GridBagLayout());
-        this.gameSelectorPanel.setPreferredSize(AppConfigLab3.GAME_SELECTOR_PANEL_DIMENSIONS);
-        this.gameSelectorPanel.setBackground(AppConfigLab3.COLOR_DARK_GREY);
-        this.gamesListPanel.setLayout(new BoxLayout(gamesListPanel, BoxLayout.Y_AXIS));
-        this.gamesListPanel.setBackground(AppConfigLab3.COLOR_DARK_GREY);
-        labelStyling(pickAGameLabel, AppConfigLab3.TEXT_SIZE_NORMAL, false);
-        this.pickAGameLabel.setBorder(AppConfigLab3.BOTTOM_SPACER_30);
-        this.gamesListPanel.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
-        this.gamesListPanel.add(pickAGameLabel);
-        // this.scrollPane.setBorder(BorderFactory.createLineBorder(AppConfigLab3.COLOR_WHITE)); <- not needed?
+    public void initializeView() {
+        SwingUtilities.invokeLater(() -> {
+            // GameSelectorPanel (left side)
+            this.gameSelectorPanel.setLayout(new GridBagLayout());
+            this.gameSelectorPanel.setPreferredSize(AppConfigLab3.GAME_SELECTOR_PANEL_DIMENSIONS);
+            this.gameSelectorPanel.setBackground(AppConfigLab3.COLOR_DARK_GREY);
 
-        // ScrollPane (handles size of gamesPanel)
-        this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        this.scrollPane.setBorder(AppConfigLab3.REMOVE_BORDER);
+            // Top of GameSelectorPanel
+            this.gbc.gridx = 0;
+            this.gbc.gridy = 0;
+            this.gbc.insets = AppConfigLab3.INSET_TOP_30_BOTTOM_20;
+            labelStyling(this.gameLabel, AppConfigLab3.TEXT_SIZE_NORMAL, false);
+            this.gameSelectorPanel.add(this.gameLabel, this.gbc);
 
-        this.gbc.gridx = 1;
-        this.gbc.gridy = 0;
-        this.gbc.weighty = 1;
-        this.gbc.weightx = 1;
-        this.gbc.insets = AppConfigLab3.INSET_BOTTOM_20;
-        this.gbc.fill = GridBagConstraints.BOTH;
-        this.gameSelectorPanel.add(scrollPane, this.gbc);
+            // ScrollPane (handles size of gamesPanel)
+            this.gamesListPanel.setLayout(new BoxLayout(this.gamesListPanel, BoxLayout.Y_AXIS));
+            this.gamesListPanel.setBackground(AppConfigLab3.COLOR_DARK_GREY);
+            this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+            this.scrollPane.setBorder(AppConfigLab3.REMOVE_BORDER);
 
-        labelBtn(quitBtn, AppConfigLab3.COLOR_WHITE);
-        this.gbc.gridy++;
-        this.gbc.weighty = 0;
-        this.gbc.fill = GridBagConstraints.NONE;
-        this.gbc.insets = AppConfigLab3.INSET_BOTTOM_30;
-        this.gameSelectorPanel.add(quitBtn, this.gbc);
+            this.gbc.gridy++;
+            this.gbc.weighty = 1;
+            this.gbc.weightx = 1;
+            this.gbc.insets = AppConfigLab3.INSET_BOTTOM_20;
+            this.gbc.fill = GridBagConstraints.BOTH;
+            this.gameSelectorPanel.add(this.scrollPane, this.gbc);
 
-        // GamePanel
-        this.gamePanel.setLayout(this.gamePanelCL);
-        this.gamePanel.add(startScreen, "Start Screen");
+            // The button at the bottom of the gameSelectorPanel
+            labelBtn(this.quitBtn, AppConfigLab3.COLOR_WHITE);
+            this.gbc.gridy++;
+            this.gbc.weighty = 0;
+            this.gbc.fill = GridBagConstraints.NONE;
+            this.gbc.insets = AppConfigLab3.INSET_BOTTOM_30;
+            this.gameSelectorPanel.add(this.quitBtn, this.gbc);
 
-        // For when the launcher is complete (cant resize it and troubleshoot with this on)
-        // Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        // this.setSize(screenSize);
-        // this.setUndecorated(true);
+            /*===================================
+             * GamePanel (right side)
+             ==================================*/
+            this.gamePanel.setLayout(this.gamePanelCL);
 
-        // JFrame
-        this.setLayout(new BorderLayout());
-        this.setSize(AppConfigLab3.GAME_LAUNCHER_DIMENSIONS);
-        this.add(gameSelectorPanel, BorderLayout.WEST);
-        this.add(gamePanel, BorderLayout.CENTER);
-        this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            // StartScreen
+            this.startScreen.setBackground(AppConfigLab3.COLOR_DARKER_GREY);
+            this.startScreen.setLayout(new GridBagLayout());
+
+            resetGbc(this.gbc);
+            this.gbc.gridx = 0;
+            this.gbc.gridy = 0;
+            this.gbc.weighty = 1;
+            this.gbc.weightx = 1;
+            this.startScreen.add(new JLabel(), this.gbc); // Empty label as spacer
+
+            labelBtn(this.aboutBtn, AppConfigLab3.COLOR_SNAKE_GAME_ACCENT);
+            this.gbc.gridy++;
+            this.gbc.weighty = 0;
+            this.gbc.anchor = GridBagConstraints.SOUTHWEST;
+            this.gbc.insets = AppConfigLab3.INSET_LEFT_BOTTOM_CORNER_30;
+            this.startScreen.add(this.aboutBtn, this.gbc);
+
+            this.gamePanel.add(this.startScreen, "Start Screen");
+
+            // AboutScreen
+            this.aboutPanel.setBackground(AppConfigLab3.COLOR_DARKER_GREY);
+            this.aboutPanel.setLayout(new GridBagLayout());
+            labelStyling(this.instructionsHeading, AppConfigLab3.TEXT_HEADING_1, false);
+            labelStyling(this.instructionsSelectGame, AppConfigLab3.TEXT_SIZE_NORMAL, false);
+            labelStyling(this.instructionsExit, AppConfigLab3.TEXT_SIZE_NORMAL, false);
+            labelStyling(this.instructionsAbout, AppConfigLab3.TEXT_SIZE_NORMAL, false);
+            labelStyling(this.instructionsEnjoy, AppConfigLab3.TEXT_SIZE_NORMAL, false);
+            labelStyling(this.instructionsSmiley, AppConfigLab3.TEXT_HEADING_2, false);
+            labelBtn(instructionsBackBtn, AppConfigLab3.COLOR_SNAKE_GAME_ACCENT);
+
+            resetGbc(this.gbc);
+            this.gbc.gridx = 0;
+            this.gbc.gridy = 0;
+            this.gbc.insets = AppConfigLab3.INSET_BOTTOM_20;
+            this.aboutPanel.add(this.instructionsHeading, this.gbc);
+            this.gbc.gridy++;
+            this.aboutPanel.add(this.instructionsSelectGame, this.gbc);
+            this.gbc.gridy++;
+            this.aboutPanel.add(this.instructionsExit, this.gbc);
+            this.gbc.gridy++;
+            this.aboutPanel.add(this.instructionsAbout, this.gbc);
+            this.gbc.gridy++;
+            this.aboutPanel.add(this.instructionsEnjoy, this.gbc);
+            this.gbc.gridy++;
+            this.gbc.insets = AppConfigLab3.INSET_BOTTOM_30;
+            this.aboutPanel.add(this.instructionsSmiley, this.gbc);
+            this.gbc.gridy++;
+            this.aboutPanel.add(this.instructionsBackBtn, this.gbc);
+
+            this.gamePanel.add(this.aboutPanel, "About Screen");
+
+            /*===================================
+             * GamePanel end
+             ==================================*/
+
+            // For when the launcher is complete (cant resize it and troubleshoot with this on)
+            // Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            // this.setSize(screenSize);
+            // this.setUndecorated(true);
+
+            // JFrame
+            this.setLayout(new BorderLayout());
+            this.setSize(AppConfigLab3.GAME_LAUNCHER_DIMENSIONS);
+            this.add(this.gameSelectorPanel, BorderLayout.WEST);
+            this.add(this.gamePanel, BorderLayout.CENTER);
+            this.setLocationRelativeTo(null);
+            this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        });
+    }
+
+    /**
+     * Makes the game launcher view visible on the Event Dispatch Thread (EDT).
+     */
+    public void showLauncher() {
+        SwingUtilities.invokeLater(() -> {
+            this.setVisible(true);
+        });
     }
 
     /**
@@ -133,39 +209,56 @@ public class GameLauncherView extends JFrame implements BaseView {
      * @param titles a list of game titles corresponding to each icon
      */
     public void addGameIcons(final List<String> iconPaths, final List<String> titles) {
-        for (int i = 0; i < iconPaths.size(); i++) {
-            // Set up the icon.
-            JButton gameIcon = new JButton();
-            gameIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
-            gameIcon.setBorder(AppConfigLab3.REMOVE_BORDER);
-            gameIcon.setContentAreaFilled(false);
-            gameIcon.setBorderPainted(false);
-            gameIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            // Fetch  and sets the icon image.
-            gameIcon.setIcon(ImageManager.INSTANCE.loadIcon(iconPaths.get(i)));
-            // Set the action command of the icon to the game title,
-            // to let the action listener know which game was clicked.
-            gameIcon.setActionCommand(titles.get(i));
+        SwingUtilities.invokeLater(() -> {
+            for (int i = 0; i < iconPaths.size(); i++) {
+                // Set up the icon.
+                final JButton gameIcon = new JButton();
+                gameIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
+                gameIcon.setBorder(AppConfigLab3.REMOVE_BORDER);
+                gameIcon.setContentAreaFilled(false);
+                gameIcon.setBorderPainted(false);
+                gameIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                // Fetch  and sets the icon image.
+                gameIcon.setIcon(ImageManager.INSTANCE.loadIcon(iconPaths.get(i)));
+                // Set the action command of the icon to the game title,
+                // to let the action listener know which game was clicked.
+                gameIcon.setActionCommand(titles.get(i));
 
-            // Add icon to the panel, plus a distance to create some air.
-            gamesListPanel.add(gameIcon);
-            gamesListPanel.add(Box.createRigidArea(AppConfigLab3.HIGHT_20));
+                // Add icon to the panel, plus a distance to create some air.
+                gamesListPanel.add(gameIcon);
+                if (i < iconPaths.size() - 1) { gamesListPanel.add(Box.createRigidArea(AppConfigLab3.HIGHT_20)); }
 
-            // Add the icon to the icon list so action listeners can be attached at a later stage.
-            gameIcons.add(gameIcon);
-        }
-        // Adds flexible space below the icons,
-        // allowing the panel to respect the preferred size of the buttons.
-        gamesListPanel.add(Box.createVerticalGlue());
+                // Add the icon to the icon list so action listeners can be attached at a later stage.
+                gameIcons.add(gameIcon);
+            }
+            // Adds flexible space below the icons,
+            // allowing the panel to respect the preferred size of the buttons.
+            gamesListPanel.add(Box.createVerticalGlue());
+        });
     }
 
     /**
-     * Makes the game launcher view visible on the Event Dispatch Thread (EDT).
+     * Displays the game panel by showing the start screen.
      */
-    public void showLauncher() {
-        SwingUtilities.invokeLater(() -> {
-            this.setVisible(true);
-        });
+    public void displayStartScreen() {
+        this.gamePanelCL.show(this.gamePanel, "Start Screen");
+    }
+
+    /**
+     * Displays the about panel by showing the start screen.
+     */
+    public void displayAboutPanel() {
+        this.gamePanelCL.show(this.gamePanel, "About Screen");
+    }
+
+    /**
+     * Method that controls the scroll speed of the scroll pane.
+     * @param notches The direction of the mouse wheel (1 or -1).
+     */
+    public void handleScroll(final int notches) {
+        final JScrollBar vertical = this.scrollPane.getVerticalScrollBar();
+        // Sets the new position either up (-1) or down (1) depending on scroll direction.
+        vertical.setValue(vertical.getValue() + (notches * AppConfigLab3.SCROLL_SPEED_MULTIPLIER));
     }
 
     /**
@@ -185,44 +278,25 @@ public class GameLauncherView extends JFrame implements BaseView {
     }
 
     /**
-     * Returns the game panel.
-     * @return the {@link JPanel} representing the game panel.
+     * Exits the game launcher application.
+     * This method terminates the application by calling System.exit(0).
      */
-    public JPanel getGamePanel() {
-        return gamePanel;
+    public void exitLauncher() {
+        System.exit(0);
     }
 
-    /**
-     * Returns the games panel.
-     * @return the {@link JPanel} representing the games panel.
-     */
-    public JPanel getGamesListPanel() {
-        return gamesListPanel;
-    }
+    /*====================
+     * Listeners
+     ===================*/
 
     /**
-     * Returns the scroll pane.
-     * @return the {@link JScrollPane} used in the user interface.
+     * Adds a mouse wheel listener to the scroll pane.
+     * @param scrollPaneListener the {@link MouseWheelListener} that listens for mouse wheel events on the scroll pane.
      */
-    public JScrollPane getScrollPane() {
-        return scrollPane;
-    }
-
-    /**
-     * Returns the quit button label.
-     * @return the {@link JLabel} representing the quit button.
-     */
-    public JLabel getQuitBtn() {
-        return quitBtn;
-    }
-
-    /**
-     * Adds a mouse listener to the quit button.
-     * @param quitBtnListener the {@link MouseAdapter} that listens for events on the quit button.
-     */
-    @Override
-    public void addQuitBtnListener(MouseAdapter quitBtnListener) {
-        this.quitBtn.addMouseListener(quitBtnListener);
+    public void addScrollPaneListener(final MouseWheelListener scrollPaneListener) {
+        SwingUtilities.invokeLater(() -> {
+            this.scrollPane.addMouseWheelListener(scrollPaneListener);
+        });
     }
 
     /**
@@ -230,44 +304,80 @@ public class GameLauncherView extends JFrame implements BaseView {
      * @param gameIcon the {@link JButton} representing the game icon to which the listener is added.
      * @param gameIconListener the {@link ActionListener} that listens for action events on the game icon button.
      */
-    public void addGameIconListeners(ActionListener gameIconListener) {
-        // For game icons so they start the game when clicked
-        for (JButton gameIcon : this.gameIcons) {
-            gameIcon.addActionListener(gameIconListener);
-        }
+    public void addGameIconListeners(final ActionListener gameIconListener) {
+        SwingUtilities.invokeLater(() -> {
+            // For game icons so they start the game when clicked
+            for (final JButton gameIcon : this.gameIcons) {
+                gameIcon.addActionListener(gameIconListener);
+            }
+        });
     }
 
     /**
-     * Adds a mouse wheel listener to the scroll pane.
-     * @param scrollPaneListener the {@link MouseWheelListener} that listens for mouse wheel events on the scroll pane.
+     * Adds a mouse listener to the about button.
+     * @param aboutBtnListener the {@link MouseAdapter} that listens for events on the about button.
      */
-    public void addScrollPaneListener(MouseWheelListener scrollPaneListener) {
-        scrollPane.addMouseWheelListener(scrollPaneListener);
+    public void addAboutBtnListener(final MouseAdapter aboutBtnListener) {
+        SwingUtilities.invokeLater(() -> {
+            this.aboutBtn.addMouseListener(aboutBtnListener);
+        });
     }
 
     /**
-     * Method that controls the scroll speed of the scroll pane.
-     * @param notches The direction of the mouse wheel (1 or -1).
+     * Adds a mouse listener to the back button.
+     * @param backBtnListener the {@link MouseAdapter} that listens for events on the back button.
      */
-    public void handleScroll(int notches) {
-        JScrollBar vertical = this.getScrollPane().getVerticalScrollBar();
-        // Sets the new position either up (-1) or down (1) depending on scroll direction.
-        vertical.setValue(vertical.getValue() + (notches * AppConfigLab3.SCROLL_SPEED_MULTIPLIER));
+    public void addBackBtnListener(final MouseAdapter backBtnListener) {
+        SwingUtilities.invokeLater(() -> {
+            this.instructionsBackBtn.addMouseListener(backBtnListener);
+        });
     }
 
     /**
-     * Displays the game panel by toggling the background repaint and showing the start screen.
+     * Adds a mouse listener to the quit button.
+     * @param quitBtnListener the {@link MouseAdapter} that listens for events on the quit button.
      */
-    public void display() {
-        backgroundPanel.toggleBackgroundRepaint(true);
-        this.gamePanelCL.show(gamePanel, "Start Screen");
+    public void addQuitBtnListener(final MouseAdapter quitBtnListener) {
+        SwingUtilities.invokeLater(() -> {
+            this.quitBtn.addMouseListener(quitBtnListener);
+        });
+    }
+
+    /*=====================
+     * Getters
+     ====================*/
+
+    /**
+     * Returns the game panel.
+     * Eventually it ends up in the started games main view.
+     * There it is used to display the launcher again when the user quits the game.
+     * @return the {@link JPanel} representing the game panel.
+     */
+    public JPanel getGamePanel() {
+        return this.gamePanel;
     }
 
     /**
-     * Exits the game launcher application.
-     * This method terminates the application by calling System.exit(0).
+     * Returns the quit button label.
+     * @return the JLabel representing the quit button.
      */
-    public void exitLauncher() {
-        System.exit(0);
+    public JLabel getQuitBtn() {
+        return this.quitBtn;
+    }
+
+    /**
+     * Returns the about button.
+     * @return the JLabel representing the about button.
+     */
+    public JLabel getAboutBtn() {
+        return this.aboutBtn;
+    }
+
+    /**
+     * Returns the back button.
+     * @return the JLabel representing the back button.
+     */
+    public JLabel getInstructionsBackBtn() {
+        return this.instructionsBackBtn;
     }
 }

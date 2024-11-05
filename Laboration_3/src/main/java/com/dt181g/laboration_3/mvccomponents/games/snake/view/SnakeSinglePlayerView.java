@@ -12,19 +12,42 @@ import javax.swing.JPanel;
 
 import com.dt181g.laboration_3.support.AppConfigLab3;
 
+/**
+ * Represents the single-player view for the Snake game.
+ * This view class manages the graphical display of the game grid and the snake,
+ * updating the snake's position as it moves and controlling the layout
+ * and style of the grid cells.
+ *
+ * <p>
+ * This class primarily interacts with {@link SnakeMainView} for shared view components
+ * and relies on a 2D array to manage the snake's appearance in the grid.
+ * </p>
+ *
+ * @author Joel Lansgren
+ */
 public class SnakeSinglePlayerView extends JPanel{
     private final GridBagConstraints gbc = new GridBagConstraints();
-    private final SnakeView snakeView;
+    private final SnakeMainView snakeView;
     private JPanel snakeGrid;
     private JPanel[][] snakeGridCells;
     private List<Object> gameAssets;
 
-    protected SnakeSinglePlayerView(final SnakeView snakeView) {
+    /**
+     * Constructs a new single-player view for the Snake game.
+     * Sets up the layout and initializes the main components.
+     *
+     * @param snakeView The main view component that provides shared styling and layout.
+     */
+    protected SnakeSinglePlayerView(final SnakeMainView snakeView) {
         this.setLayout(new GridBagLayout());
         this.snakeView = snakeView;
         this.setBackground(AppConfigLab3.COLOR_DARKER_GREY);
     }
 
+    /**
+     * Starts the Snake game by initializing and displaying the game grid.
+     * Uses the provided game assets to set up the initial grid state.
+     */
     protected void startGame() {
         String comingSoon = (String) gameAssets.get(0);
         int[][] snake2DArray = (int[][]) gameAssets.get(gameAssets.size() - 1);
@@ -50,10 +73,11 @@ public class SnakeSinglePlayerView extends JPanel{
     }
 
     /**
-     * Initializes the grid with the current state of the snake.
+     * Initializes the grid layout based on the snake's current state.
+     * Each cell in the grid displays part of the snake or the background.
      *
-     * @param snake2DArray  A 2D array representing the current state of the snake grid.
-     * @param comingSoon A string representing the characters to display in the snake.
+     * @param snake2DArray A 2D array representing the snake's position in the grid.
+     * @param comingSoon   A string representing the characters displayed inside the snake.
      */
     private void initializeGrid(final int[][] snake2DArray, final String comingSoon) {
         this.snakeGrid.removeAll();
@@ -121,15 +145,17 @@ public class SnakeSinglePlayerView extends JPanel{
     /**
      * Helper method that styles the letters inside the snake.
      *
-     * @param snakeChar The JLabel to be styled.
+     * @param snakeChar A JLabel representing a single character within the snake's body
      */
     protected void styleSnakeBanner(final JLabel snakeChar) {
         this.snakeView.labelStyling(snakeChar, AppConfigLab3.TEXT_SIZE_NORMAL, true);
     }
 
     /**
-     * Sets the list with the snakes current position in the grid plus a string.
-     * @param gameAssets a list containing a string and a 2D int array representing the snakes position in the grid
+     * Sets the game assets, including the snake's position and display text.
+     * This data is used to update the visual representation of the snake in the grid.
+     *
+     * @param gameAssets A list containing a string and a 2D array representing the snake's position.
      */
     protected void setGameAssets(List<Object> gameAssets) {
         this.gameAssets = gameAssets;

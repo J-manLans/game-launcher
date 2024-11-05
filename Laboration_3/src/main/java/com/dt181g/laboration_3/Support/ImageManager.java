@@ -30,17 +30,17 @@ public enum ImageManager {
             // Load the image from the specified path as an input stream.
             // This is necessary to ensure the image can be included in the JAR file
             // and accessed properly when the application is packaged.
-            BufferedImage originalImage = ImageIO.read((getClass().getResourceAsStream(path)));
+            final BufferedImage originalImage = ImageIO.read((getClass().getResourceAsStream(path)));
 
             // Create a down-scaled version of the image, optimized for quadratic images.
-            Image scaledImage = originalImage.getScaledInstance(
+            final Image scaledImage = originalImage.getScaledInstance(
                 AppConfigLab3.NUM_200,
                 AppConfigLab3.NUM_200,
                 Image.SCALE_SMOOTH
             );
 
             return new ImageIcon(scaledImage);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             DebugLogger.INSTANCE.logWarning(e + "\nSomething went wrong while loading the picture to the game icons");
             return null;
         }

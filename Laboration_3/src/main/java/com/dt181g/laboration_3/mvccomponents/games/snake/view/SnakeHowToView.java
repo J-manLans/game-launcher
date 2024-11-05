@@ -8,23 +8,36 @@ import javax.swing.JPanel;
 
 import com.dt181g.laboration_3.support.AppConfigLab3;
 
-public class SnakeControlsView extends JPanel{
+/**
+ * Represents the controls menu view for the Snake game.
+ *
+ * <p>
+ * This class displays the instructions on how to control the snake and
+ * provides a back button for navigation.
+ * </p>
+ *
+ * @author Joel Lansgren
+ */
+public class SnakeHowToView extends JPanel{
     private final GridBagConstraints gbc = new GridBagConstraints();
-    private final SnakeView snakeView;
+    private final SnakeMainView snakeView;
     private final JLabel controlsMainLabel = new JLabel("CONTROLS:");
     private final JLabel controlsSubLabel = new JLabel("W,S,A,D or arrow keys to move the snake around");
+    private final JLabel instructionsMainLabel = new JLabel("INSTRUCTIONS:");
+    private final JLabel instructionsSubLabel = new JLabel("Eat whatever booster that appear on the grid to gain it's effect");
 
     /**
-     * Displays the controls menu for the game.
+     * Initializes the SnakeControlsView with the specified main view.
      *
      * <p>
-     * This constructor clears the current view and sets up the control panel with
-     * instructions on how to control the snake. It also provides a back button
-     * to return to the previous menu.
+     * This constructor sets the layout, styles the control labels,
+     * and adds them to the panel. It also applies background color and border styling.
      * </p>
-     * @param snakeView the main snake view
+     *
+     * @param snakeView the main view of the Snake game, used to retrieve shared components
+     * and styling methods.
      */
-    protected SnakeControlsView(final SnakeView snakeView) {
+    protected SnakeHowToView(final SnakeMainView snakeView) {
         this.setLayout(new GridBagLayout());
 
         // Initiate components
@@ -32,14 +45,22 @@ public class SnakeControlsView extends JPanel{
 
         this.snakeView.labelStyling(controlsMainLabel, AppConfigLab3.TEXT_HEADING_2, false);
         this.snakeView.labelStyling(controlsSubLabel, AppConfigLab3.TEXT_SIZE_NORMAL, false);
+        this.snakeView.labelStyling(instructionsMainLabel, AppConfigLab3.TEXT_HEADING_2, false);
+        this.snakeView.labelStyling(instructionsSubLabel, AppConfigLab3.TEXT_SIZE_NORMAL, false);
 
         this.gbc.insets = AppConfigLab3.INSET_BOTTOM_20;
-
         this.gbc.gridy = 0;
         this.add(controlsMainLabel, gbc);
 
         this.gbc.gridy++;
         this.add(controlsSubLabel, gbc);
+
+        this.gbc.gridy++;
+        this.add(instructionsMainLabel, gbc);
+
+        this.gbc.gridy++;
+        this.add(instructionsSubLabel, gbc);
+        this.gbc.insets = AppConfigLab3.RESET_INSETS;
 
         this.setBackground(AppConfigLab3.COLOR_DARKER_GREY);
         this.setBorder(AppConfigLab3.CONTROLS_BORDER);
