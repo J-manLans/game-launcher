@@ -6,11 +6,13 @@ import com.dt181g.laboration_3.support.ImageManager;
 
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.ActionListener;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
+import java.awt.Toolkit;
 import java.awt.GridBagConstraints;
 import java.awt.event.MouseAdapter;
 
@@ -47,6 +49,9 @@ import javax.swing.SwingUtilities;
  * @author Joel Lansgren
  */
 public class GameLauncherView extends JFrame implements BaseView {
+    // Launcher
+    private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
     // Game selector panel
     private final GridBagConstraints gbc = new GridBagConstraints();
     private final JPanel gameSelectorPanel = new JPanel();
@@ -79,7 +84,9 @@ public class GameLauncherView extends JFrame implements BaseView {
      */
     public void initializeView() {
         SwingUtilities.invokeLater(() -> {
-            // GameSelectorPanel (left side)
+            /*===================================
+             * GamePanel (left side)
+             ==================================*/
             this.gameSelectorPanel.setLayout(new GridBagLayout());
             this.gameSelectorPanel.setPreferredSize(AppConfigLab3.GAME_SELECTOR_PANEL_DIMENSIONS);
             this.gameSelectorPanel.setBackground(AppConfigLab3.COLOR_DARK_GREY);
@@ -170,17 +177,13 @@ public class GameLauncherView extends JFrame implements BaseView {
             this.gamePanel.add(this.aboutPanel, "About Screen");
 
             /*===================================
-             * GamePanel end
+             * JFrame
              ==================================*/
 
-            // For when the launcher is complete (cant resize it and troubleshoot with this on)
-            // Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            // this.setSize(screenSize);
-            // this.setUndecorated(true);
-
-            // JFrame
+            this.setSize(screenSize);
+            this.setUndecorated(true);
+            // this.setSize(AppConfigLab3.GAME_LAUNCHER_DIMENSIONS);
             this.setLayout(new BorderLayout());
-            this.setSize(AppConfigLab3.GAME_LAUNCHER_DIMENSIONS);
             this.add(this.gameSelectorPanel, BorderLayout.WEST);
             this.add(this.gamePanel, BorderLayout.CENTER);
             this.setLocationRelativeTo(null);
@@ -275,14 +278,6 @@ public class GameLauncherView extends JFrame implements BaseView {
         // Adds the panel and show the game view.
         this.gamePanel.add((JPanel) gameView, "Game");
         this.gamePanelCL.show(gamePanel, "Game");
-    }
-
-    /**
-     * Exits the game launcher application.
-     * This method terminates the application by calling System.exit(0).
-     */
-    public void exitLauncher() {
-        System.exit(0);
     }
 
     /*====================

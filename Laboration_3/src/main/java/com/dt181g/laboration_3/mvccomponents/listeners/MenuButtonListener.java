@@ -51,11 +51,11 @@ public class MenuButtonListener extends MouseAdapter {
     }
 
     @Override
-    public void mousePressed(final MouseEvent e) {
+    public void mouseReleased(final MouseEvent e) {
         // Makes sure the label button is transparent and has
         // the right text color on the next startup.
         button.setOpaque(false);
-        button.setForeground(AppConfigLab3.COLOR_WHITE);
+        button.setForeground(orgColor);
         action.run();
     }
 

@@ -38,7 +38,7 @@ public class SnakeHowToView extends JPanel{
      * and styling methods.
      */
     protected SnakeHowToView(final SnakeMainView snakeView) {
-        this.setLayout(new GridBagLayout());
+        super(new GridBagLayout());
 
         // Initiate components
         this.snakeView = snakeView;

@@ -11,7 +11,9 @@ import com.dt181g.laboration_3.mvccomponents.launcher.model.GameListModel;
 import com.dt181g.laboration_3.mvccomponents.launcher.view.GameLauncherView;
 import com.dt181g.laboration_3.mvccomponents.listeners.MenuButtonListener;
 import com.dt181g.laboration_3.support.AppConfigLab3;
+import com.dt181g.laboration_3.support.TimedEventQueue;
 
+import java.awt.Toolkit;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
@@ -35,21 +37,23 @@ public class GameLauncherController implements BaseController{
      * @param gameLauncherView the view component for the game launcher
      * @param gameListModel the model component containing the list of games that the launcher will display
      */
-    public GameLauncherController(final GameLauncherView gameLauncherView, final GameListModel gameListModel) {
-        this.gameLauncherView = gameLauncherView;
-        this.gameListModel = gameListModel;
+    public GameLauncherController() {
+        this.gameLauncherView = new GameLauncherView();
+        this.gameListModel = new GameListModel();
     }
 
     /**
      * Initializes the game launcher using various helper methods.
-     * First it sets up the game icons, then attach listeners to them
-     * and lastly displays the launcher.
+     * First it sets up the game icons, then attach listeners to them,
+     * displays the launcher and finally pushes a {@link TimedEventQueue}
+     * onto the system event queue to monitor event dispatch times.
      */
     public void initialize() {
         this.gameLauncherView.initializeView();
         this.addGameIcons();
         this.initializeListeners();
-        this.startLauncher();
+        this.gameLauncherView.showLauncher();
+        if (AppConfigLab3.DEBUG_MODE) { Toolkit.getDefaultToolkit().getSystemEventQueue().push(new TimedEventQueue()); }
     }
 
     /**
@@ -92,15 +96,16 @@ public class GameLauncherController implements BaseController{
         // For exiting the launcher
         this.gameLauncherView.addQuitBtnListener(new MenuButtonListener(
             this.gameLauncherView.getQuitBtn(),
-            gameLauncherView::exitLauncher
+            this::exitLauncher
         ));
     }
 
     /**
-     * Helper method that displays the game launcher UI.
+     * Exits the game launcher application.
+     * This method terminates the application by calling System.exit(0).
      */
-    private void startLauncher() {
-        this.gameLauncherView.showLauncher();
+    public void exitLauncher() {
+        System.exit(0);
     }
 
     /*=========================================================
