@@ -37,6 +37,7 @@ public class GameListModel {
             {AppConfigLab3.SNAKE_TITLE, AppConfigLab3.SNAKE_ICON},
             {AppConfigLab3.SNAKE_TITLE, AppConfigLab3.SNAKE_ICON},
             {AppConfigLab3.SNAKE_TITLE, AppConfigLab3.SNAKE_ICON},
+            {AppConfigLab3.SNAKE_TITLE, AppConfigLab3.SNAKE_ICON}
         };
         for (String[] game : games) {
             this.gameTitles.add(game[0]);

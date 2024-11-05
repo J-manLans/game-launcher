@@ -135,6 +135,9 @@ public final class AppConfigLab3 {
     GameLauncherView Settings.
     ------------------------------------------ */
 
+    /** Indicates wether I'm debugging or not. */
+    public static final boolean DEBUG_MODE = false;
+
     /** Dimension for the game selector panel. */
     public static final Dimension GAME_SELECTOR_PANEL_DIMENSIONS = new Dimension(270, 940);
 
