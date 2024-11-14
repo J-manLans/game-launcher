@@ -4,8 +4,8 @@ import java.util.Random;
 
 /**
  * The {@code Client} class represents a client that requests and utilizes a {@code WorkerThread}
- * from the {@code ThreadManager}. Once the client has finished utilizing the thread, it returns
- * the thread back to the manager.
+ * from the {@code ThreadManager} to add randomness to its inherit random number.
+ * Once the client has finished utilizing the thread, it returns the thread back to the manager.
  * Each {@code Client} runs in its own thread and interacts with a {@code WorkerThread} to perform tasks.
  * @author Joel Lansgren
  */
@@ -27,6 +27,8 @@ public class Client extends Thread {
 
         /**
          * Returns the instances random number.
+         * This is the number that shall be processed and get another layer of randomness
+         * attached to it.
          * @return the instances random number
          */
         public int getRandNum() {

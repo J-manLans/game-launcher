@@ -14,10 +14,10 @@ import java.util.Random;
  * @author Joel Lansgren
  */
 public class Storefront {
-    final Random randomizer = new Random();
-    final int clientPool = randomizer.nextInt(11) + 100;
-    final ArrayDeque<Client> clients = new ArrayDeque<Client>(20);
-    final ThreadManager manager = ThreadManager.INSTANCE;
+    private final Random randomizer = new Random();
+    private final int clientPool = randomizer.nextInt(11) + 100;
+    private final ArrayDeque<Client> clients = new ArrayDeque<Client>(20);
+    private final ThreadManager manager = ThreadManager.INSTANCE;
 
     Storefront() {
         System.out.println("\nClients: " + clientPool + "\n");
