@@ -16,7 +16,7 @@ import java.util.Random;
 public class Storefront {
     private final Random randomizer = new Random();
     private final int clientPool = randomizer.nextInt(11) + 100;
-    private final ArrayDeque<Client> clients = new ArrayDeque<Client>(20);
+    private final ArrayDeque<Client> clients = new ArrayDeque<>();
     private final ThreadManager manager = ThreadManager.INSTANCE;
 
     Storefront() {

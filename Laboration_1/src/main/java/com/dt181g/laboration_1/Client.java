@@ -64,7 +64,7 @@ public class Client extends Thread {
                     "%s gives %s its random number",
                     this.getName(),
                     this.workerThread.getName()
-                    )
+                )
             );
 
             workerThread.notifyToDoWork(randNum);

@@ -16,10 +16,10 @@ public class WorkerThread extends Thread {
     private int clientsNum;
     private boolean shutdown = false;
     private boolean gotClient = false;
-    private Random randomizer = new Random();
-    AtomicBoolean counting = new AtomicBoolean();
-    int[] count = {0};
-    private boolean isPrime;
+    private Random randomizer;
+    private AtomicBoolean counting = new AtomicBoolean();
+    private int[] count = {0};
+    private boolean isClientsNumPrime;
 
     /**
      * Constructs a WorkerThread with a given name.
@@ -36,6 +36,15 @@ public class WorkerThread extends Thread {
     public void setClient(final Client client, final boolean gotClient) {
         this.client = client;
         this.gotClient = gotClient;
+    }
+
+    /**
+     * Returns the isPrime boolean
+     * Utilized by the thread manager to determine if the thread has a prime number available
+     * @return the isPrime boolean
+     */
+    public boolean isClientsNumPrime() {
+        return this.isClientsNumPrime;
     }
 
     /**
@@ -76,7 +85,8 @@ public class WorkerThread extends Thread {
      * {@code isRandPrime}.
      * If so, the number is flagged and additional computation is done. The helper method {@code threadSleepAndIncrement}
      * is utilized for this to add complexity to the upper bound for number generation to the {@code randomizer}.
-     * The prime number is also used to set the randomizer's seed.
+     * The prime number is also used to set the randomizer's seed. At the start of the method the randomizer is
+     * re-instantiated to prevent unpredictability.
      *
      * <p>
      * If the number isn't prime, a new random number is generated based on the initial number.
@@ -86,12 +96,12 @@ public class WorkerThread extends Thread {
      * @return the layered random number
      */
     private int doWork(int initialNum) {
+        randomizer = new Random();
         this.isRandPrime(initialNum);
-        if (isPrime) {
+        if (isClientsNumPrime) {
             randomizer.setSeed(initialNum);
             return randomizer.nextInt(threadSleepAndIncrement(initialNum));
         }
-
         return randomizer.nextInt(initialNum);
     }
 
@@ -106,13 +116,13 @@ public class WorkerThread extends Thread {
         if (initialNum % 2 == 1) {
             for (int i = 3; i <= (int) Math.sqrt(initialNum); i += 2) {
                 if (initialNum % i == 0) {
-                    this.isPrime = false;
+                    this.isClientsNumPrime = false;
                     return;
                 }
             }
-            this.isPrime = true;
+            this.isClientsNumPrime = true;
         } else {
-            this.isPrime = false;
+            this.isClientsNumPrime = false;
         }
     }
 
@@ -127,10 +137,10 @@ public class WorkerThread extends Thread {
      */
     private int threadSleepAndIncrement(final int prime) {
         counting.set(true);
-        count[0] = 0;
+        count[0] = 1;  // Safety to prevent un-positive numbers
         new Thread(() -> {
             while (counting.get()) {
-             count[0]++;
+                count[0]++;
             }
         }).start();
 
@@ -140,7 +150,6 @@ public class WorkerThread extends Thread {
             counting.set(false);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            counting.set(false);
             e.printStackTrace();
         }
         this.clientsNum = count[0];

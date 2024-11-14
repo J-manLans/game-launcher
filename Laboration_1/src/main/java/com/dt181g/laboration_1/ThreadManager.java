@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public enum ThreadManager {
     INSTANCE;
     private final int threadPoolSize = 5;
-    private final ArrayList<WorkerThread> workerThreads = new ArrayList<WorkerThread>(5);
+    private final ArrayList<WorkerThread> workerThreadPool = new ArrayList<WorkerThread>(5);
     private WorkerThread workerThread;
     private final Object poolLock = new Object();
     private int threadUtilizations;
@@ -24,9 +24,8 @@ public enum ThreadManager {
      */
     private ThreadManager() {
         for (int i = 1; i <= threadPoolSize; i++) {
-            WorkerThread workerThread = new WorkerThread("Worker thread " + i);
-            this.workerThreads.add(workerThread);
-            workerThread.start();
+            this.workerThreadPool.add(new WorkerThread("Worker thread " + i));
+            workerThreadPool.get(workerThreadPool.size() - 1).start();
         }
     }
 
@@ -42,7 +41,8 @@ public enum ThreadManager {
      * Retrieves a {@code WorkerThread} from the pool and increments the thread utilization count.
      * <p>
      * If no thread is available, the method will wait until a thread is returned to the pool.
-     * Initially, the first worker thread in the pool is selected. Based on the selected thread's
+     * Initially, the first worker thread in the pool is selected. If the threads clients initial number
+     * was prime, a new thread will be chosen. Based on the selected thread's
      * modified client number, a preferred index is calculated to determine which worker thread
      * to return on subsequent calls. If the preferred index (determined by a modulus operation)
      * exceeds the current pool size, the method defaults to returning the first worker.
@@ -52,7 +52,7 @@ public enum ThreadManager {
      */
     public WorkerThread getThread() {
         synchronized (this.poolLock) {
-            while (this.workerThreads.isEmpty()) {
+            while (this.workerThreadPool.isEmpty()) {
                 try {
                     poolLock.wait();
                 } catch (InterruptedException e) {
@@ -61,10 +61,11 @@ public enum ThreadManager {
             }
 
             this.threadUtilizations++;
-            workerThread = this.workerThreads.get(0);
-
-            preferredWorkerIndex = workerThread.getClientsNum() % 5;
-            return this.workerThreads.remove(preferredWorkerIndex < workerThreads.size() ? preferredWorkerIndex : 0);
+            workerThread = this.workerThreadPool.get(0);
+            if (workerThread.isClientsNumPrime()) {
+                preferredWorkerIndex = workerThread.getClientsNum() % 5;
+                return this.workerThreadPool.remove(preferredWorkerIndex < workerThreadPool.size() ? preferredWorkerIndex : 0);
+            } else { return this.workerThreadPool.remove(0); }
         }
     }
 
@@ -74,7 +75,7 @@ public enum ThreadManager {
      */
     public void returnThread(final WorkerThread workerThread) {
         synchronized (poolLock) {
-            workerThreads.add(workerThread);
+            workerThreadPool.add(workerThread);
             poolLock.notify();
         }
     }
@@ -85,11 +86,11 @@ public enum ThreadManager {
      * Once all threads are stopped, the pool is cleared.
      */
     public void shutdown() {
-        for (WorkerThread workerThread : workerThreads) {
+        for (WorkerThread workerThread : workerThreadPool) {
             workerThread.shutdown();
         }
 
-        for (WorkerThread workerThread : workerThreads) {
+        for (WorkerThread workerThread : workerThreadPool) {
             try {
                 workerThread.join();
             } catch (InterruptedException e) {
@@ -98,6 +99,6 @@ public enum ThreadManager {
             }
         }
 
-        workerThreads.clear();
+        workerThreadPool.clear();
     }
 }
