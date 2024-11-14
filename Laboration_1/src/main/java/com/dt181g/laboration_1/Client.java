@@ -13,8 +13,7 @@ public class Client extends Thread {
         private final Object clientLock = new Object();
         private Random randomizer = new Random();
         private int randNum = randomizer.nextInt(101) + 50;
-        private boolean threadDone = false;
-        private final ThreadManager manager = ThreadManager.INSTANCE;
+        private boolean workerThreadDone = false;
         private WorkerThread workerThread;
 
         /**
@@ -23,16 +22,6 @@ public class Client extends Thread {
          */
         public Client(final String name) {
             this.setName(name);
-        }
-
-        /**
-         * Returns the instances random number.
-         * This is the number that shall be processed and get another layer of randomness
-         * attached to it.
-         * @return the instances random number
-         */
-        public int getRandNum() {
-            return this.randNum;
         }
 
         /**
@@ -47,11 +36,14 @@ public class Client extends Thread {
 
         /**
          * Notifies the client that the {@code WorkerThread} has finished its task.
+         * The client also removes itself and returns the thread to the pool right away.
          * This method is called by the {@code WorkerThread} when it completes its work.
          */
         public void notifyWorksDone() {
             synchronized (this.clientLock) {
-                this.threadDone = true;
+                this.workerThreadDone = true;
+                this.workerThread.setClient(null, false);
+                ThreadManager.INSTANCE.returnThread(this.workerThread);
                 this.clientLock.notify();
             }
         }
@@ -59,13 +51,14 @@ public class Client extends Thread {
         /**
          * The {@code Client}'s main logic. The client retrieves a {@code WorkerThread} from the manager,
          * assigns itself to the thread, and waits for the thread to complete its work before returning the thread
-         * to the pool.
+         * to the pool and nullifying the reference.
          */
         @Override
         public void run() {
-            this.workerThread = this.manager.getThread();
-            this.workerThread.setClient(this);
+            this.workerThread = ThreadManager.INSTANCE.getThread();
+            this.workerThread.setClient(this, true);
 
+            // Just printing some statistics
             System.out.println(
                 String.format(
                     "%s gives %s its random number",
@@ -73,10 +66,11 @@ public class Client extends Thread {
                     this.workerThread.getName()
                     )
             );
-            workerThread.notifyToDoWork();
+
+            workerThread.notifyToDoWork(randNum);
 
             synchronized (this.clientLock) {
-                while (!this.threadDone) {
+                while (!this.workerThreadDone) {
                     try {
                         this.clientLock.wait();
                     } catch (InterruptedException e) {
@@ -93,8 +87,7 @@ public class Client extends Thread {
                     this.randNum
                 )
             );
-            this.workerThread.setClient(null);
-            this.manager.returnThread(this.workerThread);
+
             this.workerThread = null;
         }
 }

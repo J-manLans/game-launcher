@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author Joel Lansgren
  */
 public class WorkerThread extends Thread {
-    private final Object threadLock = new Object();
+    private final Object workerThreadLock = new Object();
     private Client client;
     private int clientsNum;
     private boolean shutdown = false;
@@ -33,21 +33,14 @@ public class WorkerThread extends Thread {
      * Sets the client for this worker thread. The client assigns tasks to the worker.
      * @param client the client assigning tasks to the worker
      */
-    public void setClient(final Client client) {
+    public void setClient(final Client client, final boolean gotClient) {
         this.client = client;
-        if (client != null) { this.clientsNum = this.client.getRandNum(); }
+        this.gotClient = gotClient;
     }
 
     /**
-     * Returns the isPrime boolean
-     * @return the isPrime boolean
-     */
-    public boolean getPrime() {
-        return this.isPrime;
-    }
-
-    /**
-     * Returns the clientsNum int
+     * Returns the clientsNum int.
+     * Utilized by the thread manager to determine what thread to give away next
      * @return the clientsNum int
      */
     public int getClientsNum() {
@@ -57,10 +50,10 @@ public class WorkerThread extends Thread {
     /**
      * Notifies the worker thread that it has work to do.
      */
-    public void notifyToDoWork() {
-        synchronized (this.threadLock) {
-            this.gotClient = true;
-            this.threadLock.notify();
+    public void notifyToDoWork(int randNum) {
+        synchronized (this.workerThreadLock) {
+            this.clientsNum = randNum;
+            this.workerThreadLock.notify();
         }
     }
 
@@ -168,11 +161,11 @@ public class WorkerThread extends Thread {
     public void run() {
         while (!this.shutdown) {
 
-            synchronized (this.threadLock) {
+            synchronized (this.workerThreadLock) {
                 // Wait for instructions
                 while (!this.gotClient) {
                     try {
-                        this.threadLock.wait();
+                        this.workerThreadLock.wait();
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                         break;
@@ -180,16 +173,17 @@ public class WorkerThread extends Thread {
                 }
             }
 
+            // The if block is used for the shutdown, when the threads get released for the day
+            // by the storefront and no clients are available.
             if (this.client != null) {
                 System.out.println(
                     String.format("%s adds a layer of randomness to %d...",
-                        this.getName(),
+                        getName(),
                         this.clientsNum
                     )
                 );
-                this.client.updateRandNum(this.doWork(clientsNum));
+                this.client.updateRandNum(doWork(this.clientsNum));
                 this.client.notifyWorksDone();
-                this.gotClient = false;
             }
 
         } System.out.println(this.getName() + " shutting down...");

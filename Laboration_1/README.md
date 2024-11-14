@@ -35,7 +35,7 @@ The purpose of this program is to simulate a simple multithreaded environment wh
 ## Procedures
 ![Copilots view of this program](./src/main/resources/thread_pool.jpg)
 ### Main Method
-**The main method** serves as the entry point for the application, designed to simulate client interactions with worker threads managed by the ``ThreadManager``. It initiates the process by generating a random number of clients between 10 and 20. Each client is instantiated with a unique name and added to a list for processing.
+**The main method** serves as the entry point for the application and just initiates the StoreFront. The StoreFront in turn is designed to simulate client interactions with worker threads managed by the ``ThreadManager``. It initiates the process by generating a random number of clients between 10 and 20. Each client is instantiated with a unique name and added to a list for processing.
 
 Once the clients are created, the method activates each client in its own thread. This is done through the start method, which triggers the execution of their respective tasks using the available worker threads. The method then waits for all clients to complete their tasks by joining each thread, ensuring that the main thread only proceeds once all clients have finished.
 
@@ -50,39 +50,38 @@ Extending the Thread class, the ``Client`` class must override its ``run`` metho
 
 **In the ``run`` method**, the ``ThreadManager.INSTANCE`` needs to be utilized to acquire a worker thread through its ``getThread`` method, establishing the client as the thread’s owner. Following this, the client notifies the worker to proceed with its task of generating a random number, which will update the client’s ``randNum``.
 
-Once the client has initiated the worker, it will enter a loop that monitors the ``threadDone`` flag, which indicates whether the worker has completed its task. This flag is initially set to false and is updated to true by the worker in the ``notifyWorksDone`` method before notifying the client. The while loop maintains the client’s waiting state, accounting for potential spurious wakeups, ensuring that it only exits when the worker thread invokes ``notifyWorksDone``, signaling that its task is complete.
+Once the client has initiated the worker, it will enter a loop that monitors the ``workerThreadDone`` flag, which indicates whether the worker has completed its task. This flag is initially set to false and is updated to true by the worker in the ``notifyWorksDone`` method before notifying the client. The while loop maintains the client’s waiting state, accounting for potential spurious wakeups, ensuring that it only exits when the worker thread invokes ``notifyWorksDone``, signaling that its task is complete.
 
 ````java
-synchronized (clientLock) {
-    while (!threadDone) {
+synchronized (this.clientLock) {
+    while (!this.workerThreadDone) {
         try {
             this.clientLock.wait();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
-    this.workerThread.setClient(null);
 }
 ````
 
-Once the worker has completed its task and the client is notified, the client prints the relevant statistics, unsets itself as the worker’s client, returns the worker thread to the manager, and clears its reference to the worker. Finally, the client thread terminates after executing all necessary actions.
+Once the worker has completed its task the client removes itself from the worker, returns the thread to the pool and the client is notified, the client prints the relevant statistics and clears its reference to the worker. Finally, the client thread terminates after executing all necessary actions.
 
 ### WorkerThread
 The ``WorkerThread`` class will be responsible for executing tasks that add randomness to numbers received from its assigned client. This class operates within a pool of five threads managed by the ``ThreadManager``, which is tasked with initializing and starting these worker threads.
 
-This class includes four methods alongside the ``run`` method, each serving specific purposes. The ``setClient`` method will allow the client to assign itself to the worker. The ``doWork`` method will be responsible for randomizing the given number. The ``notifyToWork`` method will signal the worker that it needs to begin its task, while the ``shutdown`` method will notify the worker to terminate once all clients have completed their tasks.
+This class includes a couple of methods alongside the ``run`` method, each serving specific purposes. The ``setClient`` method will allow the client to assign itself to the worker. The ``doWork`` method will be responsible for randomizing the given number. The ``notifyToWork`` method will signal the worker that it needs to begin its task, while the ``shutdown`` method will notify the worker to terminate once all clients have completed their tasks. Other than that there is one getter method that the thread manager uses to determine what thread to give away next based on the additional layer of randomness added.
 
 The ``run`` method will be contained within a while loop that continually checks a shutdown flag, ensuring the thread remains active while clients require its services. When the ``shutdown`` method is invoked, the thread will exit gracefully.
 
-Initially, the worker thread will enter a wait state using the synchronization mechanism established in the ``Client`` class.
+Initially, the worker thread will enter a wait state using the synchronization mechanism described in the ``Client`` class.
 
-Once released from the synchronized block, the worker will check if a client is assigned. If a client is present, the worker will call the client's ``updateRandNum`` method using its own ``doWork`` method to generate a new random number:
+Once released from the synchronized block, the worker will check if a client is assigned. If a client is present, the worker will call the client's ``updateRandNum`` method using its own ``doWork`` method to generate a new random number based on the one the client already provided:
 
 ````java
-this.client.updateRandNum(this.doWork(client.getRandNum()));
+this.client.updateRandNum(doWork(this.clientsNum));
 ````
 
-After completing the task, the worker will notify the client that the job is done, revert the ``gotClient`` boolean back to false, and re-evaluate the shutdown flag to determine whether to re-enter the while loop.
+After completing the task, the worker will notify the client that the job is done and re-evaluate the shutdown flag to determine whether to re-enter the while loop.
 
 ### TreadManager
 The ``ThreadManager`` class will be responsible for managing a fixed pool of worker threads, enabling clients to borrow threads for their tasks and returning them to the pool upon completion. This class will facilitate a graceful shutdown of all threads when no clients remain. It will follow the singleton design pattern, ensuring only one instance exists throughout the application.
@@ -91,7 +90,7 @@ The constructor will be private to enforce the singleton pattern, preventing ext
 
 The primary methods in this class will include ``getThread``, ``returnThread``, and ``shutdown``. A common getter will also be implemented to provide data on thread utilization for statistical purposes.
 
-The ``getThread`` method will allow retrieval of a ``WorkerThread`` from the pool. If no threads are available, the calling thread will wait until one is returned. This method will be synchronized on ``poolLock`` to ensure thread safety. When a thread becomes available, the method will increment the ``threadUtilizations`` counter and remove the first ``WorkerThread`` from the pool.
+The ``getThread`` method will allow retrieval of a ``WorkerThread`` from the pool. If no threads are available, the calling thread will wait until one is returned. This method will be synchronized on ``poolLock`` to ensure thread safety. When a thread becomes available, the method will increment the ``threadUtilizations`` counter and return a thread based on a index calculated of the first threads modified client number, if the index exceeds the current size of the pool, the first ``WorkerThread`` will be returned.
 
 The ``returnThread`` method will also be synchronized on the ``poolLock``, notifying any waiting threads in ``getThread`` that a thread is now available for use.
 
