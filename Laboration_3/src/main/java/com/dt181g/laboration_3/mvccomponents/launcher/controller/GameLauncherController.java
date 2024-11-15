@@ -46,7 +46,7 @@ public class GameLauncherController implements BaseController{
      * Initializes the game launcher using various helper methods.
      * First it sets up the game icons, then attach listeners to them,
      * displays the launcher and finally pushes a {@link TimedEventQueue}
-     * onto the system event queue to monitor event dispatch times.
+     * onto the system event queue to monitor event dispatch times if debug mode is activated.
      */
     public void initialize() {
         this.gameLauncherView.initializeView();
