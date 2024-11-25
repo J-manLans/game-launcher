@@ -12,7 +12,6 @@ import java.lang.reflect.InvocationTargetException;
  */
 enum ResourceRunner {
     INSTANCE;
-    private final Manager manager = Manager.INSTANCE;
     private final ResourceFrame resourceFrame = new ResourceFrame();
 
     /**
@@ -22,10 +21,10 @@ enum ResourceRunner {
      * <ul>
      *     <li>Uses {@link SwingUtilities#invokeAndWait} to safely set up the GUI on the Event Dispatch Thread (EDT).</li>
      *     <li>Starts the background threads managed by the {@code Manager} instance.</li>
-     *     <li>Sets up a timer to periodically refresh the GUI by invoking the {@code Manager}'s refresh method.</li>
+     *     <li>Sets up a timer to periodically refresh the GUI by invoking the {@code Manager}'s modifyClients method followed by redrawing the GUI utilizing the ResourceFrame.</li>
      * </ul>
      */
-    void runRunner() {
+    void runResourceProgram() {
         try {
             SwingUtilities.invokeAndWait(() -> {
                 this.resourceFrame.setupAndStartGUI();
@@ -34,12 +33,16 @@ enum ResourceRunner {
             e.printStackTrace();
         }
 
-        this.manager.initiateAndStartThreads();
+        Manager.INSTANCE.initiateAndStartThreads();
 
         Timer resourceCheckTimer = new Timer(AppConfig.EDT_REFRESH_DELAY, new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                manager.refreshGUI(resourceFrame);
+                resourceFrame.reDrawGUI(
+                    Manager.INSTANCE.modifyClients(),
+                    Manager.INSTANCE.getActiveProducers(),
+                    Manager.INSTANCE.getActiveConsumers()
+                );
             }
         });
         resourceCheckTimer.start();

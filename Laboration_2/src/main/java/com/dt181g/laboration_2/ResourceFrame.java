@@ -32,6 +32,8 @@ class ResourceFrame extends JFrame{
     private final JLabel consumerLabel = new JLabel();
     private final JLabel consumerCount = new JLabel();
 
+    private int oldPoolSize = AppConfig.STARTING_RESOURCES;
+
     /**
      * Sets up and configures the GUI components and layout.
      * This method initializes the various panels, labels, and their
@@ -49,6 +51,7 @@ class ResourceFrame extends JFrame{
         this.rightPanel.setPreferredSize(new Dimension(AppConfig.SIDE_PANEL_WIDTH, AppConfig.PANEL_HEIGHT));
 
         // Adding components and styling
+        // Left panel
         this.setAndCenterLabel(
             this.leftPanel,
             this.producerLabel,
@@ -65,7 +68,8 @@ class ResourceFrame extends JFrame{
         );
         this.leftPanel.setBackground(AppConfig.DARK_GRAY);
 
-        centerPanel.drawCircle(AppConfig.STARTING_RESOURCES);
+        // Center panel
+        centerPanel.drawCircle(this.oldPoolSize);
         this.setAndCenterLabel(
             this.centerPanel,
             this.resourceLabel,
@@ -75,6 +79,7 @@ class ResourceFrame extends JFrame{
         );
         this.centerPanel.setBackground(AppConfig.GRAY);
 
+        // Right panel
         this.setAndCenterLabel(
             this.rightPanel,
             this.consumerLabel,
@@ -100,7 +105,6 @@ class ResourceFrame extends JFrame{
         this.pack();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
-        this.setAlwaysOnTop(true);
         this.setVisible(true);
     }
 
@@ -128,15 +132,19 @@ class ResourceFrame extends JFrame{
     }
 
     /**
-     * Redraws the graphical user interface (GUI) components to display the current
+     * Checks if the resource pool size has changed by comparing its current value to the old one.
+     * If so it redraws the GUI components to display the current
      * counts of producers, consumers, and the current resource pool size, as well as
      * the circle representing the size of the resources.
      */
-    void refreshGUI(final int producers, final int currentPoolSize, final int consumers) {
-        this.producerCount.setText(Integer.toString(producers));
-        this.resourceLabel.setText(Integer.toString(currentPoolSize));
-        centerPanel.drawCircle(currentPoolSize);
-        this.consumerCount.setText(Integer.toString(consumers));
+    void reDrawGUI( final int currentPoolSize, final int producers, final int consumers) {
+        if (currentPoolSize != this.oldPoolSize) {
+            producerCount.setText(Integer.toString(producers));
+            resourceLabel.setText(Integer.toString(currentPoolSize));
+            centerPanel.drawCircle(currentPoolSize);
+            consumerCount.setText(Integer.toString(consumers));
+            this.oldPoolSize = currentPoolSize;
+        }
     }
 
     /**
@@ -158,12 +166,12 @@ class ResourceFrame extends JFrame{
 
         /**
          * Updates the current pool size and redraws the circle with the new size and color.
-         * To do this it utilizes {@link Manager.CirclePanel#setColor(int)}
+         * To do this it utilizes {@link #setColor(int)}
          *
          * @param newPoolSize the current size of the resource pool to be represented
          */
-        private void drawCircle(final int newPoolSize) {
-            this.circleDiameter = newPoolSize;
+        private void drawCircle(final int currentPoolSize) {
+            this.circleDiameter = currentPoolSize;
             this.circleColor = setColor();
             repaint();
         }
@@ -193,6 +201,8 @@ class ResourceFrame extends JFrame{
         @Override
         protected void paintComponent(final Graphics g) {
             super.paintComponent(g);
+            // Pinpoints the start coordinate to the upper left corner of the circle rectangle
+            // the circle itself will be painted in the center of the container
             final int x = (getWidth() / 2) - (this.circleDiameter / 2);
             final int y = (getHeight() / 2) - (this.circleDiameter / 2);
             g.setColor(this.circleColor);
