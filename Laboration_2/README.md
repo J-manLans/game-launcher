@@ -40,7 +40,7 @@ The goal of this lab is to design and implement a graphical user interface (GUI)
 This section describes the step-by-step approach used to develop the program. The program relies on four main classes working in tandem to ensure proper functionality:
 
 - **The resource pool**. This is the central point of the program, the class that is interacted with by all of the other main classes. It holds the resources and provides data for the GUI, where the size of the pool is dynamically visualized as resources are added or consumed.
-- **Producer and consumer classes**. These are the actors that directly interacts with the resource pool, consuming or producing resources.
+- **Producer and consumer classes**. These are the clients that directly interacts with the resource pool, consuming or producing resources. Both are concrete implementations of the abstract class ``Client``, who in turn implements the ``Runnable`` interface.
 - **The manager class**. This is the class that controls the flow of the program, balances the amount of actors and is responsible for updating the GUI as the resource pool changes. For this to be possible it needs to observe the pool ensure accurate updates to the GUI.
 
 In addition to this, three other classes have been implemented to support the functionality. These are:
@@ -129,14 +129,6 @@ Dynamic thread management switches actors between active and sleeping states bas
 So to sum up. The goals were successfully met by implementing efficient producer/consumer management using a Manager singleton and dynamic thread handling. The system ensures thread safety with atomic operations and visualizes the resource pool using a responsive GUI. The ``ResourcePool`` dynamically maintains a balanced system by adjusting producer and consumer activity based on resource levels, keeping the pool within the bounds.
 
 ### Alternative Approaches
-polling vs observer pattern and pulling
+One could imagine using a polling mechanism for informing the ``Manager`` when the resource pool have been altered. By doing that the whole swing Timer could have been sidestepped and updates would only take place when actual changes happen, when they happen. Which would end up in a more accurate GUI. In addition to that some sort of future proofing would have been established since entities could register as observers at the observable pool and a notify method could have been called whenever changes occur. This method could then notify all registered observers. However, the lab instructions stated we've use the Timer, and since it was a nice introduction to the object since it's such a big part of the swing package it makes at least some sense to go about it this way. Additionally, there might be some value in capping the amount of updates to the GUI to some extent.
 
-Timer vs invokeAndWait() - check notes
-
-Blocking queue in resource pool
-
-alternative method for modifying clients list, a more general method that is open for additional threads that might be added in the future, but in this consumer producer setup its not really applicable
-
-using an abstract class for producers and consumners
-
-## Personal Reflections
+It might be more straightforward to manage the clients with an ExecutorService. However, for the sake of learning, implementing a method to dynamically handle the clients is a valuable exercise, as it provides a deeper low-level understanding of thread management. While practicing with an ExecutorService is also useful, especially for production scenarios where high-level abstractions are preferred, there will likely be more opportunities to explore that in the future.

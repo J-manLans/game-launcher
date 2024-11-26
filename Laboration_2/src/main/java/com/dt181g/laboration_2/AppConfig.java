@@ -52,8 +52,14 @@ public final class AppConfig {
     /** The max amount of resources the producers can add. */
     public static final int PRODUCER_MAX_ADD = 10;
 
+    /** The operation the producer (addition). */
+    public static final int PRODUCER_OPERATION = 1;
+
     /** The max amount of resources the consumers can add. */
     public static final int CONSUMER_MAX_ADD = 20;
+
+    /** The operation the consumer (subtraction). */
+    public static final int CONSUMER_OPERATION = -1;
 
     /** Minimum time a client can sleep in between adding resources. */
     public static final long CLIENTS_MIN_SLEEP = 1000L;
