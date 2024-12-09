@@ -1,8 +1,6 @@
 package com.dt181g.laboration_3.issuer;
 
-import com.dt181g.laboration_3.mvccomponents.launcher.controller.GameLauncherController;
-import com.dt181g.laboration_3.mvccomponents.launcher.model.GameListModel;
-import com.dt181g.laboration_3.mvccomponents.launcher.view.GameLauncherView;
+import com.dt181g.laboration_3.controller.launcher.GameLauncherController;
 
 /**
  * Singleton for initializing and running the game launcher.
@@ -34,7 +32,7 @@ public enum GameLauncherInitializer {
      */
     public void runLauncher() {
         if (gameLauncherController == null) {
-            this.gameLauncherController = new GameLauncherController(new GameLauncherView(), new GameListModel());
+            this.gameLauncherController = new GameLauncherController();
             this.gameLauncherController.initialize();
         }
     }

@@ -18,6 +18,8 @@ import javax.swing.border.Border;
  * <p>
  * The class is not meant to be instantiated; all fields and methods are static.
  * </p>
+ *
+ * @author Joel Lansgren
  */
 public final class AppConfigLab3 {
     // Prevent instantiation
@@ -32,9 +34,6 @@ public final class AppConfigLab3 {
 
     /** Extension to snake image. */
     public static final String SNAKE_ICON = "snake.jpeg";
-
-    /** Extension to tic tac toe image. */
-    public static final String TIC_TAC_TOE_ICON = "tictactoe.jpeg";
 
     /** Path to images folder */
     public static final String PATH_TO_IMAGES = "/img/";
@@ -52,8 +51,6 @@ public final class AppConfigLab3 {
     /** Snake title. */
     public static final String SNAKE_TITLE = "SNAKE(S)";
 
-    /** Tic tac toe title. */
-    public static final String TIC_TAC_TOE_TITLE = "TIC TAC TOE";
 
     /* ---------------------------------------
     Fonts.
@@ -127,12 +124,19 @@ public final class AppConfigLab3 {
     /** Another GridBag inset. */
     public static final Insets INSET_BOTTOM_30 = new Insets(0, 0, 30, 0);
 
+    /** Yet another GridBag inset. */
+    public static final Insets INSET_TOP_30_BOTTOM_20 = new Insets(30, 0, 20, 0);
+
+    /** Yet another GridBag inset. */
     public static final Insets INSET_LEFT_BOTTOM_CORNER_30 = new Insets(0, 30, 30, 0);
 
 
     /* ---------------------------------------
     GameLauncherView Settings.
     ------------------------------------------ */
+
+    /** Indicates wether I'm debugging or not. */
+    public static final boolean DEBUG_MODE = false;
 
     /** Dimension for the game selector panel. */
     public static final Dimension GAME_SELECTOR_PANEL_DIMENSIONS = new Dimension(270, 940);
