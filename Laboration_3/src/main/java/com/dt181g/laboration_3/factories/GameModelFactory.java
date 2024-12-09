@@ -1,18 +1,18 @@
 package com.dt181g.laboration_3.factories;
 
-import com.dt181g.laboration_3.mvccomponents.games.GameModel;
+import com.dt181g.laboration_3.model.games.common.IGameModel;
 
 /**
- * A factory interface for creating instances of {@link GameModel}.
+ * A factory interface for creating instances of {@link IGameModel}.
  *
  * @author Joel Lansgren
  */
 @FunctionalInterface
 public  interface GameModelFactory {
     /**
-     * Creates a new instance of {@link GameModel}.
+     * Creates a new instance of {@link IGameModel}.
      *
-     * @return A new instance of {@link GameModel}.
+     * @return A new instance of {@link IGameModel}.
      */
-    GameModel create(final String title);
+    IGameModel create(final String title);
 }

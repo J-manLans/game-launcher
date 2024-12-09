@@ -1,6 +1,6 @@
 package com.dt181g.laboration_3.issuer;
 
-import com.dt181g.laboration_3.mvccomponents.launcher.controller.GameLauncherController;
+import com.dt181g.laboration_3.controller.launcher.GameLauncherController;
 
 /**
  * Singleton for initializing and running the game launcher.
