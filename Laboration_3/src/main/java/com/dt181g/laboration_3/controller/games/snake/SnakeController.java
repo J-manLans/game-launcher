@@ -60,8 +60,8 @@ public class SnakeController implements IGameController, IController {
 
     @Override
     public void initialize() {
-        this.initializeListeners();
-        this.createGameLoop();
+        initializeListeners();
+        createGameLoop();
     }
 
     @Override
@@ -135,8 +135,8 @@ public class SnakeController implements IGameController, IController {
 
     @Override
     public void closeGame() {
-        this.stopGameLoop();
-        this.removeListeners();
+        stopGameLoop();
+        removeListeners();
         this.snakeMainView.closeGameView();
     }
 
@@ -151,7 +151,7 @@ public class SnakeController implements IGameController, IController {
      * Stops the game loop timer if it is currently running when closing the game.
      */
     private void stopGameLoop() {
-        if (gameLoop != null) {
+        if (this.gameLoop != null) {
             this.gameLoop.stop();
             this.gameLoop = null;
         }
@@ -163,6 +163,6 @@ public class SnakeController implements IGameController, IController {
 
     @Override
     public String getTitle() {
-        return title;
+        return this.title;
     }
 }

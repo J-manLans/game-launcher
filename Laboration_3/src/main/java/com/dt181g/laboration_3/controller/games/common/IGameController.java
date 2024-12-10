@@ -23,8 +23,8 @@ public interface IGameController {
      *
      * <p>
      * This method should clear any current game data, restore initial settings,
-     * and prepare the game for a new session. It's executed every time a game starts up
-     * or when the user navigates back to the start menu.
+     * and prepare the game for a new session. It's executed through the GameIconListeners every time a game starts up
+     * or when the user navigates back to the start menu inside a game.
      * </p>
      */
     void initiateGame();
