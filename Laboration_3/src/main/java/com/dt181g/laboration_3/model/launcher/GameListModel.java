@@ -33,10 +33,6 @@ public class GameListModel {
      */
     public GameListModel() {
         String[][] games = {
-            {AppConfigLab3.SNAKE_TITLE, AppConfigLab3.SNAKE_ICON},
-            {AppConfigLab3.SNAKE_TITLE, AppConfigLab3.SNAKE_ICON},
-            {AppConfigLab3.SNAKE_TITLE, AppConfigLab3.SNAKE_ICON},
-            {AppConfigLab3.SNAKE_TITLE, AppConfigLab3.SNAKE_ICON},
             {AppConfigLab3.SNAKE_TITLE, AppConfigLab3.SNAKE_ICON}
         };
         for (String[] game : games) {
